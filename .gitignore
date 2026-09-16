@@ -1,0 +1,51 @@
+# Build / CMake
+build/
+bin/
+
+# vcpkg
+vcpkg_installed/
+
+# External dependencies
+lvgl/
+FreeRTOS/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# VS Code
+.vscode/
+
+# Compiled binaries / build artifacts
+*.exe
+*.dll
+*.lib
+*.obj
+*.pdb
+*.ilk
+*.exp
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Logs / temporary files
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+.gitmodules
