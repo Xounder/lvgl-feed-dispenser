@@ -69,7 +69,20 @@ add_compile_definitions($<$<BOOL:${LV_USE_FFMPEG}>:LV_USE_FFMPEG=1>)
 add_subdirectory(lvgl)
 target_include_directories(lvgl PUBLIC ${PROJECT_SOURCE_DIR} ${SDL2_INCLUDE_DIRS})
 
-set(MAIN_SOURCES src/mouse_cursor_icon.c src/hal/hal.c)
+set(MAIN_SOURCES
+    src/mouse_cursor_icon.c
+    src/hal/hal.c
+    src/ui/ui.c
+    src/ui/screen_manager.c
+    src/ui/screens/home_screen.c
+    src/ui/screens/mode_screen.c
+    src/ui/screens/config_screen.c
+    src/ui/screens/dosing_screen.c
+    src/hardware/simulated_weight_sensor.c
+    src/domain/dosing_controller.c
+    src/hardware/simulated_dispenser.c
+    src/ui/screens/completed_screen.c
+)
 set(MAIN_LIBS lvgl lvgl::examples lvgl::demos lvgl::thorvg ${SDL2_LIBRARIES})
 
 # Create the main executable, depending on the FreeRTOS option
