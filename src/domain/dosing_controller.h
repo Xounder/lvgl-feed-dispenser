@@ -1,6 +1,10 @@
 #ifndef DOSING_CONTROLLER_H
 #define DOSING_CONTROLLER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "dosing_config.h"
 
 typedef enum {
@@ -40,5 +44,9 @@ int dosing_controller_get_target_grams(void);
 DosingState dosing_controller_get_state(void);
 
 DosingPhase dosing_controller_get_phase(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -33,25 +33,25 @@ void dosing_controller_init(DosingConfig *dosing_config)
     phase = DOSING_PHASE_FAST;
     manual_release_active = 0;
 
-    simulated_dispenser.stop();
+    dispenser.stop();
 }
 
 void dosing_controller_start(void)
 {
-    simulated_weight_sensor.reset();
+    weight_sensor.reset();
 
     state = DOSING_STATE_DOSING;
 
     phase = DOSING_PHASE_FAST;
 
-    simulated_dispenser.start();
+    dispenser.start();
 }
 
 void dosing_controller_update(void)
 {
     if (state == DOSING_STATE_DOSING) {
         int target = effective_target_grams();
-        int current_weight = simulated_weight_sensor.read_grams();
+        int current_weight = weight_sensor.read_grams();
         int remaining = target - current_weight;
         int step;
 
@@ -63,14 +63,14 @@ void dosing_controller_update(void)
             step = FAST_STEP_GRAMS;
         }
 
-        if (simulated_dispenser.is_active()) {
-            simulated_weight_sensor.add_grams(step);
+        if (dispenser.is_active()) {
+            weight_sensor.add_grams(step);
         }
 
-        current_weight = simulated_weight_sensor.read_grams();
+        current_weight = weight_sensor.read_grams();
 
         if (current_weight >= target) {
-            simulated_dispenser.stop();
+            dispenser.stop();
             state = DOSING_STATE_COMPLETED;
         }
 
@@ -79,13 +79,13 @@ void dosing_controller_update(void)
 
     if (manual_release_active &&
         state != DOSING_STATE_DOSING) {
-        simulated_weight_sensor.add_grams(MANUAL_STEP_GRAMS);
+        weight_sensor.add_grams(MANUAL_STEP_GRAMS);
     }
 }
 
 void dosing_controller_cancel(void)
 {
-    simulated_dispenser.stop();
+    dispenser.stop();
 
     manual_release_active = 0;
 
@@ -94,9 +94,9 @@ void dosing_controller_cancel(void)
 
 void dosing_controller_new_dosing(void)
 {
-    simulated_dispenser.stop();
+    dispenser.stop();
 
-    simulated_weight_sensor.reset();
+    weight_sensor.reset();
 
     manual_release_active = 0;
 
@@ -111,14 +111,14 @@ void dosing_controller_manual_release_start(void)
 
     manual_release_active = 1;
 
-    simulated_dispenser.start();
+    dispenser.start();
 }
 
 void dosing_controller_manual_release_stop(void)
 {
     manual_release_active = 0;
 
-    simulated_dispenser.stop();
+    dispenser.stop();
 }
 
 int dosing_controller_manual_release_is_active(void)
@@ -136,7 +136,7 @@ int dosing_controller_manual_release_is_allowed(void)
 
 int dosing_controller_get_weight(void)
 {
-    return simulated_weight_sensor.read_grams();
+    return weight_sensor.read_grams();
 }
 
 int dosing_controller_get_target_grams(void)

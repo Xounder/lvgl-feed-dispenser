@@ -1,6 +1,10 @@
 #ifndef SCREEN_MANAGER_H
 #define SCREEN_MANAGER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "lvgl/lvgl.h"
 #include "screens/config_screen.h"
 #include "../domain/dosing_config.h"
@@ -19,5 +23,9 @@ void screen_manager_show(Screen screen);
 void screen_manager_show_config(DosingMode mode);
 
 DosingConfig *screen_manager_get_dosing_config(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
