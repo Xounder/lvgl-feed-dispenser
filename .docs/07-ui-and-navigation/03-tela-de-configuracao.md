@@ -8,15 +8,45 @@ Arquivo:
 src/ui/screens/config_screen.c
 ```
 
-A tela é responsável por configurar os parâmetros da dosagem antes da execução.
+A tela é responsável por configurar os parâmetros da dosagem antes da
+execução e corresponde à **TELA 2** (`Aguardando - Definição de
+Quantidade`) do mockup `.images/tela-aguardando.md`.
 
-Apresenta:
+Estrutura:
 
 ```text
-Configurar dosagem
+AGUARDANDO
+Defina a quantidade
+
+┌────────────────────┐  ┌──────────────────┐
+│  MASSA (g)         │  │ VALOR (R$)       │
+└────────────────────┘  └──────────────────┘
+
+Quantidade desejada
+  [- ]        500 g        [ + ]
+
+Valores rapidos
+┌────────┐ ┌────────┐ ┌────────┐
+│ 100 g  │ │ 250 g  │ │ 500 g  │
+└────────┘ └────────┘ └────────┘
+┌────────┐ ┌────────┐ ┌────────┐
+│ 750 g  │ │1.000 g │ │2.000 g │
+└────────┘ └────────┘ └────────┘
+
+▶ INICIAR DOSAGEM AUTOMATICA
+VOLTAR
 ```
 
-e identifica o modo selecionado.
+As abas `MASSA (g)` / `VALOR (R$)` alternam o modo:
+`screen_manager_show_config(...)`. No modo Valor (R$), os valores rápidos
+são `R$ 5,00 / 10,00 / 20,00 / 50,00 / 100,00 / 200,00` (centavos) e uma
+linha adicional mostra:
+
+```text
+Equivale a X g
+```
+
+com o preço de referência do domínio.
 
 ---
 
@@ -172,19 +202,19 @@ A tela de configuração altera esses valores através da interface.
 Quando o usuário seleciona:
 
 ```text
-Continuar
+INICIAR DOSAGEM AUTOMATICA
 ```
 
 a configuração já está preparada para o início da operação.
 
 ---
 
-## 21. Botão Continuar
+## 21. Botão INICIAR
 
 O botão:
 
 ```text
-Continuar
+INICIAR DOSAGEM AUTOMATICA
 ```
 
 leva para:
@@ -204,7 +234,7 @@ e depois carrega a tela de dosagem.
 Conceitualmente:
 
 ```text
-Continuar
+INICIAR DOSAGEM AUTOMATICA
    ↓
 configuração pronta
    ↓

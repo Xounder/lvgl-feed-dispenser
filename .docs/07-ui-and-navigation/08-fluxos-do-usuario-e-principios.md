@@ -8,14 +8,7 @@ O fluxo normal é:
 ┌──────────────┐
 │    HOME      │
 │              │
-│   Iniciar    │
-└──────┬───────┘
-       │
-       ▼
-┌──────────────┐
-│     MODE     │
-│              │
-│ Massa        │
+│ Massa        │  (seleção de modo na própria Home — TELA 1)
 │ Valor (R$)   │
 └──────┬───────┘
        │
@@ -25,7 +18,7 @@ O fluxo normal é:
 │              │
 │      - +     │
 │              │
-│    Continuar │
+│   Iniciar    │
 └──────┬───────┘
        │
        ▼
@@ -35,7 +28,7 @@ O fluxo normal é:
 │  Peso: 75 g  │
 │  ███████░░░  │
 │              │
-│  Parar/Urg.  │
+│ Interromper  │
 └──────┬───┬───┘
        │   │ objetivo
        │   │ atingido
@@ -46,9 +39,10 @@ O fluxo normal é:
 │   concluído  │ │  interrompida│
 │              │ │              │
 │ Nova dosagem │ │ Nova dosagem │
-│ Início       │ │ Início       │
 └──────────────┘ └──────────────┘
 ```
+
+`Nova dosagem` retorna a `HOME` com tara (`dosing_controller_new_dosing()`).
 
 ---
 
@@ -59,7 +53,7 @@ O fluxo normal é:
 ```text
 DOSING
    ↓
-Parar / Emergencia
+INTERROMPER DOSAGEM (tela) / Emergencia (botao fisico)
    ↓
 INTERRUPTED
 ```
@@ -67,19 +61,13 @@ INTERRUPTED
 A tela de interrupção oferece:
 
 ```text
-Nova dosagem  → MODE (com tara)
-Início        → HOME
+Nova dosagem → HOME (com tara)
 ```
 
 ### Voltar durante seleção
 
-```text
-MODE
-   ↓
-Voltar
-   ↓
-HOME
-```
+Como a seleção de modo ocorre na própria Home, não existe mais a tela
+intermediária `MODE`.
 
 ### Voltar durante configuração
 
@@ -98,7 +86,7 @@ COMPLETED / INTERRUPTED
    ↓
 Nova dosagem
    ↓
-MODE
+HOME (com tara)
 ```
 
 ---

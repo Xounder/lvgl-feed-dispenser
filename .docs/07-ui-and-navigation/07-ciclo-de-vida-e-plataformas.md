@@ -37,9 +37,9 @@ LVGL screen
 Depois:
 
 ```text
-show SCREEN_MODE
+show SCREEN_CONFIG
     ↓
-mode_screen_create()
+config_screen_create()
     ↓
 LVGL screen
 ```
@@ -57,15 +57,7 @@ Isso mantém a construção específica de cada tela no próprio módulo.
 Responsável por:
 
 ```text
-Home
-```
-
-### `mode_screen.c`
-
-Responsável por:
-
-```text
-seleção do modo
+Home (inclui seleção de modo MASSA / VALOR e liberação manual)
 ```
 
 ### `config_screen.c`
@@ -74,6 +66,24 @@ Responsável por:
 
 ```text
 configuração
+```
+
+### `manual_release_widget.c`
+
+Responsável por:
+
+```text
+widget de liberação manual (LED + botão), reutilizado em Home,
+Concluído e Interrompido
+```
+
+### `screen_chrome.c`
+
+Responsável por:
+
+```text
+barra de status, título, blocos de estado, barra inferior e cards
+(cores e layout compartilhados)
 ```
 
 ### `dosing_screen.c`

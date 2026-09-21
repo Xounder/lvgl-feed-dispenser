@@ -112,8 +112,6 @@ src/ui/
 └── screens/
     ├── home_screen.c
     ├── home_screen.h
-    ├── mode_screen.c
-    ├── mode_screen.h
     ├── config_screen.c
     ├── config_screen.h
     ├── dosing_screen.c
@@ -121,7 +119,11 @@ src/ui/
     ├── completed_screen.c
     ├── completed_screen.h
     ├── interrupted_screen.c
-    └── interrupted_screen.h
+    ├── interrupted_screen.h
+    ├── manual_release_widget.c
+    ├── manual_release_widget.h
+    └── screen_chrome.c
+    └── screen_chrome.h
 ```
 
 A organização separa:
@@ -182,7 +184,6 @@ A enumeração atual é:
 ```c
 typedef enum {
     SCREEN_HOME,
-    SCREEN_MODE,
     SCREEN_CONFIG,
     SCREEN_DOSING,
     SCREEN_COMPLETED,
@@ -194,12 +195,15 @@ As telas existentes são:
 
 ```text
 SCREEN_HOME
-SCREEN_MODE
 SCREEN_CONFIG
 SCREEN_DOSING
 SCREEN_COMPLETED
 SCREEN_INTERRUPTED
 ```
+
+> A seleção de modo (Massa / Valor R$) foi incorporada à `SCREEN_HOME`
+> (TELA 1 do mockup `.images/tela-aguardando.md`), então a antiga
+> `SCREEN_MODE` / `mode_screen.c` não existe mais.
 
 ---
 
@@ -234,12 +238,7 @@ O fluxo atual pode ser representado por:
              │     HOME     │
              └──────┬───────┘
                     │
-                 Iniciar
-                    │
-                    ▼
-             ┌──────────────┐
-             │     MODE     │
-             └──────┬───────┘
+         (cards MASSA / VALOR na própria HOME)
                     │
           ┌─────────┴─────────┐
           │                   │
@@ -252,15 +251,15 @@ O fluxo atual pode ser representado por:
              │    CONFIG    │
              └──────┬───────┘
                     │
-                Continuar
+                Iniciar
                     │
                     ▼
              ┌──────────────┐
              │    DOSING    │
              └──┬───────┬───┘
                 │       │
-   objetivo     │       │  Parar /
-   atingido     │       │  Emergência
+   objetivo     │       │  Interromper
+   atingido     │       │  dosagem
                 │       │
                 ▼       ▼
      ┌──────────────┐ ┌──────────────┐
@@ -270,16 +269,5 @@ O fluxo atual pode ser representado por:
      Nova dosagem     Nova dosagem
             │                │
             ▼                ▼
-          MODE            MODE
-```
-
-Também existe o caminho de volta para o início a partir das telas de conclusão e interrupção:
-
-```text
-COMPLETED / INTERRUPTED
-   │
-Voltar ao inicio
-   │
-   ▼
-HOME
+          HOME            HOME
 ```

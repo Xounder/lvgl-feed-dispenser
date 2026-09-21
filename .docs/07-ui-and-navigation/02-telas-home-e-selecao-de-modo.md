@@ -8,35 +8,73 @@ Arquivo:
 src/ui/screens/home_screen.c
 ```
 
-A Home é a porta de entrada da aplicação.
+A Home é a porta de entrada da aplicação e corresponde à **TELA 1**
+(`Aguardando - Seleção de Modo`) do mockup em
+`.images/tela-aguardando.md`.
 
-Atualmente apresenta:
+O layout segue o chrome compartilhado (`screen_chrome.c`):
 
 ```text
-Dosador de Racao
-Aguardando dosagem
-Peso atual: 0 g
+10:30                                     ıll 100%
+Pesagem e Dosagem
+──────────────────────────────────────────
+ESTADO ATUAL
+AGUARDANDO
+Selecione o modo de dosagem
 
-[ LED: modo manual ]   (indicador verde quando liberação manual ativa)
+┌──────────────────────────────────────┐
+│ MASSA                                │
+│ Dosar por peso (g)                   │
+└──────────────────────────────────────┘
+┌──────────────────────────────────────┐
+│ VALOR MONETARIO                      │
+│ Dosar por valor (R$)                 │
+└──────────────────────────────────────┘
 
-[ Iniciar ]
-[ Liberacao manual ]   (segurar para liberar manualmente)
+✋ LIBERACAO MANUAL DISPONIVEL         [ LED ]
+┌──────────────────────────────────────┐
+│ LIBERAR MANUALMENTE                  │
+└──────────────────────────────────────┘
+🏠 Inicio   Dosagens   Historico   Config.
 ```
 
-O texto utiliza `Racao` em vez de `Ração` porque a configuração atual da fonte padrão do LVGL não possui todos os caracteres acentuados necessários.
+Os textos aparecem sem acentuação (`LIBERACAO`, `MONETARIO`,
+`Historicos`) porque a fonte padrão do LVGL (Montserrat) só cobre
+ASCII básico + símbolos (ver nota na seção 9b).
 
 ---
 
 ## 9a. Liberação manual na Home
 
-A Home também hospeda a **liberação manual** (RS14-RS16 do Trabalho.md):
+A Home hospeda a **liberação manual** (RS14-RS16 do Trabalho.md):
 
-* o botão **Liberacao manual** deve ser mantido pressionado;
-* enquanto pressionado, o controller adiciona ração manualmente e o **LED** (indicador circular) fica verde;
-* ao soltar, a liberação manual para e o LED volta a ficar cinza;
-* a liberação manual só é permitida quando o estado do domínio é `IDLE` (bloqueada durante dosagem automática — RS15).
+* o botão **LIBERAR MANUALMENTE** deve ser mantido pressionado;
+* enquanto pressionado, o controller adiciona ração manualmente e o
+  **LED** (indicador circular no widget) fica verde;
+* ao soltar, a liberação manual para e o LED volta a ficar acinzentado;
+* a liberação manual só é permitida quando o estado do domínio é
+  `IDLE` (bloqueada durante dosagem automática — RS15).
 
-A tela exibe o peso atual em tempo real, permitindo observar o efeito da liberação manual.
+O widget usado é `manual_release_widget.c` (card verde, contorno verde
+escuro, LED + botão), compartilhado com as telas de conclusão e
+interrupção.
+
+---
+
+## 9b. Nota sobre acentuação e ícones
+
+A fonte enviada com o LVGL (`lv_font_montserrat_*`) contém apenas os
+glifos `U+0020-U+007F`, `U+00B0` e `U+2022`, além dos símbolos
+FontAwesome embutidos. Por isso:
+
+* textos são escritos sem acento: `CONCLUIDO`, `INTERROMPER`, `Racao`,
+  etc.;
+* ícones que não existem na fonte (ampulheta, balança, cifrão, mão,
+  cadeado) são representados pelos símbolos FontAwesome disponíveis ou
+  omitidos;
+* a barra inferior usa `LV_SYMBOL_HOME` (Inicio), `LV_SYMBOL_LIST`
+  (Dosagens), `LV_SYMBOL_REFRESH` (Historico) e
+  `LV_SYMBOL_SETTINGS` (Config.).
 
 ---
 
@@ -44,46 +82,50 @@ A tela exibe o peso atual em tempo real, permitindo observar o efeito da libera�
 
 A Home deve:
 
-* apresentar o estado inicial;
-* permitir iniciar uma nova operação;
-* servir como ponto de retorno;
+* apresentar o estado inicial (`AGUARDANDO`);
+* permitir selecionar o modo de dosagem (cards MASSA / VALOR
+  MONETARIO);
+* permitir liberação manual;
+* servir como ponto de retorno após `NOVA DOSAGEM`;
 * evitar expor detalhes internos do hardware.
 
-O botão:
+Clicar no card:
 
 ```text
-Iniciar
+MASSA
 ```
 
-leva para:
+chama:
 
 ```text
-SCREEN_MODE
+screen_manager_show_config(DOSING_MODE_GRAMS);
+```
+
+Clicar no card:
+
+```text
+VALOR MONETARIO
+```
+
+chama:
+
+```text
+screen_manager_show_config(DOSING_MODE_CURRENCY);
 ```
 
 A Home não deve iniciar diretamente o motor/servo ou manipular o sensor.
 
 ---
 
-## 11. Tela de seleção de modo
+## 11. Seleção de modo incorporada à Home
 
-Arquivo:
+A antiga `SCREEN_MODE` / `mode_screen.c` foi **removida**.
 
-```text
-src/ui/screens/mode_screen.c
-```
-
-A tela apresenta:
+A seleção de modo agora é parte da própria Home (TELA 1), eliminando uma
+tela intermediária. O fluxo passou a ser:
 
 ```text
-Selecione o modo
-```
-
-com duas opções:
-
-```text
-Massa
-Valor (R$)
+Home (cards) -> Config -> Dosing -> Completed / Interrupted -> Home
 ```
 
 ---
@@ -93,7 +135,7 @@ Valor (R$)
 Quando o usuário escolhe:
 
 ```text
-Massa
+MASSA
 ```
 
 a UI solicita:
@@ -102,7 +144,8 @@ a UI solicita:
 screen_manager_show_config(DOSING_MODE_GRAMS);
 ```
 
-O modo é armazenado pelo gerenciamento da UI para que a tela de configuração saiba qual interface apresentar.
+O modo é armazenado pelo gerenciamento da UI para que a tela de
+configuração saiba qual interface apresentar.
 
 ---
 
@@ -111,7 +154,7 @@ O modo é armazenado pelo gerenciamento da UI para que a tela de configuração 
 Quando o usuário escolhe:
 
 ```text
-Valor (R$)
+VALOR MONETARIO
 ```
 
 a UI solicita:
@@ -130,16 +173,18 @@ UI informa modo selecionado
 ConfigScreen apresenta controles apropriados
 ```
 
-No modo Valor (R$), a quantidade desejada é informada em reais; a conversão para gramas usa o preço de referência definido no domínio (ver [04-domain-and-state-machine.md](../04-domain-and-state-machine.md)).
+No modo Valor (R$), a quantidade desejada é informada em reais; a
+conversão para gramas usa o preço de referência definido no domínio (ver
+[04-domain-and-state-machine.md](../04-domain-and-state-machine.md)).
 
 ---
 
 ## 14. Voltar para o início
 
-A tela de seleção de modo possui:
+A tela de configuração (TELA 2) possui o botão:
 
 ```text
-Voltar ao inicio
+VOLTAR
 ```
 
 Esse botão retorna para:

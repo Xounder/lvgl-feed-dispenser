@@ -41,7 +41,7 @@ abre?
 ### Nível 3 — Fluxo básico
 
 ```text
-Home → Mode → Config → Dosing
+Home → Config → Dosing
 ```
 
 ### Nível 4 — Cenário normal
@@ -53,7 +53,7 @@ Dosing → Completed
 ### Nível 5 — Cancelamento
 
 ```text
-Dosing → Cancel → Home
+Dosing → Interrupted → Home
 ```
 
 ### Nível 6 — Repetição

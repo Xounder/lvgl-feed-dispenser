@@ -10,24 +10,31 @@ src/ui/screens/dosing_screen.c
 
 Essa é a tela operacional.
 
-Ela acompanha uma dosagem em andamento.
+Ela acompanha uma dosagem em andamento e corresponde à **TELA 2**
+(`Dosando`) do mockup `.images/tela-dosando.md`.
 
 Atualmente apresenta:
 
 ```text
-Dosando
-```
+DOSANDO
 
-Além de:
-
-```text
+Massa atual
+┌────────────────────────────────────────┐
+│ ████████████░░░░░░░░░░░░░░   52%      │
+└────────────────────────────────────────┘
 Meta: 100 g
-Peso atual: 0 g
-barra de progresso
-status (Etapa rapida / Etapa fina)
-[ Parar ]
-[ Emergencia ]
+Etapa rapida: vazao alta
+
+■ INTERROMPER DOSAGEM
+
+┌──────────────────────────────────────┐
+│ LIBERACAO MANUAL DESABILITADA        │
+└──────────────────────────────────────┘
 ```
+
+A tela **não possui** botão separado de emergência: conforme o mockup,
+há apenas o comando **INTERROMPER DOSAGEM** (RS11). O botão físico de
+emergência é tratado no alvo embarcado (ver [05-botoes-e-indicadores.md](../08-target-hardware/05-botoes-e-indicadores.md)).
 
 ---
 
@@ -246,16 +253,15 @@ Isso permite ao usuário observar o controle em duas etapas (abertura maior quan
 
 ---
 
-## 30. Interrupção (Parar e Emergência)
+## 30. Interrupção (INTERROMPER DOSAGEM)
 
-A tela de dosagem possui dois comandos de interrupção:
+A tela de dosagem possui um comando de interrupção na tela:
 
 ```text
-[ Parar ]          (comando na tela — RS11)
-[ Emergencia ]     (simulação do botão físico de emergência — RS11/RS12)
+[ INTERROMPER DOSAGEM ]   (comando na tela — RS11)
 ```
 
-Quando qualquer um é acionado:
+Quando acionado:
 
 ```text
 dosing_controller_cancel();
@@ -275,7 +281,9 @@ A UI então solicita a tela de interrupção:
 SCREEN_INTERRUPTED
 ```
 
-Ambos os comandos têm prioridade sobre o controle automático (RS12).
+O comando tem prioridade sobre o controle automático (RS12). Durante a
+dosagem a **liberação manual é bloqueada** (RS15), o que é refletido na
+tela pelo card estático `LIBERACAO MANUAL DESABILITADA`.
 
 ---
 

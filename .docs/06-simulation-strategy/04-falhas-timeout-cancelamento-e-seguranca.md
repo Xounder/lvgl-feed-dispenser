@@ -137,11 +137,11 @@ A interrupção já faz parte do comportamento atual, via:
 dosing_controller_cancel()
 ```
 
-dois comandos na tela de Dosagem a acionam:
+um comando na tela de Dosagem a aciona:
 
 ```text
-[ Parar ]          → comando na tela
-[ Emergencia ]     → simulação do botão físico de emergência
+[ INTERROMPER DOSAGEM ]   → comando na tela (RS11)
+[ Emergencia ]            → botão físico de emergência (alvo embarcado)
 ```
 
 Ao interromper:
@@ -171,7 +171,7 @@ O comando de interrupção possui prioridade sobre o controle automático:
 ```text
 DOSING (etapa rápida ou fina)
     ↓
-Parar / Emergencia
+INTERROMPER DOSAGEM / Emergencia fisico
     ↓
 dispenser.stop()
     ↓

@@ -81,7 +81,7 @@ O código está organizado principalmente em três áreas (`src/`):
 
 * `domain/` — lógica do comportamento do sistema: configuração da dosagem, estado do processo e regras para iniciar, atualizar, cancelar e concluir. Ver [04-domain-and-state-machine.md](04-domain-and-state-machine.md).
 * `hardware/` — abstrações `WeightSensor` e `Dispenser` com implementações simuladas, substituíveis no futuro por HX711 + célula de carga e SG90/atuador sem que o controller precise conhecê-los. Ver [05-hardware-abstraction.md](05-hardware-abstraction.md).
-* `ui/` — telas (Home com liberação manual e LED, Modo, Configuração, Dosagem com Emergência/Parar, Interrompido, Concluído) e navegação via `screen_manager`. Ver [07-ui-and-navigation.md](07-ui-and-navigation.md).
+* `ui/` — telas (Home com liberação manual, LED e seleção de modo; Configuração; Dosagem com `INTERROMPER DOSAGEM`; Interrompido; Concluído) e navegação via `screen_manager`. Ver [07-ui-and-navigation.md](07-ui-and-navigation.md).
 
 A UI deve permanecer responsável principalmente por apresentar informações, receber interação do usuário, solicitar ações ao domínio e refletir o estado atual da aplicação.
 
@@ -93,7 +93,7 @@ A estrutura completa do `src/` está em [02-architecture.md](02-architecture.md)
 
 # 7. Fluxo atual da aplicação
 
-O fluxo principal implementado é: `Home → Selecionar modo (Massa | Valor R$) → Configuração → Dosando → (Parar/Emergência → Interrompido → Nova dosagem) ou (Meta atingida → Concluído → Nova dosagem)`.
+O fluxo principal implementado é: `Home (seleção de modo: Massa | Valor R$) → Configuração → Dosando → (Interromper/Emergência física → Interrompido → Nova dosagem) ou (Meta atingida → Concluído → Nova dosagem)`.
 
 As telas de conclusão e de interrupção permitem iniciar uma nova dosagem ou voltar ao início.
 

@@ -13,7 +13,7 @@ Botão de emergência    → interrompe imediatamente a dosagem (RS11/RS12)
 Botão de liberação     → liberação manual direta, mantido pressionado (RS14)
 ```
 
-O **botão de emergência** tem prioridade sobre o controle automático: acionado em qualquer momento da dosagem, o dispenser é parado imediatamente (equivalente físico do botão "Emergencia" do simulador).
+O **botão de emergência** tem prioridade sobre o controle automático: acionado em qualquer momento da dosagem, o dispenser é parado imediatamente — equivale funcionalmente ao comando `INTERROMPER DOSAGEM` da tela de Dosagem no simulador.
 
 O **botão de liberação** permite liberar ração manualmente e só deve atuar quando o sistema não estiver em dosagem automática (RS15); no simulador corresponde ao botão "Liberacao manual" da Home.
 

@@ -22,16 +22,20 @@ src/
 │   ├── screen_manager.c
 │   ├── screen_manager.h
 │   └── screens/
+│       ├── screen_chrome.c
+│       ├── screen_chrome.h
 │       ├── home_screen.c
 │       ├── home_screen.h
-│       ├── mode_screen.c
-│       ├── mode_screen.h
 │       ├── config_screen.c
 │       ├── config_screen.h
 │       ├── dosing_screen.c
 │       ├── dosing_screen.h
 │       ├── completed_screen.c
-│       └── completed_screen.h
+│       ├── completed_screen.h
+│       ├── interrupted_screen.c
+│       ├── interrupted_screen.h
+│       ├── manual_release_widget.c
+│       └── manual_release_widget.h
 │
 ├── domain/
 │   ├── dosing_config.h

@@ -19,13 +19,13 @@ dispenser = ativo
 Pressionar:
 
 ```text
-Parar
+INTERROMPER DOSAGEM
 ```
 
 ou:
 
 ```text
-Emergencia
+Emergencia (botao fisico no alvo embarcado)
 ```
 
 (RS11/RS12)
@@ -49,7 +49,7 @@ A interrupção não deve apenas trocar de tela.
 É necessário garantir:
 
 ```text
-Parar / Emergencia
+INTERROMPER DOSAGEM / Emergencia fisico
       ↓
 dispenser.stop()
 ```
@@ -69,7 +69,7 @@ Também deve ser considerado:
 ```text
 Dosing
  ↓
-Parar / Emergencia
+INTERROMPER DOSAGEM / Emergencia fisico
  ↓
 Interrupted
  ↓

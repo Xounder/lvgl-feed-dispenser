@@ -138,17 +138,24 @@ Fluxo conceitual:
 
 ```text
 HOME
- │
- └──→ MODE
-       │
-       ├──→ CONFIG
-       │      │
-       │      └──→ DOSING
-       │             │
-       │             └──→ COMPLETED
-       │
-       └──→ HOME
+  │
+  ├──→ CONFIG (MASSA)
+  │      │
+  │      └──→ DOSING
+  │             │
+  │             └──→ COMPLETED
+  │                    └──→ HOME
+  │
+  └──→ CONFIG (VALOR R$)
+         │
+         └──→ DOSING
+                │
+                └──→ INTERRUPTED
+                       └──→ HOME
 ```
+
+A seleção de modo ocorre na própria Home (cards MASSA / VALOR), sem tela
+intermediária `MODE`.
 
 A existência de um `screen_manager` evita que cada tela precise conhecer diretamente todas as outras telas.
 
@@ -159,7 +166,7 @@ home_screen
      ↓
 screen_manager
      ↓
-mode_screen
+config_screen
 ```
 
 em vez de:
@@ -167,7 +174,7 @@ em vez de:
 ```text
 home_screen
      ↓
-cria diretamente mode_screen
+cria diretamente config_screen
 ```
 
 A navegação completa entre telas está em [07-ui-and-navigation.md](../07-ui-and-navigation.md).

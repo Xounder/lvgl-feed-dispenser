@@ -244,12 +244,12 @@ a cada atualização de aproximadamente:
 Concluído:
 
 ```text
-✓ botão Parar (comando na tela)
-✓ botão Emergencia (simulação do botão físico)
+✓ botão INTERROMPER DOSAGEM (comando na tela)
+✓ emergência pelo botão físico no alvo embarcado
 ✓ dispenser é parado
 ✓ controller muda para INTERRUPTED
 ✓ massa parcial é preservada
-✓ tela Interrompida (Nova dosagem / Voltar ao inicio)
+✓ tela Interrompida (Nova dosagem)
 ```
 
 A interrupção tem prioridade sobre o controle automático.
@@ -298,7 +298,7 @@ Já foram verificados:
 ✓ aumento do peso
 ✓ parada do dispenser
 ✓ tara (nova dosagem)
-✓ interrupção (Parar / Emergencia)
+✓ interrupção (INTERROMPER DOSAGEM / Emergencia fisico)
 ✓ tela Interrompida
 ✓ liberação manual com LED
 ✓ Completed

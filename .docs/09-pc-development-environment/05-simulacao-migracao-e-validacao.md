@@ -141,7 +141,7 @@ Detalhes: [06-simulation-strategy.md](../06-simulation-strategy.md).
 
 ## 54. Fluxo completo do simulador
 
-O fluxo completo (`main.c` → `lv_init()`/`sdl_hal_init()`/`ui_init()` → Screen Manager → Home → Mode → Config → DosingController (com WeightSensor e Dispenser simulados) → Dosing → Completed) é apresentado de forma integrada em [07-ui-and-navigation.md](../07-ui-and-navigation.md) e [02-architecture.md](../02-architecture.md).
+O fluxo completo (`main.c` → `lv_init()`/`sdl_hal_init()`/`ui_init()` → Screen Manager → Home (seleção de modo) → Config → DosingController (com WeightSensor e Dispenser simulados) → Dosing → Completed) é apresentado de forma integrada em [07-ui-and-navigation.md](../07-ui-and-navigation.md) e [02-architecture.md](../02-architecture.md).
 
 ---
 

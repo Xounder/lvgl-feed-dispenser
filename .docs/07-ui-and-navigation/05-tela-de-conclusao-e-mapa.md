@@ -8,25 +8,37 @@ Arquivo:
 src/ui/screens/completed_screen.c
 ```
 
-A tela apresenta:
+A tela apresenta o resultado de uma dosagem concluída e corresponde à
+**TELA 3** (`Concluido`) do mockup `.images/tela-concluido.md`:
 
 ```text
-Dosagem concluida!
-Peso final: X g
+CONCLUIDO ✓
+Dosagem concluida com sucesso
+
+Massa final
+│                                                      │
+│                       500 g                         │
+│                                                      │
+┌──────────────────────────┐
+│ NOVA DOSAGEM             │
+└──────────────────────────┘
+
+✋ LIBERACAO MANUAL DISPONIVEL         [ LED ]
+┌──────────────────────────────────────┐
+│ LIBERAR MANUALMENTE                  │
+└──────────────────────────────────────┘
 ```
 
-e informações sobre o objetivo atingido.
-
-Ela oferece:
+A massa final vem do domínio:
 
 ```text
-Nova dosagem
+dosing_controller_get_weight()
 ```
 
-e:
+Além da liberação manual (mesmo widget da Home), a tela oferece:
 
 ```text
-Voltar ao inicio
+NOVA DOSAGEM
 ```
 
 ---
@@ -36,28 +48,16 @@ Voltar ao inicio
 Ao selecionar:
 
 ```text
-Nova dosagem
+NOVA DOSAGEM
 ```
 
 o usuário retorna para:
 
 ```text
-SCREEN_MODE
+SCREEN_HOME
 ```
 
-Isso permite selecionar novamente:
-
-```text
-Massa
-```
-
-ou:
-
-```text
-Valor (R$)
-```
-
-Antes de voltar ao modo, o controller é reiniciado com tara:
+Antes de voltar, o controller é reiniciado com tara:
 
 ```text
 dosing_controller_new_dosing();
@@ -72,26 +72,22 @@ COMPLETED / INTERRUPTED
     ↓
 Nova dosagem
     ↓
-MODE
+HOME
 ```
 
 ---
 
-## 34. Voltar ao início após conclusão ou interrupção
+## 34. (removido) Voltar ao início
 
-Ao selecionar:
+A antiga ação:
 
 ```text
 Voltar ao inicio
 ```
 
-o usuário retorna para:
-
-```text
-SCREEN_HOME
-```
-
-Esse caminho representa o encerramento do ciclo de uso.
+foi **removida** das telas de conclusão e interrupção: os mockups
+`.images/tela-concluido.md` e `.images/tela-interrompido.md` apresentam
+somente **NOVA DOSAGEM** (que já retorna à Home) e a liberação manual.
 
 ---
 
@@ -103,45 +99,48 @@ Arquivo:
 src/ui/screens/interrupted_screen.c
 ```
 
-É exibida quando a dosagem é interrompida por:
+É exibida quando a dosagem é interrompida pelo comando:
 
 ```text
-Parar
+INTERROMPER DOSAGEM
 ```
 
-ou:
+durante a execução (RS11/RS12) ou pelo botão físico de emergência no
+alvo embarcado.
+
+A tela corresponde à **TELA 4** (`Interrompido`) do mockup
+`.images/tela-interrompido.md`:
 
 ```text
-Emergencia
-```
-
-durante a execução (RS11/RS12).
-
-A tela apresenta:
-
-```text
+INTERROMPIDO ⚠
 Dosagem interrompida
-Massa parcial: X g (de Y g)
+
+Massa parcial: 240 g de 500 g
+┌────────────────────────────────────────┐
+│ ████████░░░░░░░░░░░░░░░░░░    48%      │
+└────────────────────────────────────────┘
+
+┌──────────────────────────┐
+│ NOVA DOSAGEM             │
+└──────────────────────────┘
+
+✋ LIBERACAO MANUAL DISPONIVEL         [ LED ]
+┌──────────────────────────────────────┐
+│ LIBERAR MANUALMENTE                  │
+└──────────────────────────────────────┘
 ```
 
-e oferece:
-
-```text
-Nova dosagem
-Voltar ao inicio
-```
-
-**Nova dosagem** retorna a `SCREEN_MODE` (com tara); **Voltar ao inicio** retorna a `SCREEN_HOME`.
+**NOVA DOSAGEM** retorna a `SCREEN_HOME` (com tara via
+`dosing_controller_new_dosing()`).
 
 ---
 
 ## 35. Mapa das telas
 
-| Tela        | Função                     | Próximas telas        |
-| ----------- | -------------------------- | --------------------- |
-| Home        | Entrada, início e liberação manual | Mode            |
-| Mode        | Selecionar modo (Massa / Valor R$) | Config, Home  |
-| Config      | Definir parâmetros         | Dosing, Home          |
-| Dosing      | Acompanhar execução        | Completed, Interrupted |
-| Completed   | Informar conclusão         | Mode, Home            |
-| Interrupted | Informar interrupção       | Mode, Home            |
+| Tela        | Função                     | Próximas telas             |
+| ----------- | -------------------------- | -------------------------- |
+| Home        | Início, seleção de modo e liberação manual | Config           |
+| Config      | Definir parâmetros         | Dosing, Home               |
+| Dosing      | Acompanhar execução        | Completed, Interrupted     |
+| Completed   | Informar conclusão         | Home                       |
+| Interrupted | Informar interrupção       | Home                       |

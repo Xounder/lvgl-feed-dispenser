@@ -55,7 +55,6 @@ Conceitualmente:
 
 ```text
 SCREEN_HOME
-SCREEN_MODE
 SCREEN_CONFIG
 SCREEN_DOSING
 SCREEN_COMPLETED
@@ -67,14 +66,17 @@ Ele atua como uma ponte entre o fluxo da aplicação e a apresentação visual.
 Por exemplo:
 
 ```text
-Usuário pressiona "Iniciar"
+Usuário seleciona "MASSA" (card na Home)
             ↓
 home_screen
             ↓
-screen_manager_show(SCREEN_MODE)
+screen_manager_show_config(DOSING_MODE_GRAMS)
             ↓
-mode_screen
+config_screen
 ```
+
+A antiga tela `SCREEN_MODE` / `mode_screen` foi removida: a seleção de
+modo (Massa / Valor R$) foi incorporada à Home (TELA 1).
 
 O `screen_manager` pode conhecer:
 

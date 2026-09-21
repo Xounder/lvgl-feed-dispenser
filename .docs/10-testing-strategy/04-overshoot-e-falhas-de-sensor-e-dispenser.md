@@ -172,7 +172,7 @@ O sistema não pode permitir que a UI esteja em `Completed` enquanto o mecanismo
 Da mesma forma:
 
 ```text
-Parar / Emergencia
+INTERROMPER DOSAGEM / Emergencia fisico
       ↓
 Interrupted
 ```

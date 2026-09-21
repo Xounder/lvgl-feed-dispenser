@@ -153,14 +153,20 @@ Iniciar o simulador.
 
 ### Esperado
 
-A tela deve apresentar:
+A tela deve apresentar (Home / TELA 1):
 
 ```text
-Dosador de Racao
+Pesagem e Dosagem
 
-Pronto
+AGUARDANDO
+Selecione o modo de dosagem
 
-[ Iniciar ]
+[ MASSA ]           → Dosar por peso (g)
+[ VALOR MONETARIO ] → Dosar por valor (R$)
+
+[ LIBERAR MANUALMENTE ] (adiantado por LED verde)
+
+[ Inicio ] [ Dosagens ] [ Historico ] [ Config. ]
 ```
 
 O botão `Iniciar` deve levar para a seleção de modo.

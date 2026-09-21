@@ -18,7 +18,6 @@ A enumeração da UI:
 
 ```c
 SCREEN_HOME
-SCREEN_MODE
 SCREEN_CONFIG
 SCREEN_DOSING
 SCREEN_COMPLETED
@@ -122,10 +121,11 @@ SELECT_MODE
 pode ser representado pela:
 
 ```text
-SCREEN_MODE
+SCREEN_HOME
 ```
 
-e:
+(cards MASSA / VALOR dispostos na própria Home — a antiga `SCREEN_MODE`
+foi removida) e:
 
 ```text
 CONFIGURING
@@ -182,7 +182,7 @@ acionar
 O usuário pressiona:
 
 ```text
-Continuar
+INICIAR DOSAGEM AUTOMATICA
 ```
 
 A sequência é:
@@ -236,7 +236,7 @@ A UI apenas apresenta o resultado.
 ```text
 Usuário
    ↓
-Parar / Emergencia
+INTERROMPER DOSAGEM (tela) / Emergencia (botao fisico)
    ↓
 DosingScreen
    ↓

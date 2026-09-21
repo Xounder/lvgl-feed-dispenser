@@ -220,8 +220,7 @@ Ao alterar uma tela, preservar os caminhos existentes, salvo se a tarefa pedir e
 Atualmente:
 
 ```text
-Home → Mode
-Mode → Config
+Home → Config (MASSA ou VALOR, cards na própria Home)
 Config → Dosing
 Dosing → Completed
 Dosing → Interrupted
@@ -230,13 +229,13 @@ Dosing → Interrupted
 Também existem caminhos de retorno:
 
 ```text
-Mode → Home
 Config → Home
-Completed → Home
-Completed → Mode
-Interrupted → Home
-Interrupted → Mode
+Completed → Home (Nova dosagem)
+Interrupted → Home (Nova dosagem)
 ```
+
+A antiga tela `Mode` (`SCREEN_MODE` / `mode_screen.c`) foi removida: a
+seleção de modo passou a ser feita na própria Home.
 
 ---
 
@@ -247,8 +246,10 @@ A fonte padrão atual do LVGL não possui todos os caracteres acentuados necess�
 Por isso existem textos sem acentos, por exemplo:
 
 ```text
-Dosador de Racao
+Pesagem e Dosagem
 Liberacao manual
+LIBERAR MANUALMENTE
+LIBERACAO MANUAL DISPONIVEL
 Dosagem concluida
 Dosagem interrompida
 ```
