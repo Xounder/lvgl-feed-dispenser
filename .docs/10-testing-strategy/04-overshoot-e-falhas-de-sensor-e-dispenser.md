@@ -167,14 +167,22 @@ O sistema não pode permitir que a UI esteja em `Completed` enquanto o mecanismo
 
 ---
 
-## 35. Dispenser ativo após cancelamento
+## 35. Dispenser ativo após interrupção ou conclusão
 
 Da mesma forma:
 
 ```text
-Cancelar
+Parar / Emergencia
       ↓
-Home
+Interrupted
+```
+
+ou:
+
+```text
+Meta atingida
+      ↓
+Completed
 ```
 
 deve resultar em:

@@ -31,18 +31,18 @@ O fluxo principal está implementado:
 ```text
 Home
   ↓
-Seleção de modo
+Seleção de modo (Massa / Valor R$)
   ↓
 Configuração
   ↓
 Dosagem
-  ↓
-Conclusão
+  ├── Conclusão
+  └── Interrupção (Parar / Emergência)
 ```
 
-A dosagem possui um peso simulado e um dispenser simulado.
+A dosagem possui um peso simulado em duas etapas (rápida/fina) e um dispenser simulado.
 
-O ciclo completo já pode ser executado sem o hardware físico.
+O ciclo completo já pode ser executado sem o hardware físico, incluindo a liberação manual na Home.
 
 ---
 
@@ -72,7 +72,7 @@ O detalhamento técnico é tratado nos documentos canônicos de domínio, simula
 | Parte | Conteúdo |
 | ----- | -------- |
 | [`12-roadmap/01-visao-geral-e-estado-atual.md`](12-roadmap/01-visao-geral-e-estado-atual.md) | Objetivo do roadmap (não é cronograma rígido), visão geral da evolução (`Ideia → Simulador PC → … → Produto funcional`) e estado atual do projeto. |
-| [`12-roadmap/02-o-que-ja-foi-concluido.md`](12-roadmap/02-o-que-ja-foi-concluido.md) | Ambiente de desenvolvimento, repositório, simulador desktop, interface inicial, seleção de modo, configurações (quantidade fixa e porções), controller, abstração de hardware, sensor/dispenser simulados, cancelamento, reset, conclusão, testes manuais e documentação. |
+| [`12-roadmap/02-o-que-ja-foi-concluido.md`](12-roadmap/02-o-que-ja-foi-concluido.md) | Ambiente de desenvolvimento, repositório, simulador desktop, interface inicial, seleção de modo, configurações (Massa e Valor R$), controller, abstração de hardware, sensor/dispenser simulados, interrupção, tara/nova dosagem, conclusão, liberação manual, testes manuais e documentação. |
 | [`12-roadmap/03-proximo-ciclo-robustez.md`](12-roadmap/03-proximo-ciclo-robustez.md) | Próximo passo imediato e itens de robustez: estado `ERROR`, timeout, sensor sem progresso, overshoot, validação de configuração, testes automatizados, simulador mais realista e organização futura das implementações. |
 | [`12-roadmap/04-migracao-esp32-e-dosagem-fisica.md`](12-roadmap/04-migracao-esp32-e-dosagem-fisica.md) | Preparação para o ESP32-S3, display + touch, port da UI, HX711 + load cell, SG90 + mecanismo, integração mecânica, primeiros testes físicos, ajuste da dosagem, calibração, repetibilidade, falhas no hardware e teste de energia. |
 | [`12-roadmap/05-fases-dependencias-e-criterios.md`](12-roadmap/05-fases-dependencias-e-criterios.md) | Roadmap por fases (Fases 1–12), roadmap visual com legendas (✓/→/○), dependências entre fases, o que pode acontecer em paralelo e critério para avançar. |
@@ -115,7 +115,7 @@ Fase 12 — Produto final
 
 - `DosingConfig` / `DosingController` — domínio de dosagem já implementado em forma inicial.
 - `WeightSensor` / `Dispenser` — abstrações de hardware com implementações simuladas.
-- Estados atuais: `IDLE` → `DOSING` → `COMPLETED`; evolução planejada inclui `SELECT_MODE`, `CONFIGURING` e `ERROR`.
+- Estados atuais: `IDLE` → `DOSING` → `COMPLETED` (e `INTERRUPTED`); evolução planejada inclui `SELECT_MODE`, `CONFIGURING` e `ERROR`.
 
 A abstração de hardware usada pelo domínio é tratada em [`05-hardware-abstraction.md`](05-hardware-abstraction.md), e a UI em [`07-ui-and-navigation.md`](07-ui-and-navigation.md).
 

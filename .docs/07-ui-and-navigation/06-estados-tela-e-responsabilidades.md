@@ -22,6 +22,7 @@ SCREEN_MODE
 SCREEN_CONFIG
 SCREEN_DOSING
 SCREEN_COMPLETED
+SCREEN_INTERRUPTED
 ```
 
 representa:
@@ -34,6 +35,7 @@ Já o domínio possui:
 DOSING_STATE_IDLE
 DOSING_STATE_DOSING
 DOSING_STATE_COMPLETED
+DOSING_STATE_INTERRUPTED
 ```
 
 representando:
@@ -90,8 +92,15 @@ SELECT_MODE
 CONFIGURING
   ↓
 DOSING
-  ↓
-COMPLETED
+  ├── COMPLETED
+  └── INTERRUPTED
+```
+
+Atualmente o domínio implementa uma versão simplificada:
+
+```text
+IDLE → DOSING → COMPLETED
+            └──→ INTERRUPTED
 ```
 
 com possibilidade futura de:
@@ -222,12 +231,12 @@ A UI apenas apresenta o resultado.
 
 ---
 
-## 42. Exemplo: cancelamento
+## 42. Exemplo: interrupção
 
 ```text
 Usuário
    ↓
-Cancelar
+Parar / Emergencia
    ↓
 DosingScreen
    ↓
@@ -235,9 +244,9 @@ dosing_controller_cancel()
    ↓
 Dispenser.stop()
    ↓
-state = IDLE
+state = INTERRUPTED (massa parcial preservada)
    ↓
-Home
+InterruptedScreen
 ```
 
 ---
@@ -298,10 +307,8 @@ A UI pode:
 A UI atualmente aplica restrições simples, como:
 
 ```text
-quantidade mínima = 10 g
-incremento = 10 g
-porções mínimas = 1
-incremento = 1
+modo Massa: mínimo = 10 g, incremento = 10 g
+modo Valor (R$): mínimo = R$ 0,50, incremento = R$ 0,50
 ```
 
 Essas regras ajudam a impedir entradas obviamente inválidas.

@@ -177,8 +177,10 @@ Hoje temos:
 
 ```text
 DosingConfig
+├── mode (DOSING_MODE_GRAMS / DOSING_MODE_CURRENCY)
 ├── target_grams
-└── portions
+├── target_money_cents
+└── price_per_kg_cents
 ```
 
 e:
@@ -187,9 +189,12 @@ e:
 DosingController
 ├── start
 ├── update
-├── cancel
+├── cancel (interrupção → INTERRUPTED)
+├── new_dosing (tara)
+├── manual_release_start / manual_release_stop
 ├── get_weight
-└── get_state
+├── get_state
+└── get_phase
 ```
 
 Isso deixou a evolução posterior bem mais clara.
@@ -220,16 +225,18 @@ Hoje o domínio possui:
 typedef enum {
     DOSING_STATE_IDLE,
     DOSING_STATE_DOSING,
-    DOSING_STATE_COMPLETED
+    DOSING_STATE_COMPLETED,
+    DOSING_STATE_INTERRUPTED
 } DosingState;
 ```
 
 Então:
 
 ```text
-IDLE       ✅
-DOSING     ✅
-COMPLETED  ✅
+IDLE         ✅
+DOSING       ✅
+COMPLETED    ✅
+INTERRUPTED  ✅
 
 SELECT_MODE    → representado atualmente pela UI
 CONFIGURING   → representado atualmente pela UI
@@ -264,6 +271,7 @@ Por exemplo:
 Atual:
 
 IDLE → DOSING → COMPLETED
+             └→ INTERRUPTED
 ```
 
 e:
@@ -279,6 +287,7 @@ CONFIGURING
  ↓
 DOSING
  ├── COMPLETED
+ ├── INTERRUPTED
  └── ERROR
 ```
 

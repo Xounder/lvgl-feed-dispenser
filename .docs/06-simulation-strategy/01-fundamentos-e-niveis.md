@@ -119,7 +119,7 @@ As principais partes são:
 ```text
 1. Peso
 2. Dispenser
-3. Fluxo de ração
+3. Fluxo de ração (etapas rápida e fina)
 4. Tempo
 5. Ruído
 6. Overshoot
@@ -127,7 +127,9 @@ As principais partes são:
 8. Falhas do sensor
 9. Falhas do dispenser
 10. Cancelamento
-11. Timeout
+11. Interrupção / emergência
+12. Liberação manual
+13. Timeout
 ```
 
 Nem todas precisam existir imediatamente.
@@ -146,15 +148,19 @@ Já implementado.
 
 ```text
 dispenser ativo
-       ↓
-peso + 2 g
-       ↓
-controller verifica peso
-       ↓
-atingiu objetivo?
-       ↓
-sim → completa
+        ↓
+dosagem em duas etapas
+        ↓
+faltam > 30 g → etapa RÁPIDA (+20 g/tick ~300 ms)
+        ↓
+faltam ≤ 30 g → etapa FINA (+2 g/tick ~300 ms)
+        ↓
+peso >= meta → dispenser para
+        ↓
+COMPLETED
 ```
+
+O modo da meta pode ser Massa (gramas) ou Valor (R$) — neste caso, o valor é convertido em gramas pelo preço de referência por kg (padrão R$12,00/kg) antes da dosagem.
 
 ### Nível 2 — Fluxo temporal
 
@@ -192,4 +198,6 @@ ausência de progresso
 
 Permitir selecionar diferentes condições de teste.
 
-Cada nível é implementado sobre os componentes simulados `WeightSensor`/`Dispenser` definidos em [05-hardware-abstraction.md](../05-hardware-abstraction.md). Os estados de dosagem reproduzidos (`DOSING`, `COMPLETED`, `ERROR`, `IDLE`) pertencem ao domínio, descrito em [04-domain-and-state-machine.md](../04-domain-and-state-machine.md).
+Cada nível é implementado sobre os componentes simulados `WeightSensor`/`Dispenser` definidos em [05-hardware-abstraction.md](../05-hardware-abstraction.md). Os estados de dosagem reproduzidos (`IDLE`, `DOSING`, `COMPLETED`, `INTERRUPTED`) pertencem ao domínio, descrito em [04-domain-and-state-machine.md](../04-domain-and-state-machine.md).
+
+Além do fluxo automático, o Nível 1 também já reproduz a **liberação manual simulada** (RS14/RS16): enquanto o botão da Home é mantido pressionado, +5 g são adicionados por tick (~200 ms) e o LED verde fica aceso; essa liberação só é permitida quando o controller está em `IDLE`, sendo bloqueada durante a dosagem automática (RS15).

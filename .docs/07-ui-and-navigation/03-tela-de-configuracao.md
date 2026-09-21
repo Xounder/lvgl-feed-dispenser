@@ -20,12 +20,12 @@ e identifica o modo selecionado.
 
 ---
 
-## 16. Configuração de quantidade fixa
+## 16. Configuração do modo Massa
 
 No modo:
 
 ```text
-CONFIG_MODE_FIXED_AMOUNT
+DOSING_MODE_GRAMS
 ```
 
 a interface apresenta uma quantidade em gramas.
@@ -56,39 +56,47 @@ e o valor mínimo é:
 
 ---
 
-## 17. Configuração de porções
+## 17. Configuração do modo Valor (R$)
 
 No modo:
 
 ```text
-CONFIG_MODE_PORTIONS
+DOSING_MODE_CURRENCY
 ```
 
-a interface apresenta o número de porções.
+a interface apresenta um valor monetário em reais (armazenado internamente em centavos).
 
 O valor inicial atual é:
 
 ```text
-1
+R$ 5,00
 ```
 
 Os controles são:
 
 ```text
-[-]    1    [+]
+[-]    R$ 5,00    [+]
 ```
 
-O incremento é:
+O incremento atual é:
 
 ```text
-1
+R$ 0,50
 ```
 
-e o mínimo é:
+e o valor mínimo é:
 
 ```text
-1
+R$ 0,50
 ```
+
+Ao lado do valor é exibida a massa correspondente, calculada com o preço de referência:
+
+```text
+Equivale a 416 g   (com preço R$ 12,00/kg)
+```
+
+A conversão pertence ao domínio (ver modo Valor em [04-domain-and-state-machine.md](../04-domain-and-state-machine.md)).
 
 ---
 
@@ -119,9 +127,16 @@ A UI apenas produz uma configuração.
 A configuração atual é representada por:
 
 ```c
+typedef enum {
+    DOSING_MODE_GRAMS,
+    DOSING_MODE_CURRENCY
+} DosingMode;
+
 typedef struct {
-    int target_grams;
-    int portions;
+    DosingMode mode;
+    int target_grams;          /* modo massa (g) */
+    int target_money_cents;    /* modo valor (R$ em centavos) */
+    int price_per_kg_cents;    /* preco de referencia por kg (centavos) */
 } DosingConfig;
 ```
 
@@ -145,8 +160,10 @@ O `Screen Manager` mantém atualmente uma configuração:
 
 ```c
 static DosingConfig dosing_config = {
+    .mode = DOSING_MODE_GRAMS,
     .target_grams = 100,
-    .portions = 1
+    .target_money_cents = 500,   /* R$ 5,00 */
+    .price_per_kg_cents = 1200   /* R$ 12,00/kg */
 };
 ```
 

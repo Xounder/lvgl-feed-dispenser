@@ -1,4 +1,4 @@
-# Tela de conclusão e mapa das telas
+# Telas de conclusão, interrupção e mapa das telas
 
 ## 32. Tela de conclusão
 
@@ -12,6 +12,7 @@ A tela apresenta:
 
 ```text
 Dosagem concluida!
+Peso final: X g
 ```
 
 e informações sobre o objetivo atingido.
@@ -47,19 +48,27 @@ SCREEN_MODE
 Isso permite selecionar novamente:
 
 ```text
-Quantidade fixa
+Massa
 ```
 
 ou:
 
 ```text
-Porções
+Valor (R$)
 ```
+
+Antes de voltar ao modo, o controller é reiniciado com tara:
+
+```text
+dosing_controller_new_dosing();
+```
+
+(zera a balança e volta para `IDLE`).
 
 O fluxo é:
 
 ```text
-COMPLETED
+COMPLETED / INTERRUPTED
     ↓
 Nova dosagem
     ↓
@@ -68,7 +77,7 @@ MODE
 
 ---
 
-## 34. Voltar ao início após conclusão
+## 34. Voltar ao início após conclusão ou interrupção
 
 Ao selecionar:
 
@@ -86,12 +95,53 @@ Esse caminho representa o encerramento do ciclo de uso.
 
 ---
 
+## 34a. Tela de interrupção
+
+Arquivo:
+
+```text
+src/ui/screens/interrupted_screen.c
+```
+
+É exibida quando a dosagem é interrompida por:
+
+```text
+Parar
+```
+
+ou:
+
+```text
+Emergencia
+```
+
+durante a execução (RS11/RS12).
+
+A tela apresenta:
+
+```text
+Dosagem interrompida
+Massa parcial: X g (de Y g)
+```
+
+e oferece:
+
+```text
+Nova dosagem
+Voltar ao inicio
+```
+
+**Nova dosagem** retorna a `SCREEN_MODE` (com tara); **Voltar ao inicio** retorna a `SCREEN_HOME`.
+
+---
+
 ## 35. Mapa das telas
 
-| Tela      | Função                     | Próximas telas  |
-| --------- | -------------------------- | --------------- |
-| Home      | Entrada e início           | Mode            |
-| Mode      | Selecionar tipo de dosagem | Config, Home    |
-| Config    | Definir parâmetros         | Dosing, Home    |
-| Dosing    | Acompanhar execução        | Completed, Home |
-| Completed | Informar conclusão         | Mode, Home      |
+| Tela        | Função                     | Próximas telas        |
+| ----------- | -------------------------- | --------------------- |
+| Home        | Entrada, início e liberação manual | Mode            |
+| Mode        | Selecionar modo (Massa / Valor R$) | Config, Home  |
+| Config      | Definir parâmetros         | Dosing, Home          |
+| Dosing      | Acompanhar execução        | Completed, Interrupted |
+| Completed   | Informar conclusão         | Mode, Home            |
+| Interrupted | Informar interrupção       | Mode, Home            |

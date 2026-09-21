@@ -310,11 +310,21 @@ COMPLETED
 e:
 
 ```text
-cancelamento
+interrupção
       ↓
 parar dispenser
       ↓
-IDLE
+INTERRUPTED
+```
+
+e:
+
+```text
+liberação manual solta
+      ↓
+parar dispenser
+      ↓
+LED apaga
 ```
 
 e futuramente:

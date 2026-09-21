@@ -35,7 +35,7 @@ Conclusão
 Também devem ser testadas situações anormais:
 
 ```text
-cancelamento
+interrupção / emergência
 sensor sem progresso
 peso acima da meta
 timeout
@@ -60,8 +60,8 @@ O objetivo final da estratégia de testes é garantir que a evolução do projet
 | Parte | Conteúdo |
 | ----- | -------- |
 | [`10-testing-strategy/01-fundamentos-e-filosofia.md`](10-testing-strategy/01-fundamentos-e-filosofia.md) | Objetivo, filosofia de testes, o que deve ser testado, testes de build, inicialização, tela Home, navegação e retorno. |
-| [`10-testing-strategy/02-configuracao-e-dosagem-normal.md`](10-testing-strategy/02-configuracao-e-dosagem-normal.md) | Modos de configuração (quantidade fixa e porções), limites da quantidade, dosagem normal, critério de sucesso, peso crescente, progress bar, conclusão, nova dosagem e reset. |
-| [`10-testing-strategy/03-cancelamento-timeout-e-falta-de-progresso.md`](10-testing-strategy/03-cancelamento-timeout-e-falta-de-progresso.md) | Cancelamento, critério de segurança do cancelamento, cancelamento repetido, sensor parado, problema do sensor parado, estratégia de falta de progresso, timeout e timeout global versus falta de progresso. |
+| [`10-testing-strategy/02-configuracao-e-dosagem-normal.md`](10-testing-strategy/02-configuracao-e-dosagem-normal.md) | Modos de configuração (Massa e Valor R$), limites da quantidade, dosagem normal, critério de sucesso, peso crescente (etapas rápida/fina), progress bar, conclusão, nova dosagem e reset/tara. |
+| [`10-testing-strategy/03-cancelamento-timeout-e-falta-de-progresso.md`](10-testing-strategy/03-cancelamento-timeout-e-falta-de-progresso.md) | Interrupção (Parar/Emergência), critério de segurança da interrupção, interrupção repetida, sensor parado, problema do sensor parado, estratégia de falta de progresso, timeout e timeout global versus falta de progresso. |
 | [`10-testing-strategy/04-overshoot-e-falhas-de-sensor-e-dispenser.md`](10-testing-strategy/04-overshoot-e-falhas-de-sensor-e-dispenser.md) | Excesso de peso, overshoot, critério futuro para excesso, sensor com leitura inválida, peso negativo, falha do dispenser, dispenser ativo após conclusão/cancelamento e interrupção durante dosagem. |
 | [`10-testing-strategy/05-validacao-de-configuracao-e-repeticao.md`](10-testing-strategy/05-validacao-de-configuracao-e-repeticao.md) | Configuração inválida, validação no domínio, configuração extrema, meta já atingida, valor muito pequeno, múltiplas dosagens e repetição rápida. |
 | [`10-testing-strategy/06-timers-memoria-e-camadas-de-teste.md`](10-testing-strategy/06-timers-memoria-e-camadas-de-teste.md) | Timers, navegação repetida, memória, contexto atual de configuração, testes de UI, testes do domínio e testes da abstração de hardware. |
@@ -75,7 +75,7 @@ O objetivo final da estratégia de testes é garantir que a evolução do projet
 
 - **Grupos de testes:** build, UI e navegação, domínio, hardware simulado e integração; futuramente hardware real.
 - **Critério de sucesso:** `current_weight >= target_grams` → `dispenser.stop()` e `state = DOSING_STATE_COMPLETED`.
-- **Estado atual:** dosagem normal, peso simulado crescente, parada ao atingir a meta, cancelamento, reset, conclusão e nova dosagem já implementados.
+- **Estado atual:** dosagem normal nos dois modos (Massa e Valor R$), peso simulado crescente em duas etapas (rápida/fina), parada ao atingir a meta, interrupção (Parar/Emergência → tela Interrompida), liberação manual na Home, tara ao iniciar nova dosagem, conclusão já implementados.
 - **Ainda planejado:** timeout, sensor sem progresso, sensor inválido, excesso de peso, tolerância de overshoot, estado `ERROR`, validações de domínio mais completas e testes automatizados.
 
 ---

@@ -76,8 +76,8 @@ A tela inicial serve como ponto de entrada da aplicação.
 Concluído:
 
 ```text
-✓ seleção de quantidade fixa
-✓ seleção de porções
+✓ seleção do modo Massa
+✓ seleção do modo Valor (R$)
 ✓ retorno para Home
 ```
 
@@ -85,7 +85,7 @@ O usuário consegue escolher como deseja configurar a dosagem.
 
 ---
 
-## 6. Configuração de quantidade fixa
+## 6. Configuração do modo Massa
 
 Concluído:
 
@@ -101,28 +101,32 @@ Concluído:
 O valor é armazenado em:
 
 ```c
-DosingConfig
+DosingConfig.mode = DOSING_MODE_GRAMS
+DosingConfig.target_grams
 ```
 
 ---
 
-## 7. Configuração porções
+## 7. Configuração do modo Valor (R$)
 
 Concluído:
 
 ```text
-✓ quantidade de porções
+✓ valor em reais (centavos)
 ✓ botão +
 ✓ botão -
-✓ incremento de 1
-✓ limite mínimo de 1
-✓ valor inicial de 1
+✓ incremento de R$ 0,50
+✓ limite mínimo de R$ 0,50
+✓ valor inicial de R$ 5,00
+✓ conversão para gramas a partir do preço de referência
 ```
 
 A configuração também é armazenada no domínio através de:
 
 ```text
-DosingConfig
+DosingConfig.mode = DOSING_MODE_CURRENCY
+DosingConfig.target_money_cents
+DosingConfig.price_per_kg_cents
 ```
 
 ---
@@ -136,9 +140,12 @@ Concluído:
 ✓ inicialização
 ✓ start
 ✓ update
-✓ cancel
+✓ cancel (interrupção → INTERRUPTED)
+✓ new_dosing (tara)
+✓ manual_release_start / manual_release_stop
 ✓ leitura do peso
 ✓ leitura do estado
+✓ leitura da fase
 ```
 
 O controller já coordena o sensor de peso e o dispenser simulado.
@@ -217,10 +224,11 @@ Concluído:
 ✓ estado muda para COMPLETED
 ```
 
-Atualmente a simulação adiciona:
+Atualmente a simulação usa duas etapas:
 
 ```text
-2 g
+etapa rápida:   +20 g por atualização (faltando mais de 30 g)
+etapa fina:     +2 g por atualização  (faltando 30 g ou menos)
 ```
 
 a cada atualização de aproximadamente:
@@ -231,27 +239,30 @@ a cada atualização de aproximadamente:
 
 ---
 
-## 13. Cancelamento
+## 13. Interrupção
 
 Concluído:
 
 ```text
-✓ botão Cancelar
+✓ botão Parar (comando na tela)
+✓ botão Emergencia (simulação do botão físico)
 ✓ dispenser é parado
-✓ controller retorna para IDLE
-✓ aplicação retorna para Home
+✓ controller muda para INTERRUPTED
+✓ massa parcial é preservada
+✓ tela Interrompida (Nova dosagem / Voltar ao inicio)
 ```
 
-Esse comportamento será especialmente importante quando o dispenser real for integrado.
+A interrupção tem prioridade sobre o controle automático.
 
 ---
 
-## 14. Reset
+## 14. Reset (tara) e liberação manual
 
 Concluído:
 
 ```text
-✓ peso é resetado ao iniciar nova dosagem
+✓ peso é resetado (tara) ao iniciar nova dosagem
+✓ release manual na Home com LED (só em IDLE, RS14-RS16)
 ```
 
 Isso permite executar ciclos consecutivos sem carregar o peso da dosagem anterior.
@@ -281,14 +292,15 @@ Já foram verificados:
 ✓ build
 ✓ execução
 ✓ navegação
-✓ configuração +
-✓ configuração -
-✓ dosagem
+✓ configuração + / -
+✓ modos Massa e Valor (R$)
+✓ dosagem (etapas rápida e fina)
 ✓ aumento do peso
 ✓ parada do dispenser
-✓ reset
-✓ cancelamento
-✓ retorno para Home
+✓ tara (nova dosagem)
+✓ interrupção (Parar / Emergencia)
+✓ tela Interrompida
+✓ liberação manual com LED
 ✓ Completed
 ✓ Nova dosagem
 ✓ ciclo completo repetido
@@ -326,9 +338,9 @@ Esses documentos preservam não apenas o código atual, mas também o raciocíni
 Os detalhes das etapas concluídas acima são tratados em seus documentos canônicos:
 
 - [`09-pc-development-environment.md`](../09-pc-development-environment.md) — ambiente de desenvolvimento, simulador desktop, build e execução no PC.
-- [`07-ui-and-navigation.md`](../07-ui-and-navigation.md) — telas e navegação (Home, seleção de modo, configuração, dosagem, conclusão).
-- [`04-domain-and-state-machine.md`](../04-domain-and-state-machine.md) — controller, configuração e regras de dosagem e cancelamento.
+- [`07-ui-and-navigation.md`](../07-ui-and-navigation.md) — telas e navegação (Home, seleção de modo, configuração, dosagem, conclusão e interrupção).
+- [`04-domain-and-state-machine.md`](../04-domain-and-state-machine.md) — controller, configuração, estados e regras de dosagem, interrupção e liberação manual.
 - [`05-hardware-abstraction.md`](../05-hardware-abstraction.md) — `WeightSensor`, `Dispenser` e implementações simuladas.
-- [`06-simulation-strategy.md`](../06-simulation-strategy.md) — simulação do peso (2 g a cada ~300 ms) e do dispenser.
+- [`06-simulation-strategy.md`](../06-simulation-strategy.md) — simulação do peso (etapas rápida/fina a cada ~300 ms) e do dispenser.
 - [`10-testing-strategy.md`](../10-testing-strategy.md) — testes manuais verificados e critérios do caminho principal.
 - [`README.md`](../README.md) — índice geral da documentação.

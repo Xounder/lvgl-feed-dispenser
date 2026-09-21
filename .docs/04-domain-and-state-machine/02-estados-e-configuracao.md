@@ -32,6 +32,8 @@ SELECT_MODE
 
 No modelo simplificado atual, parte desse fluxo é representada diretamente pela navegação da UI.
 
+Na implementação atual, `dosing_controller_start()` parte diretamente de `IDLE` para `DOSING` (executando tara/reset do sensor e iniciando o dispenser na fase `FAST`).
+
 ---
 
 ## 6. Estado `SELECT_MODE`
@@ -40,12 +42,14 @@ No modelo simplificado atual, parte desse fluxo é representada diretamente pela
 
 O usuário está escolhendo como deseja realizar a dosagem.
 
-Atualmente existem dois modos:
+Os modos previstos são:
 
 ```text
-Quantidade fixa
-Porções
+Massa (gramas)
+Valor (R$)
 ```
+
+Esse estado ainda é evolução prevista: na implementação atual, a escolha do modo é feita diretamente pela UI e refletida em `DosingConfig.mode`.
 
 ---
 
@@ -54,9 +58,9 @@ Porções
 ```text
 SELECT_MODE
    │
-   ├── Quantidade fixa ──→ CONFIGURING
+   ├── Massa ──────→ CONFIGURING
    │
-   └── Porções ──────────→ CONFIGURING
+   └── Valor (R$) ─→ CONFIGURING
 ```
 
 O modo selecionado deve ser armazenado para que a tela de configuração saiba quais parâmetros apresentar.
@@ -72,17 +76,24 @@ O usuário está configurando os parâmetros necessários para a dosagem.
 A configuração atual é representada por:
 
 ```c
+typedef enum {
+    DOSING_MODE_GRAMS,
+    DOSING_MODE_CURRENCY
+} DosingMode;
+
 typedef struct {
-    int target_grams;
-    int portions;
+    DosingMode mode;
+    int target_grams;          /* modo massa (g) */
+    int target_money_cents;    /* modo valor (R$ em centavos) */
+    int price_per_kg_cents;    /* preco de referencia por kg (centavos) */
 } DosingConfig;
 ```
 
 ---
 
-## 8. Configuração por quantidade fixa
+## 8. Configuração por massa (gramas)
 
-Nesse modo, o parâmetro principal é:
+Nesse modo (`DOSING_MODE_GRAMS`), o parâmetro principal é:
 
 ```text
 target_grams
@@ -123,52 +134,47 @@ A regra exata poderá ser alterada caso os requisitos físicos do produto mudem.
 
 ---
 
-## 9. Configuração por porções
+## 9. Configuração por valor (R$)
 
-Nesse modo, o parâmetro principal é:
+Nesse modo (`DOSING_MODE_CURRENCY`), os parâmetros principais são:
 
 ```text
-portions
+target_money_cents     valor desejado (R$ em centavos)
+price_per_kg_cents     preço de referência (R$ por kg em centavos)
 ```
 
 Exemplo:
 
 ```text
-3 porções
+valor desejado = R$ 3,00   (300 centavos)
+preço          = R$ 12,00/kg (1200 centavos)
 ```
 
-A interface atual permite:
+O preço de referência padrão é:
 
 ```text
--1
-+1
-```
-
-com mínimo de:
-
-```text
-1
+R$ 12,00/kg
 ```
 
 ---
 
-### Regra futura
+### Regra de conversão
 
-A relação entre:
-
-```text
-porções
-```
-
-e:
+O valor desejado é convertido em gramas pelo controller:
 
 ```text
-gramas
+target_grams = (target_money_cents * 1000) / price_per_kg_cents
 ```
 
-ainda precisa ser definida de forma mais precisa pelo domínio do produto.
+Exemplo com os valores acima:
 
-Não se deve assumir uma conversão arbitrária sem uma regra de negócio definida.
+```text
+(300 * 1000) / 1200 = 250 g
+```
+
+Se `price_per_kg_cents <= 0`, não existe preço de referência válido e o alvo convertido é tratado como inválido (`0 g`), impedindo o início da dosagem.
+
+A conversão é centralizada no controller (ver [`04-tabelas-eventos-e-invariantes.md`](04-tabelas-eventos-e-invariantes.md) e [`05-regras-de-borda.md`](05-regras-de-borda.md)).
 
 ---
 
@@ -198,6 +204,16 @@ resetar/tarar sensor
 iniciar dispenser
         ↓
 estado = DOSING
+```
+
+Na implementação atual, esse fluxo resume-se a `dosing_controller_start()`:
+
+```text
+reset/tara do sensor (simulated_weight_sensor.reset)
+        ↓
+estado = DOSING, fase = FAST
+        ↓
+dispenser ativo
 ```
 
 ---

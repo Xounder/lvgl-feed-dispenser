@@ -27,7 +27,7 @@ Este guia cobre:
 | ----- | -------- |
 | [01-objetivo-e-contexto.md](13-agent-guide/01-objetivo-e-contexto.md) | Objetivo do guia, leitura da documentação, objetivo do projeto, regra do estado atual versus arquitetura futura e não inventar funcionalidades |
 | [02-arquitetura-e-camadas.md](13-agent-guide/02-arquitetura-e-camadas.md) | Arquitetura atual, responsabilidade de cada camada, regra de dependência, UI sem regra de negócio, não colocar LVGL/SDL2/Windows no domínio, hardware abstrato e simulação permanente |
-| [03-dominio-e-regras-de-dosagem.md](13-agent-guide/03-dominio-e-regras-de-dosagem.md) | Estado de negócio ≠ tela, máquina de estados, `DosingConfig`, regras atuais de dosagem, cancelamento seguro, comportamento físico, overshoot, erros planejados, validação e memória |
+| [03-dominio-e-regras-de-dosagem.md](13-agent-guide/03-dominio-e-regras-de-dosagem.md) | Estado de negócio ≠ tela, máquina de estados, `DosingConfig`, regras atuais de dosagem, interrupção segura, comportamento físico, overshoot, erros planejados, validação e memória |
 | [04-codigo-e-dependencias.md](13-agent-guide/04-codigo-e-dependencias.md) | Não refatorar sem necessidade, abstrações prematuras, CMake/`MAIN_SOURCES`, dependências externas, SDL2, LVGL, ThorVG, `main.c`, HAL, telas, navegação, textos sem acentos e timer da tela de dosagem |
 | [05-testes-e-validacao.md](13-agent-guide/05-testes-e-validacao.md) | Testar antes de concluir, regra de regressão, testes reproduzíveis, não depender do hardware, hardware como fonte de informação e regras de migração entre PC e ESP32 |
 | [06-hardware.md](13-agent-guide/06-hardware.md) | Hardware futuro, pinagem, segurança do atuador e alimentação |

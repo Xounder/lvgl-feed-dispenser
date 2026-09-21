@@ -81,7 +81,7 @@ O código está organizado principalmente em três áreas (`src/`):
 
 * `domain/` — lógica do comportamento do sistema: configuração da dosagem, estado do processo e regras para iniciar, atualizar, cancelar e concluir. Ver [04-domain-and-state-machine.md](04-domain-and-state-machine.md).
 * `hardware/` — abstrações `WeightSensor` e `Dispenser` com implementações simuladas, substituíveis no futuro por HX711 + célula de carga e SG90/atuador sem que o controller precise conhecê-los. Ver [05-hardware-abstraction.md](05-hardware-abstraction.md).
-* `ui/` — telas (Home, Modo, Configuração, Dosagem, Conclusão) e navegação via `screen_manager`. Ver [07-ui-and-navigation.md](07-ui-and-navigation.md).
+* `ui/` — telas (Home com liberação manual e LED, Modo, Configuração, Dosagem com Emergência/Parar, Interrompido, Concluído) e navegação via `screen_manager`. Ver [07-ui-and-navigation.md](07-ui-and-navigation.md).
 
 A UI deve permanecer responsável principalmente por apresentar informações, receber interação do usuário, solicitar ações ao domínio e refletir o estado atual da aplicação.
 
@@ -93,9 +93,9 @@ A estrutura completa do `src/` está em [02-architecture.md](02-architecture.md)
 
 # 7. Fluxo atual da aplicação
 
-O fluxo principal implementado é: `Home → Selecionar modo (Quantidade fixa | Porções) → Configuração → Dosando → (Cancelar → Home) ou (Meta atingida → Concluído)`.
+O fluxo principal implementado é: `Home → Selecionar modo (Massa | Valor R$) → Configuração → Dosando → (Parar/Emergência → Interrompido → Nova dosagem) ou (Meta atingida → Concluído → Nova dosagem)`.
 
-A tela de conclusão permite iniciar uma nova dosagem ou retornar ao início.
+As telas de conclusão e de interrupção permitem iniciar uma nova dosagem ou voltar ao início.
 
 O fluxo de navegação detalhado está em [07-ui-and-navigation.md](07-ui-and-navigation.md).
 
@@ -103,12 +103,14 @@ O fluxo de navegação detalhado está em [07-ui-and-navigation.md](07-ui-and-na
 
 # 8. Modos de dosagem
 
-Existem dois modos de configuração:
+Existem dois modos de dosagem:
 
-* **Quantidade fixa** — o usuário define diretamente a quantidade de ração desejada em gramas;
-* **Porções** — o usuário informa a quantidade de porções desejadas.
+* **Massa** — o usuário informa diretamente a quantidade de ração desejada em gramas (`target_grams`);
+* **Valor (R$)** — o usuário informa o valor desejado em centavos (`target_money_cents`); o sistema converte para gramas usando o preço de referência por unidade de massa (`price_per_kg_cents`, padrão R$ 12,00/kg).
 
-As regras de cada modo (incrementos, limites e conversão entre porções e quantidade física) pertencem ao domínio e estão em [04-domain-and-state-machine.md](04-domain-and-state-machine.md).
+No modo Valor, a conversão segue o requisito RS05: `gramas = (target_money_cents * 1000) / price_per_kg_cents`. O `DosingConfig` é `{ DosingMode mode; int target_grams; int target_money_cents; int price_per_kg_cents; }`, com `DosingMode = DOSING_MODE_GRAMS | DOSING_MODE_CURRENCY`.
+
+As regras de cada modo (incrementos, limites e conversão valor → massa) pertencem ao domínio e estão em [04-domain-and-state-machine.md](04-domain-and-state-machine.md).
 
 ---
 
@@ -116,9 +118,9 @@ As regras de cada modo (incrementos, limites e conversão entre porções e quan
 
 O simulador representa o hardware por meio de implementações artificiais.
 
-Quando uma dosagem é iniciada, o controller reseta o peso, inicia o dispenser, o sensor simulado começa em 0 g e o peso aumenta gradualmente; quando a meta é atingida, o dispenser para e o estado passa a `COMPLETED`.
+Quando uma dosagem é iniciada, o controller reseta o peso, inicia o dispenser, o sensor simulado começa em 0 g e o peso aumenta gradualmente. A liberação ocorre em duas etapas (`DosingPhase`): etapa **rápida** com vazão alta (+20 g a cada 300 ms) enquanto faltam mais de 30 g, e etapa **fina** com vazão reduzida (+2 g) quando faltam 30 g ou menos. Ao atingir a meta, o dispenser para e o estado passa a `COMPLETED`.
 
-Na implementação atual, a simulação adiciona uma pequena quantidade de peso a cada atualização do processo.
+Na implementação atual, a simulação adiciona uma pequena quantidade de peso a cada atualização do processo (300 ms).
 
 Isso não pretende representar ainda o comportamento físico exato da ração; seu objetivo atual é permitir validar o fluxo de aplicação.
 
@@ -152,9 +154,9 @@ Esses detalhes pertencem à implementação de hardware ([05-hardware-abstractio
 
 # 12. Estados da aplicação
 
-O sistema já possui estados relacionados ao processo de dosagem.
+O `DosingState` atual implementa os estados `IDLE`, `DOSING`, `COMPLETED` e `INTERRUPTED`. `cancel()` / emergência (botões "Emergência"/"Parar") levam ao estado `INTERRUPTED`, preservando a massa parcial e priorizando a parada; `new_dosing()` realiza a tara/reset e retorna ao `IDLE`.
 
-A direção arquitetural planejada é representar explicitamente o ciclo completo: `IDLE → SELECT_MODE → CONFIGURING → DOSING → ERROR | COMPLETED`.
+A direção arquitetural planejada é representar explicitamente o ciclo completo: `IDLE → SELECT_MODE → CONFIGURING → DOSING → ERROR | COMPLETED`, restando `SELECT_MODE`, `CONFIGURING` e `ERROR` como evolução prevista (não fazem parte do enum atual).
 
 Os estados representam o **comportamento do domínio**, e não simplesmente as telas do LVGL.
 
@@ -265,3 +267,38 @@ Em uma frase:
 > **Este projeto é uma aplicação de dosagem automática de ração desenvolvida primeiro em um simulador desktop com LVGL, utilizando uma arquitetura que separa UI, domínio e hardware para permitir que a mesma lógica evolua posteriormente para um dispositivo físico baseado em ESP32-S3.**
 
 O principal objetivo arquitetural é fazer com que a aplicação possa evoluir de `Simulação` para `Protótipo físico` sem precisar abandonar a estrutura e a lógica desenvolvidas durante a fase de software.
+
+---
+
+# 21. Rastreabilidade dos requisitos do trabalho acadêmico (Trabalho.md)
+
+A tabela abaixo mapeia os requisitos físicos (RP01–RP08) e de software (RS01–RS16) do trabalho acadêmico para a documentação canônica correspondente e o status atual de cada um.
+
+Estado: **Implementado** = presente e funcional no simulador; **Planejado** = documentado como evolução futura; **Hardware físico** = depende da montagem/migração para o ESP32-S3.
+
+| Código | Requisito (texto resumido do Trabalho.md) | Cobertura na documentação | Status |
+| --- | --- | --- | --- |
+| RP01 | Reservatório para armazenamento do produto | [08-target-hardware.md](08-target-hardware.md) | Hardware físico (planejado) |
+| RP02 | Permitir abastecimento e reabastecimento | [08-target-hardware.md](08-target-hardware.md) | Hardware físico (planejado) |
+| RP03 | Mecanismo para liberar/interromper fisicamente a liberação (etapas rápida e fina) | [04-domain-and-state-machine.md](04-domain-and-state-machine.md), [06-simulation-strategy.md](06-simulation-strategy.md), [08-target-hardware.md](08-target-hardware.md) | Etapas rápida/fina implementadas no simulador; mecanismo físico planejado |
+| RP04 | Região para posicionamento do recipiente (plataforma) | [08-target-hardware.md](08-target-hardware.md) | Hardware físico (planejado) |
+| RP05 | Pesagem do produto efetivamente recebido (4 células de carga de 5 kg nos 4 pontos de apoio) | [06-simulation-strategy.md](06-simulation-strategy.md), [08-target-hardware.md](08-target-hardware.md), [10-testing-strategy.md](10-testing-strategy.md) | Hardware físico (planejado); pesagem simulada no PC |
+| RP06 | Permitir visualizar e demonstrar o processo físico | [08-target-hardware.md](08-target-hardware.md) | Hardware físico (planejado) |
+| RP07 | Permitir retirar o produto e reposicionar/substituir o recipiente | [08-target-hardware.md](08-target-hardware.md) | Hardware físico (planejado); tara implementada no simulador |
+| RP08 | Dispositivo geral de liga/desliga (chave geral) | [08-target-hardware.md](08-target-hardware.md) | Hardware físico (planejado) |
+| RS01 | Selecionar dosagem por massa ou valor monetário | [04-domain-and-state-machine.md](04-domain-and-state-machine.md), [07-ui-and-navigation.md](07-ui-and-navigation.md) | Implementado (modos Massa e Valor R$) |
+| RS02 | Informar a massa desejada | [04-domain-and-state-machine.md](04-domain-and-state-machine.md), [07-ui-and-navigation.md](07-ui-and-navigation.md) | Implementado |
+| RS03 | Informar o valor monetário desejado | [04-domain-and-state-machine.md](04-domain-and-state-machine.md), [07-ui-and-navigation.md](07-ui-and-navigation.md) | Implementado |
+| RS04 | Utilizar preço de referência por unidade de massa | [04-domain-and-state-machine.md](04-domain-and-state-machine.md), [08-target-hardware.md](08-target-hardware.md) | Implementado (padrão R$ 12,00/kg) |
+| RS05 | Determinar a massa correspondente ao valor informado | [04-domain-and-state-machine.md](04-domain-and-state-machine.md) | Implementado (gramas = valor×1000/preço-por-kg) |
+| RS06 | Iniciar automaticamente a liberação após o comando | [04-domain-and-state-machine.md](04-domain-and-state-machine.md), [06-simulation-strategy.md](06-simulation-strategy.md) | Implementado |
+| RS07 | Monitorar a massa recebida durante a dosagem | [06-simulation-strategy.md](06-simulation-strategy.md), [10-testing-strategy.md](10-testing-strategy.md) | Implementado (simulado) |
+| RS08 | Apresentar visualmente a massa atualizada | [07-ui-and-navigation.md](07-ui-and-navigation.md) | Implementado |
+| RS09 | Controlar e interromper automaticamente a liberação (rápida/fina + fechamento) | [04-domain-and-state-machine.md](04-domain-and-state-machine.md), [06-simulation-strategy.md](06-simulation-strategy.md) | Implementado |
+| RS10 | Apresentar estados Aguardando, Dosando e Concluído | [04-domain-and-state-machine.md](04-domain-and-state-machine.md), [07-ui-and-navigation.md](07-ui-and-navigation.md) | Implementado (IDLE, DOSING, COMPLETED) |
+| RS11 | Interrupção manual da dosagem (tela "Parar" / botão físico) | [04-domain-and-state-machine.md](04-domain-and-state-machine.md), [07-ui-and-navigation.md](07-ui-and-navigation.md), [08-target-hardware.md](08-target-hardware.md) | Implementado (botões "Parar"/"Emergência" → INTERRUPTED) |
+| RS12 | Prioridade da interrupção manual | [04-domain-and-state-machine.md](04-domain-and-state-machine.md) | Implementado |
+| RS13 | Encerrar a operação e preparar nova dosagem (tara) | [04-domain-and-state-machine.md](04-domain-and-state-machine.md), [07-ui-and-navigation.md](07-ui-and-navigation.md) | Implementado (`new_dosing()` → tara → IDLE) |
+| RS14 | Permitir liberação manual direta | [04-domain-and-state-machine.md](04-domain-and-state-machine.md), [07-ui-and-navigation.md](07-ui-and-navigation.md), [08-target-hardware.md](08-target-hardware.md) | Implementado em IDLE (botão "Liberação manual") |
+| RS15 | Impedir liberação manual durante dosagem automática | [04-domain-and-state-machine.md](04-domain-and-state-machine.md), [07-ui-and-navigation.md](07-ui-and-navigation.md) | Implementado (bloqueada fora do estado IDLE) |
+| RS16 | Indicar visualmente o modo de liberação manual (LED) | [07-ui-and-navigation.md](07-ui-and-navigation.md), [08-target-hardware.md](08-target-hardware.md) | Implementado (LED indicador verde na Home); LED físico planejado |

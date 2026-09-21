@@ -192,7 +192,7 @@ comportamento planejado
 | Cenário               | Entrada            | Resultado esperado           | Estado futuro          |
 | --------------------- | ------------------ | ---------------------------- | ---------------------- |
 | Dosagem normal        | peso aumenta       | atingir meta e parar         | COMPLETED              |
-| Cancelamento          | usuário cancela    | parar dispenser              | IDLE                   |
+| Interrupção           | usuário interrompe (Parar/Emergência) | parar dispenser              | INTERRUPTED            |
 | Nova dosagem          | iniciar novamente  | peso resetado                | DOSING                 |
 | Sensor parado         | peso não muda      | timeout                      | ERROR                  |
 | Timeout global        | tempo excedido     | parar dispenser              | ERROR                  |

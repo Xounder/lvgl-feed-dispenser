@@ -6,27 +6,18 @@
 
 ### 22. Botões físicos
 
-Além do touchscreen, o projeto prevê botões físicos.
-
-Os componentes inicialmente considerados incluem:
+Além do touchscreen, o projeto prevê **2 botões físicos** (conforme Trabalho.md), com funções definidas:
 
 ```text
-2 botões físicos
+Botão de emergência    → interrompe imediatamente a dosagem (RS11/RS12)
+Botão de liberação     → liberação manual direta, mantido pressionado (RS14)
 ```
 
-Eles podem ser utilizados para funções específicas da operação.
+O **botão de emergência** tem prioridade sobre o controle automático: acionado em qualquer momento da dosagem, o dispenser é parado imediatamente (equivalente físico do botão "Emergencia" do simulador).
 
-A função exata ainda pode evoluir conforme o uso do dispositivo.
+O **botão de liberação** permite liberar ração manualmente e só deve atuar quando o sistema não estiver em dosagem automática (RS15); no simulador corresponde ao botão "Liberacao manual" da Home.
 
-Possíveis funções incluem:
-
-```text
-iniciar
-cancelar
-confirmar
-```
-
-Mas a definição final deve considerar a interface touchscreen e a experiência real de utilização.
+As funções físicas devem espelhar os comandos já validados no simulador para que o comportamento seja idêntico na migração.
 
 ---
 
@@ -78,22 +69,11 @@ A implementação elétrica final deverá garantir que a chave seja compatível 
 
 ### 25. Indicador / LED
 
-Também existe um indicador visual simples, inicialmente considerado como:
+Existe um **LED indicador** cuja função definida é sinalizar o **modo de liberação manual** (RS16): aceso quando a liberação manual está ativa, apagado caso contrário.
 
-```text
-LED
-```
+No simulador, esse mesmo comportamento é representado pelo indicador verde da Home.
 
-Ele pode ser utilizado para representar condições como:
-
-```text
-dispositivo ligado
-dosagem em andamento
-concluído
-erro
-```
-
-A semântica final ainda pode ser definida durante a integração.
+A semântica final pode ser complementada durante a integração (ex.: outros estados), mas a indicação do modo manual já é um requisito fixo (RS16).
 
 O LED não deve substituir as informações principais da interface gráfica.
 

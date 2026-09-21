@@ -11,10 +11,8 @@ A UI deve impedir ou rejeitar valores inválidos.
 Exemplos:
 
 ```text
-0 g
--10 g
-0 porções
-porções negativas
+modo Massa:      0 g, -10 g
+modo Valor (R$): R$ 0,00, preço de referência nulo ou negativo
 ```
 
 No estado atual, os controles possuem limites mínimos.

@@ -246,10 +246,11 @@ permitindo estimar:
 g/s
 ```
 
-A simulação atual utiliza aproximadamente:
+A simulação atual usa aproximadamente (duas fases):
 
 ```text
-6,7 g/s
+fase rápida: ≈ 66,7 g/s  (+20 g por update ~300 ms)
+fase fina:   ≈ 6,7 g/s   (+2 g por update ~300 ms)
 ```
 
 mas esse valor é apenas um modelo inicial (taxa de alimentação da simulação em [09-pc-development-environment.md](../09-pc-development-environment.md) e [06-simulation-strategy.md](../06-simulation-strategy.md)).

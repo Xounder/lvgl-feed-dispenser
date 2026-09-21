@@ -1,12 +1,12 @@
-# Cancelamento, timeout e falta de progresso
+# Interrupção, timeout e falta de progresso
 
 > _Voltar ao índice: [`../10-testing-strategy.md`](../10-testing-strategy.md)._
 
 ---
 
-## 20. Teste de cancelamento
+## 20. Teste de interrupção
 
-O usuário deve conseguir cancelar uma dosagem em andamento.
+O usuário deve conseguir interromper uma dosagem em andamento.
 
 ### Cenário
 
@@ -19,30 +19,38 @@ dispenser = ativo
 Pressionar:
 
 ```text
-Cancelar
+Parar
 ```
+
+ou:
+
+```text
+Emergencia
+```
+
+(RS11/RS12)
 
 ### Esperado
 
 ```text
 dispenser.stop()
-        ↓
-state = IDLE
-        ↓
-Home
+         ↓
+state = INTERRUPTED
+         ↓
+InterruptedScreen (massa parcial preservada)
 ```
 
 ---
 
-## 21. Critério de segurança do cancelamento
+## 21. Critério de segurança da interrupção
 
-O cancelamento não deve apenas trocar de tela.
+A interrupção não deve apenas trocar de tela.
 
 É necessário garantir:
 
 ```text
-Cancelar
-   ↓
+Parar / Emergencia
+      ↓
 dispenser.stop()
 ```
 
@@ -50,25 +58,27 @@ Isso é especialmente importante quando o simulador for substituído pelo SG90 o
 
 A troca de tela sozinha não pode representar a parada física.
 
+A interrupção tem **prioridade** sobre o controle automático: mesmo no meio de uma etapa rápida, o dispenser deve parar (RS12).
+
 ---
 
-## 22. Teste de cancelamento repetido
+## 22. Teste de interrupção repetida
 
 Também deve ser considerado:
 
 ```text
 Dosing
  ↓
-Cancelar
+Parar / Emergencia
  ↓
-Home
+Interrupted
  ↓
-Cancelar novamente
+(repetir comando de interrupção)
 ```
 
 A aplicação não deve apresentar crash ou comportamento inesperado.
 
-Eventos de cancelamento devem ser tratados de forma segura mesmo quando o sistema já estiver parado.
+Eventos de interrupção devem ser tratados de forma segura mesmo quando o sistema já estiver parado (o controller ignora o comando quando não está em `DOSING`).
 
 ---
 

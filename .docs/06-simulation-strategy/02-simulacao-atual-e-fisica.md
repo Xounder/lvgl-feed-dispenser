@@ -14,16 +14,19 @@ A leitura retorna:
 simulated_read_grams()
 ```
 
-e o controller aumenta artificialmente o peso:
+e o controller aumenta artificialmente o peso por tick:
 
 ```c
-simulated_weight_sensor.add_grams(2);
+simulated_weight_sensor.add_grams(step);
 ```
 
-A cada atualização:
+A dosagem automática usa **duas etapas** decididas em `dosing_controller_update()`:
 
 ```text
-+2 g
+faltam > 30 g até a meta
+    → DOSING_PHASE_FAST = +20 g por tick (~300 ms)
+faltam ≤ 30 g até a meta
+    → DOSING_PHASE_FINE = +2 g por tick (~300 ms)
 ```
 
 Quando o objetivo é:
@@ -35,15 +38,31 @@ Quando o objetivo é:
 o comportamento é aproximadamente:
 
 ```text
-0
-2
-4
-6
-8
-...
-98
-100
+0 → 20 → 40 → 60   (etapa rápida)
+        ↓
+faltam 40 g → ainda rápido: 80
+        ↓
+faltam 20 g → etapa fina: 82, 84, ..., 98, 100
 ```
+
+Ao atingir:
+
+```text
+peso >= meta
+```
+
+o dispenser é parado e o estado passa a `COMPLETED`. Como o passo é adicionado antes da verificação, o peso pode ultrapassar a meta (overshoot) antes do fechamento — por exemplo, `98 → 100 → 102`.
+
+A **liberação manual** usa um passo próprio e um tick mais curto:
+
+```text
+botão "Liberacao manual" pressionado (estado IDLE)
+    → +5 g por tick (~200 ms)
+    → LED verde aceso (modo manual)
+ao soltar o botão → dispenser para e LED apaga
+```
+
+A liberação manual não utiliza a meta como condição automática de parada (RS14) e fica bloqueada durante a dosagem automática (RS15).
 
 ---
 
@@ -160,36 +179,35 @@ O domínio, com suas regras e estados, é descrito em [04-domain-and-state-machi
 A simulação atual adiciona:
 
 ```text
-2 g
-```
-
-a cada atualização de aproximadamente:
-
-```text
-300 ms
+etapa rápida:  20 g a cada ~300 ms
+etapa fina:     2 g a cada ~300 ms
+liberação manual: 5 g a cada ~200 ms
 ```
 
 Isso corresponde aproximadamente a:
 
 ```text
-6,7 g/s
+etapa rápida:  ~66,7 g/s
+etapa fina:     ~6,7 g/s
+liberação manual: ~25 g/s
 ```
 
-Essa taxa pode posteriormente ser transformada em uma variável configurável.
+Essas taxas podem posteriormente ser transformadas em variáveis configuráveis.
 
 Por exemplo:
 
 ```text
-fluxo = 5 g/s
+fluxo rápido = 40 g/s
+fluxo fino   = 5 g/s
 ```
 
 ou:
 
 ```text
-fluxo = 10 g/s
+limiar da etapa fina = 50 g
 ```
 
-permitindo testar diferentes mecanismos.
+permitindo testar diferentes mecanismos e pontos de troca de fase.
 
 ---
 
@@ -229,7 +247,7 @@ Uma evolução importante é fazer o peso depender do tempo.
 Em vez de:
 
 ```text
-cada update = +2 g
+cada update = incremento fixo por fase (+20 g rápida / +2 g fina)
 ```
 
 usar:
@@ -350,3 +368,40 @@ ruído pequeno
 ```
 
 para verificar se as regras continuam funcionando.
+
+---
+
+## 16. Modo Valor (R$): conversão monetária
+
+O dosador oferece dois modos de meta (RS01):
+
+```text
+Massa  → meta informada em gramas
+Valor  → meta informada em reais (R$)
+```
+
+No modo Valor, a meta é convertida em gramas antes da dosagem usando um **preço de referência por kg** (RS04/RS05):
+
+```text
+meta_em_gramas =
+    (valor_informado_em_centavos × 1000) /
+    preco_referencia_por_kg_em_centavos
+```
+
+O preço padrão é:
+
+```text
+R$12,00 / kg  (1200 centavos)
+```
+
+Exemplo:
+
+```text
+valor informado: R$3,00 (300 centavos)
+preço de referência: R$12,00/kg (1200 centavos)
+
+meta em gramas = (300 × 1000) / 1200
+               = 250 g
+```
+
+A simulação precisa respeitar essa conversão porque a meta convertida passa a ser a referência para as etapas rápida/fina, para o overshoot e para a parada do dispenser. Se o preço de referência for inválido (<= 0), a meta convertida é tratada como inválida e não deve permitir uma dosagem utilizável.

@@ -217,7 +217,7 @@ A arquitetura deve evoluir para reduzir essas possibilidades.
 Uma regra fundamental é:
 
 ```text
-Ao finalizar, cancelar ou entrar em erro:
+Ao finalizar, interromper ou entrar em erro:
         ↓
 garantir dispenser em estado seguro
 ```

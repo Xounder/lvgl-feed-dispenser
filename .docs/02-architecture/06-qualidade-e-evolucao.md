@@ -54,7 +54,7 @@ Dispenser:
     ativo
 
 Atualização:
-    +2 g
+    +20 g (fase rápida); +2 g a partir de ~30 g da meta (fase fina)
 
 ...
 

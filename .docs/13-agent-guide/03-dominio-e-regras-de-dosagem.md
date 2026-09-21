@@ -35,6 +35,7 @@ CONFIGURING
  ↓
 DOSING
  ├──→ COMPLETED
+ ├──→ INTERRUPTED
  └──→ ERROR
 ```
 
@@ -65,9 +66,16 @@ Adicionar estados apenas por antecipação pode aumentar a complexidade sem bene
 A configuração atual é:
 
 ```c
+typedef enum {
+    DOSING_MODE_GRAMS,
+    DOSING_MODE_CURRENCY
+} DosingMode;
+
 typedef struct {
-    int target_grams;
-    int portions;
+    DosingMode mode;
+    int target_grams;          /* modo massa (g) */
+    int target_money_cents;    /* modo valor (R$ em centavos) */
+    int price_per_kg_cents;    /* preco de referencia por kg */
 } DosingConfig;
 ```
 
@@ -101,9 +109,14 @@ Durante a simulação:
 ```text
 dispenser ativo
         ↓
-+2 g
-        ↓
-nova leitura
+nova leitura (duas etapas)
+```
+
+O crescimento por atualização depende da fase:
+
+```text
+etapa rápida: +20 g (faltando mais de 30 g)
+etapa fina:   +2 g  (faltando 30 g ou menos)
 ```
 
 A atualização ocorre aproximadamente a cada:
@@ -112,7 +125,14 @@ A atualização ocorre aproximadamente a cada:
 300 ms
 ```
 
-Portanto, a taxa simulada atual é aproximadamente:
+Portanto, nas etapas rápidas a taxa simulada atual é aproximadamente:
+
+```text
+20 g / 0,3 s
+≈ 66,7 g/s
+```
+
+e na etapa fina:
 
 ```text
 2 g / 0,3 s
@@ -149,23 +169,25 @@ A taxa real dependerá de:
 
 ---
 
-## 22. Cancelamento deve ser seguro
+## 22. Interrupção deve ser segura
 
 Atualmente:
 
 ```text
-Cancelar
- ↓
+Parar / Emergencia
+   ↓
 dispenser.stop()
- ↓
-IDLE
- ↓
-Home
+   ↓
+INTERRUPTED (massa parcial preservada)
+   ↓
+InterruptedScreen
 ```
 
-Qualquer alteração no cancelamento deve preservar a ideia de:
+Qualquer alteração na interrupção deve preservar a ideia de:
 
 > **ao interromper uma operação, o atuador deve ser colocado em estado seguro.**
+
+A interrupção tem prioridade sobre o controle automático (RS12).
 
 Isso será ainda mais importante no hardware físico.
 
@@ -294,8 +316,8 @@ leitura inválida
 A UI atualmente limita alguns valores:
 
 ```text
-gramas >= 10
-porções >= 1
+modo Massa:      gramas >= 10
+modo Valor (R$): valor >= R$ 0,50 e preço de referência > 0
 ```
 
 Mas essas validações não devem ser consideradas exclusivamente responsabilidade da interface.

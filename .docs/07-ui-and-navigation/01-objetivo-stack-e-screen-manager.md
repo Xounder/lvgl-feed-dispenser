@@ -56,8 +56,8 @@ Nova dosagem / Início
 Atualmente existem dois modos de configuração:
 
 ```text
-Quantidade fixa
-Porções
+Massa
+Valor (R$)
 ```
 
 ---
@@ -119,7 +119,9 @@ src/ui/
     ├── dosing_screen.c
     ├── dosing_screen.h
     ├── completed_screen.c
-    └── completed_screen.h
+    ├── completed_screen.h
+    ├── interrupted_screen.c
+    └── interrupted_screen.h
 ```
 
 A organização separa:
@@ -183,7 +185,8 @@ typedef enum {
     SCREEN_MODE,
     SCREEN_CONFIG,
     SCREEN_DOSING,
-    SCREEN_COMPLETED
+    SCREEN_COMPLETED,
+    SCREEN_INTERRUPTED
 } Screen;
 ```
 
@@ -195,6 +198,7 @@ SCREEN_MODE
 SCREEN_CONFIG
 SCREEN_DOSING
 SCREEN_COMPLETED
+SCREEN_INTERRUPTED
 ```
 
 ---
@@ -240,7 +244,7 @@ O fluxo atual pode ser representado por:
           ┌─────────┴─────────┐
           │                   │
           ▼                   ▼
-   Quantidade fixa          Porções
+        Massa             Valor (R$)
           │                   │
           └─────────┬─────────┘
                     ▼
@@ -253,28 +257,28 @@ O fluxo atual pode ser representado por:
                     ▼
              ┌──────────────┐
              │    DOSING    │
-             └──────┬───────┘
-                    │
-                 objetivo
-                 atingido
-                    │
-                    ▼
-             ┌──────────────┐
-             │  COMPLETED   │
-             └──────┬───────┘
-                    │
-             Nova dosagem
-                    │
-                    ▼
-                  MODE
+             └──┬───────┬───┘
+                │       │
+   objetivo     │       │  Parar /
+   atingido     │       │  Emergência
+                │       │
+                ▼       ▼
+     ┌──────────────┐ ┌──────────────┐
+     │  COMPLETED   │ │  INTERRUPTED │
+     └──────┬───────┘ └──────┬───────┘
+            │                │
+     Nova dosagem     Nova dosagem
+            │                │
+            ▼                ▼
+          MODE            MODE
 ```
 
-Também existe o caminho de cancelamento:
+Também existe o caminho de volta para o início a partir das telas de conclusão e interrupção:
 
 ```text
-DOSING
+COMPLETED / INTERRUPTED
    │
-Cancelar
+Voltar ao inicio
    │
    ▼
 HOME

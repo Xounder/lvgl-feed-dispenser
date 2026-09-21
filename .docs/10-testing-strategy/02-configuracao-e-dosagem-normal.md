@@ -4,12 +4,12 @@
 
 ---
 
-## 9. Teste do modo de quantidade fixa
+## 9. Teste do modo Massa
 
 Selecionar:
 
 ```text
-Quantidade fixa
+Massa
 ```
 
 deve levar para a configuração da quantidade em gramas.
@@ -62,38 +62,50 @@ Exemplo:
 
 ---
 
-## 11. Teste do modo de porções
+## 11. Teste do modo Valor (R$)
 
 Selecionar:
 
 ```text
-Porcoes
+Valor (R$)
 ```
 
-deve apresentar a configuração de quantidade de porções.
+deve apresentar a configuração de valor monetário.
 
 O valor inicial atual é:
 
 ```text
-1
+R$ 5,00
 ```
 
 O incremento é:
 
 ```text
-1
+R$ 0,50
 ```
 
 O mínimo é:
 
 ```text
-1
+R$ 0,50
 ```
 
 Portanto:
 
 ```text
-1 → [-] → continua 1
+R$ 0,50 → [-] → continua R$ 0,50
+```
+
+A tela deve exibir a massa equivalente, calculada com o preço de referência:
+
+```text
+R$ 5,00 a R$ 12,00/kg = 416 g
+```
+
+A conversão pertence ao domínio:
+
+```text
+grams = (target_money_cents * 1000) / price_per_kg_cents
 ```
 
 ---
@@ -103,13 +115,13 @@ Portanto:
 Depois de configurar:
 
 ```text
-target_grams
+target_grams        (modo Massa)
 ```
 
 ou:
 
 ```text
-portions
+target_money_cents + price_per_kg_cents   (modo Valor R$)
 ```
 
 o botão:
@@ -133,7 +145,7 @@ Este é o cenário principal do sistema.
 Exemplo:
 
 ```text
-Modo: quantidade fixa
+Modo: Massa
 Meta: 100 g
 ```
 
@@ -152,9 +164,9 @@ Dosing
    ↓
 peso = 0
    ↓
-dispenser ativo
+etapa rápida (faltando mais de 30 g)  +20 g por atualização
    ↓
-peso aumenta
+etapa fina (faltando 30 g ou menos)   +2 g por atualização
    ↓
 peso >= 100 g
    ↓
@@ -197,28 +209,20 @@ O dispenser também deve ter sido parado.
 
 Durante a dosagem, o peso simulado deve aumentar.
 
-Atualmente:
+Atualmente o crescimento depende da fase:
 
 ```text
-+2 g
+etapa rápida: +20 g por atualização (faltando mais de 30 g)
+etapa fina:   +2 g por atualização  (faltando 30 g ou menos)
 ```
 
-por atualização quando o dispenser está ativo.
-
-Portanto, uma sequência aproximada pode ser:
+Portanto, uma sequência aproximada para meta de 100 g é:
 
 ```text
-0
-2
-4
-6
-8
-...
-98
-100
+0 → 20 → 40 → 60 → 80 → 82 → 84 → ... → 98 → 100
 ```
 
-A interface deve acompanhar essa evolução.
+A interface deve acompanhar essa evolução e exibir a fase atual (Etapa rapida/Etapa fina).
 
 ---
 
@@ -285,10 +289,10 @@ Voltar ao inicio
 Depois de concluir uma dosagem:
 
 ```text
-Completed
- ↓
+Completed / Interrupted
+  ↓
 Nova dosagem
- ↓
+  ↓
 Mode
 ```
 
@@ -300,15 +304,23 @@ O peso da nova dosagem deve começar novamente em:
 0 g
 ```
 
-Isso é garantido atualmente pelo reset realizado no início da dosagem.
+Isso é garantido atualmente pela tara executada por:
+
+```text
+dosing_controller_new_dosing()
+```
+
+que também volta o controller para `IDLE`.
 
 ---
 
-## 19. Teste de reset
+## 19. Teste de reset (tara)
 
 Ao iniciar uma nova dosagem:
 
 ```text
+dosing_controller_new_dosing()
+    ↓
 simulated_weight_sensor.reset()
 ```
 

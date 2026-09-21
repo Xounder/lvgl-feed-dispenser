@@ -59,6 +59,7 @@ SCREEN_MODE
 SCREEN_CONFIG
 SCREEN_DOSING
 SCREEN_COMPLETED
+SCREEN_INTERRUPTED
 ```
 
 Ele atua como uma ponte entre o fluxo da aplicação e a apresentação visual.
@@ -116,9 +117,16 @@ As regras de dosagem, os estados e a máquina de estados são detalhados em [04-
 Atualmente:
 
 ```c
+typedef enum {
+    DOSING_MODE_GRAMS,
+    DOSING_MODE_CURRENCY
+} DosingMode;
+
 typedef struct {
-    int target_grams;
-    int portions;
+    DosingMode mode;
+    int target_grams;          /* modo massa (g) */
+    int target_money_cents;    /* modo valor (R$ em centavos) */
+    int price_per_kg_cents;    /* preco de referencia por kg */
 } DosingConfig;
 ```
 
@@ -127,8 +135,10 @@ Seu papel é representar **dados da configuração**, e não controlar a interfa
 Exemplo:
 
 ```text
-target_grams = 100
-portions     = 1
+mode               = DOSING_MODE_GRAMS
+target_grams       = 100
+target_money_cents = 500   (R$ 5,00, no modo Valor)
+price_per_kg_cents = 1200  (R$ 12,00/kg)
 ```
 
 A UI pode alterar esses valores, mas não deve assumir o controle da execução da dosagem.
@@ -146,11 +156,13 @@ iniciar
    ↓
 ler peso
    ↓
-controlar dispenser
+controlar dispenser (fases rápida e fina)
    ↓
 verificar objetivo
    ↓
-finalizar ou cancelar
+finalizar ou interromper
+   ↓
+liberação manual (quando em IDLE)
 ```
 
 Conceitualmente:
@@ -181,13 +193,14 @@ O domínio deve conhecer conceitos relacionados ao problema:
 Dosagem
 Peso
 Quantidade alvo
-Porções
+Valor (R$) / preço de referência
 Estado
 Dispenser
 Sensor de peso
 Erro
 Conclusão
-Cancelamento
+Interrupção
+Liberação manual
 ```
 
 ---

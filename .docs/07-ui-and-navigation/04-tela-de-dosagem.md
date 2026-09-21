@@ -18,14 +18,15 @@ Atualmente apresenta:
 Dosando
 ```
 
-além de:
+Além de:
 
 ```text
-objetivo
-peso atual
+Meta: 100 g
+Peso atual: 0 g
 barra de progresso
-status
-Cancelar
+status (Etapa rapida / Etapa fina)
+[ Parar ]
+[ Emergencia ]
 ```
 
 ---
@@ -226,15 +227,35 @@ SCREEN_COMPLETED
 
 ---
 
-## 30. Cancelamento
+## 29a. Fases rápidas e fina na tela
 
-A tela de dosagem possui:
+A tela exibe a fase atual da dosagem:
 
 ```text
-Cancelar
+Etapa rapida: vazao alta
+Etapa fina: vazao reduzida
 ```
 
-Quando acionado:
+A fase é consultada no domínio:
+
+```c
+dosing_controller_get_phase();
+```
+
+Isso permite ao usuário observar o controle em duas etapas (abertura maior quando longe do alvo e abertura reduzida quando próximo — RP03/RS09).
+
+---
+
+## 30. Interrupção (Parar e Emergência)
+
+A tela de dosagem possui dois comandos de interrupção:
+
+```text
+[ Parar ]          (comando na tela — RS11)
+[ Emergencia ]     (simulação do botão físico de emergência — RS11/RS12)
+```
+
+Quando qualquer um é acionado:
 
 ```text
 dosing_controller_cancel();
@@ -244,23 +265,21 @@ O controller:
 
 ```text
 para o dispenser
+preserva a massa parcial
+estado = INTERRUPTED
 ```
 
-e:
+A UI então solicita a tela de interrupção:
 
 ```text
-retorna para IDLE
+SCREEN_INTERRUPTED
 ```
 
-A UI então retorna para:
-
-```text
-SCREEN_HOME
-```
+Ambos os comandos têm prioridade sobre o controle automático (RS12).
 
 ---
 
-## 31. Por que o botão Cancelar não controla o hardware diretamente
+## 31. Por que os botões de interrupção não controlam o hardware diretamente
 
 A tela não deve fazer algo como:
 
@@ -282,7 +301,7 @@ Ela solicita:
 dosing_controller_cancel()
 ```
 
-O domínio então decide como o cancelamento deve ser executado.
+O domínio então decide como a interrupção deve ser executada.
 
 Atualmente:
 
@@ -293,7 +312,7 @@ controller.cancel()
  ↓
 dispenser.stop()
  ↓
-IDLE
+INTERRUPTED (massa parcial preservada)
 ```
 
 Essa separação será importante quando o dispenser simulado for substituído pelo SG90 real.

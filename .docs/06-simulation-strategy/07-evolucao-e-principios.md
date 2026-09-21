@@ -6,7 +6,7 @@ A estratégia recomendada é:
 
 ```text
 VERSÃO 1
-peso +2 g/update
+peso com incremento fixo por update (atualmente em duas fases: +20 g rápida / +2 g fina)
         ↓
 VERSÃO 2
 taxa baseada em tempo

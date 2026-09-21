@@ -14,12 +14,29 @@ Atualmente apresenta:
 
 ```text
 Dosador de Racao
-Pronto
+Aguardando dosagem
+Peso atual: 0 g
+
+[ LED: modo manual ]   (indicador verde quando liberação manual ativa)
 
 [ Iniciar ]
+[ Liberacao manual ]   (segurar para liberar manualmente)
 ```
 
 O texto utiliza `Racao` em vez de `Ração` porque a configuração atual da fonte padrão do LVGL não possui todos os caracteres acentuados necessários.
+
+---
+
+## 9a. Liberação manual na Home
+
+A Home também hospeda a **liberação manual** (RS14-RS16 do Trabalho.md):
+
+* o botão **Liberacao manual** deve ser mantido pressionado;
+* enquanto pressionado, o controller adiciona ração manualmente e o **LED** (indicador circular) fica verde;
+* ao soltar, a liberação manual para e o LED volta a ficar cinza;
+* a liberação manual só é permitida quando o estado do domínio é `IDLE` (bloqueada durante dosagem automática — RS15).
+
+A tela exibe o peso atual em tempo real, permitindo observar o efeito da liberação manual.
 
 ---
 
@@ -65,42 +82,42 @@ Selecione o modo
 com duas opções:
 
 ```text
-Quantidade fixa
-Porcoes
+Massa
+Valor (R$)
 ```
 
 ---
 
-## 12. Modo Quantidade Fixa
+## 12. Modo Massa
 
 Quando o usuário escolhe:
 
 ```text
-Quantidade fixa
+Massa
 ```
 
 a UI solicita:
 
 ```text
-screen_manager_show_config(CONFIG_MODE_FIXED_AMOUNT);
+screen_manager_show_config(DOSING_MODE_GRAMS);
 ```
 
 O modo é armazenado pelo gerenciamento da UI para que a tela de configuração saiba qual interface apresentar.
 
 ---
 
-## 13. Modo Porções
+## 13. Modo Valor (R$)
 
 Quando o usuário escolhe:
 
 ```text
-Porcoes
+Valor (R$)
 ```
 
 a UI solicita:
 
 ```text
-screen_manager_show_config(CONFIG_MODE_PORTIONS);
+screen_manager_show_config(DOSING_MODE_CURRENCY);
 ```
 
 O princípio é o mesmo:
@@ -112,6 +129,8 @@ UI informa modo selecionado
         ↓
 ConfigScreen apresenta controles apropriados
 ```
+
+No modo Valor (R$), a quantidade desejada é informada em reais; a conversão para gramas usa o preço de referência definido no domínio (ver [04-domain-and-state-machine.md](../04-domain-and-state-machine.md)).
 
 ---
 

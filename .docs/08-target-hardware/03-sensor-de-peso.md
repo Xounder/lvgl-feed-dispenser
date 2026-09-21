@@ -28,23 +28,23 @@ O HX711 é responsável pela aquisição do sinal proveniente da célula de carg
 
 ### 11. Load Cell
 
-A célula de carga será o elemento responsável por detectar o peso.
-
-Fisicamente:
+A plataforma de pesagem será apoiada em **4 células de carga de 5 kg**, uma em cada ponto de apoio (RP05, conforme Trabalho.md).
 
 ```text
 ração
   ↓
 recipiente / plataforma
   ↓
-Load Cell
+4 Load Cells de 5 kg (apoios)
   ↓
 sinal elétrico
   ↓
 HX711
 ```
 
-A montagem mecânica da célula será importante para que o peso seja transferido corretamente.
+As 4 células permitem distribuir a carga nos 4 pontos de apoio e obter o peso do produto efetivamente recebido.
+
+A montagem mecânica das células será importante para que o peso seja transferido corretamente.
 
 ---
 

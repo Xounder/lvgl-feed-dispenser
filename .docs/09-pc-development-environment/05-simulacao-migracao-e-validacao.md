@@ -85,7 +85,9 @@ peso = 0
       ↓
 dispenser = ativo
       ↓
-controller.update() (≈ a cada 300 ms) → +2 g
+controller.update() (≈ a cada 300 ms) → fase rápida (+20 g)
+      ↓
+... a partir de ~30 g da meta → fase fina (+2 g por update)
       ↓
 ... até peso >= objetivo
       ↓
@@ -100,9 +102,14 @@ Detalhes do comportamento simulado: [06-simulation-strategy.md](../06-simulation
 
 ## 52. Taxa aproximada da simulação
 
-A simulação adiciona `2 g` por atualização, aproximadamente a cada `300 ms`, o que representa aproximadamente `6,7 g/s`.
+A simulação usa duas etapas por atualização, aproximadamente a cada `300 ms`:
 
-Essa taxa é apenas um modelo inicial e não deve ser interpretada como a vazão real do futuro mecanismo.
+```text
+fase rápida: +20 g  → ≈ 66,7 g/s
+fase fina:   +2 g   → ≈ 6,7 g/s
+```
+
+Essas taxas são apenas um modelo inicial e não devem ser interpretadas como a vazão real do futuro mecanismo.
 
 Detalhes: [06-simulation-strategy.md](../06-simulation-strategy.md).
 

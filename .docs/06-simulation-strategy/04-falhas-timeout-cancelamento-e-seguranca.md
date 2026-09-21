@@ -129,27 +129,60 @@ e entrar em erro.
 
 ---
 
-## 27. Cancelamento
+## 27. Cancelamento, interrupção e emergência
 
-O cancelamento já faz parte do comportamento atual.
-
-Ao cancelar:
+A interrupção já faz parte do comportamento atual, via:
 
 ```text
 dosing_controller_cancel()
 ```
 
-o dispenser deve parar:
+dois comandos na tela de Dosagem a acionam:
+
+```text
+[ Parar ]          → comando na tela
+[ Emergencia ]     → simulação do botão físico de emergência
+```
+
+Ao interromper:
 
 ```text
 dispenser.stop()
 ```
 
-e o controller retorna para:
+e o controller passa para:
 
 ```text
-IDLE
+INTERRUPTED
 ```
+
+A massa já dosada é preservada:
+
+```text
+massa parcial = peso no momento da interrupção
+```
+
+e é exibida na tela `Interrupted`.
+
+### Prioridade da interrupção (RS12)
+
+O comando de interrupção possui prioridade sobre o controle automático:
+
+```text
+DOSING (etapa rápida ou fina)
+    ↓
+Parar / Emergencia
+    ↓
+dispenser.stop()
+    ↓
+INTERRUPTED
+```
+
+Nenhum tick posterior de `dosing_controller_update()` pode voltar a abrir o dispenser enquanto a interrupção estiver ativa, pois o update só age quando o estado é `DOSING`.
+
+### Relação com o cancelamento anterior
+
+Em versões anteriores, o cancelamento retornava diretamente para `IDLE`. No modelo atual, a interrupção é um estado próprio (`INTERRUPTED`) que preserva a massa parcial e exige um comando explícito para preparar uma nova dosagem (`dosing_controller_new_dosing()`).
 
 A simulação deve preservar esse comportamento em qualquer cenário.
 
@@ -165,11 +198,11 @@ ou:
 peso = 90 g
 ```
 
-o cancelamento deve interromper a dosagem.
+a interrupção deve funcionar na etapa rápida e na etapa fina.
 
 ---
 
-## 28. Segurança em caso de erro
+## 29. Segurança em caso de erro
 
 Todo cenário de erro deve considerar primeiro o atuador.
 

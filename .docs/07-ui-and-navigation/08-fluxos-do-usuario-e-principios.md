@@ -15,8 +15,8 @@ O fluxo normal é:
 ┌──────────────┐
 │     MODE     │
 │              │
-│ Qtd. fixa    │
-│ Porções      │
+│ Massa        │
+│ Valor (R$)   │
 └──────┬───────┘
        │
        ▼
@@ -35,34 +35,40 @@ O fluxo normal é:
 │  Peso: 75 g  │
 │  ███████░░░  │
 │              │
-│   Cancelar   │
-└──────┬───────┘
-       │
-       │ objetivo
-       │ atingido
-       ▼
-┌──────────────┐
-│  COMPLETED   │
-│              │
-│   concluído  │
-│              │
-│ Nova dosagem │
-│ Início       │
-└──────────────┘
+│  Parar/Urg.  │
+└──────┬───┬───┘
+       │   │ objetivo
+       │   │ atingido
+       ▼   ▼
+┌──────────────┐ ┌──────────────┐
+│  COMPLETED   │ │ INTERRUPTED  │
+│              │ │              │
+│   concluído  │ │  interrompida│
+│              │ │              │
+│ Nova dosagem │ │ Nova dosagem │
+│ Início       │ │ Início       │
+└──────────────┘ └──────────────┘
 ```
 
 ---
 
 ## 58. Fluxos alternativos
 
-### Cancelamento
+### Interrupção
 
 ```text
 DOSING
    ↓
-Cancelar
+Parar / Emergencia
    ↓
-HOME
+INTERRUPTED
+```
+
+A tela de interrupção oferece:
+
+```text
+Nova dosagem  → MODE (com tara)
+Início        → HOME
 ```
 
 ### Voltar durante seleção
@@ -88,7 +94,7 @@ HOME
 ### Nova dosagem
 
 ```text
-COMPLETED
+COMPLETED / INTERRUPTED
    ↓
 Nova dosagem
    ↓

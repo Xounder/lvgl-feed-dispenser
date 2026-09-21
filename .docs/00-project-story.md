@@ -99,6 +99,8 @@ A primeira versão funcional foi construída de forma incremental.
 
 O fluxo inicial foi definido como `Home → Selecionar modo → Configurar dosagem → Dosagem`.
 
+Posteriormente, com a definição dos modos **Massa** e **Valor (R$)**, o fluxo atual passou a ser: `Home → Selecionar modo (Massa | Valor R$) → Configuração → Dosando → (Interrompido → Nova dosagem) ou (Concluído → Nova dosagem)`.
+
 Posteriormente foi adicionada a conclusão (`Concluído`).
 
 Também foram adicionadas ações de retorno e cancelamento para evitar que o usuário ficasse preso em uma tela.
@@ -109,9 +111,9 @@ O fluxo de navegação atual está detalhado em [07-ui-and-navigation.md](07-ui-
 
 # 6. Modos de dosagem
 
-Foram definidos inicialmente dois modos de configuração: **quantidade fixa** e **porções**.
+Inicialmente pensou-se em dois modos de configuração: **quantidade fixa** (gramas) e **porções**. Com o alinhamento aos requisitos do trabalho acadêmico (Trabalho.md), o modelo evoluiu: o modo **porções** foi substituído por **Valor (R$)**, de modo que os modos atuais são **Massa** (gramas) e **Valor (R$)** (centavos, convertidos para gramas por um preço de referência por unidade de massa).
 
-As regras atuais de cada modo (limites, incrementos e evolução planejada) pertencem ao domínio e estão em [04-domain-and-state-machine.md](04-domain-and-state-machine.md).
+As regras atuais de cada modo (limites, incrementos, conversão valor → massa e evolução planejada) pertencem ao domínio e estão em [04-domain-and-state-machine.md](04-domain-and-state-machine.md).
 
 A arquitetura deve permitir que essas regras evoluam sem exigir alterações profundas na interface ou no hardware.
 
@@ -253,7 +255,7 @@ Portanto:
 
 # 14. Estado atual do projeto
 
-Neste estágio, o simulador já possui LVGL e SDL2 funcionando em desktop, interface de 800×480, telas (Home, seleção de modo, configuração de quantidade/porções, dosagem, conclusão), controller de dosagem, sensor de peso e dispenser simulados, reset, cancelamento, barra de progresso, retorno para Home e nova dosagem.
+Neste estágio, o simulador já possui LVGL e SDL2 funcionando em desktop, interface de 800×480, telas (Home com liberação manual e LED, seleção de modo (Massa | Valor R$), configuração, dosagem, interrompido, conclusão), controller de dosagem, sensor de peso e dispenser simulados, etapas rápida/fina, estados `IDLE`/`DOSING`/`COMPLETED`/`INTERRUPTED`, cancelamento/emergência, barra de progresso, retorno para Home e nova dosagem.
 
 O estado atual detalhado está em [12-roadmap.md](12-roadmap.md).
 
@@ -285,9 +287,15 @@ Esses detalhes devem permanecer fora da lógica de negócio ([05-hardware-abstra
 
 ### Máquina de estados
 
-O projeto já possui estados relacionados à dosagem, mas a máquina de estados ainda deve evoluir para representar explicitamente todo o ciclo da aplicação, com direção pretendida para `IDLE → SELECT_MODE → CONFIGURING → DOSING → ERROR | COMPLETED`.
+Os estados `IDLE`, `DOSING`, `COMPLETED` e `INTERRUPTED` já estão implementados (enum `DosingState`). `cancel()`/emergência levam a `INTERRUPTED` (massa parcial preservada, parada priorizada); `new_dosing()` faz tara/reset e retorna a `IDLE`.
+
+A máquina de estados ainda deve evoluir para representar explicitamente todo o ciclo da aplicação, com direção pretendida para `IDLE → SELECT_MODE → CONFIGURING → DOSING → ERROR | COMPLETED` (essas transições adicionais permanecem como evolução prevista).
 
 A definição final dos estados deverá ser feita antes da integração completa com o hardware ([04-domain-and-state-machine.md](04-domain-and-state-machine.md)).
+
+### Hardware físico
+
+O hardware final (Trabalho.md) prevê: reservatório com tampa (RP01/RP02), mecanismo de liberação com etapas rápida/fina (RP03), plataforma de pesagem com 4 células de carga de 5 kg nos 4 pontos de apoio (RP04/RP05), estrutura para visualização e reposição do recipiente (RP06/RP07), chave geral liga/desliga (RP08), 2 botões físicos (emergência e liberação manual), LED indicador do modo manual e preço de referência por unidade de massa (RS04). Detalhes em [08-target-hardware.md](08-target-hardware.md).
 
 ---
 

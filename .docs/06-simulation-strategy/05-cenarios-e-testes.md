@@ -103,30 +103,74 @@ A estratégia futura pode incluir pelo menos:
 
 ---
 
-## 33. Simulação da quantidade de porções
+## 33. Modo Valor (R$): conversão monetária como cenário
 
-O modo de porções também deve ser testável no simulador.
+O modo de dosagem por valor monetário deve ser testável no simulador.
 
 Por exemplo:
 
 ```text
-porções = 3
+modo = Valor (R$)
+preço de referência = R$12,00/kg
+valor informado = R$3,00
 ```
 
-Se cada porção tiver:
+o comportamento esperado é:
 
 ```text
-100 g
+meta em gramas = (300 × 1000) / 1200 = 250 g
+    ↓
+etapa rápida inicia (faltam 250 g)
+    ↓
+etapa fina quando faltam ≤ 30 g
+    ↓
+peso >= 250 g → COMPLETED
 ```
 
-o comportamento esperado poderá ser:
+Cenários adicionais para o modo Valor:
+
+- **Conversão conferida manualmente:** usar um valor conhecido e verificar a massa equivalente pelo preço de referência.
+- **Preço de referência padrão:** confirmar que o padrão é R$12,00/kg.
+- **Conversão com frações:** por exemplo R$1,50 → 125 g, verificando o arredondamento inteiro do resultado.
+
+A forma exata de conversão pertence ao domínio; a simulação deve apenas receber a meta convertida e reproduzir a dosagem correspondente.
+
+---
+
+## 34. Liberação manual como cenário
+
+A liberação manual simulada também é um cenário do simulador:
 
 ```text
-porção 1 → 100 g
-porção 2 → 100 g
-porção 3 → 100 g
+estado = IDLE
+    ↓
+botão "Liberacao manual" pressionado
+    ↓
+dispenser.start()
+    ↓
++5 g por tick (~200 ms)
+    ↓
+LED verde aceso (modo manual)
+    ↓
+botão solto
+    ↓
+dispenser.stop() e LED apaga
 ```
 
-A forma exata como as porções serão definidas e acumuladas pertence ao domínio.
+Cenário de bloqueio:
 
-A simulação deve apenas fornecer o comportamento físico necessário.
+```text
+estado = DOSING
+    ↓
+tentar acionar a liberação manual
+    ↓
+comando ignorado (RS15)
+```
+
+A simulação deve garantir que o passo manual só seja adicionado quando:
+
+```text
+manual_release_active
++
+estado == IDLE
+```

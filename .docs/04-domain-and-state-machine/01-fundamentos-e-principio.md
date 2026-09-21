@@ -67,55 +67,52 @@ A máquina de estados desejada pode ser representada como:
 
 ```text
                          ┌───────────────┐
-                         │     IDLE      │
-                         └───────┬───────┘
-                                 │
-                              iniciar
-                                 │
-                                 ▼
-                    ┌────────────────────────┐
-                    │     SELECT_MODE        │
-                    └───────────┬────────────┘
-                                │
-                         selecionar modo
-                                │
-                                ▼
-                    ┌────────────────────────┐
-                    │      CONFIGURING        │
-                    └───────────┬────────────┘
-                                │
-                             iniciar
-                                │
-                                ▼
-                    ┌────────────────────────┐
-                    │        DOSING           │
-                    └──────┬─────────┬───────┘
-                           │         │
-                     cancelar       erro
-                           │         │
-                           ▼         ▼
-                        IDLE       ERROR
-                           ▲         │
-                           │         │
-                           └─────────┘
-                             finalizar
-
-                    DOSING
-                       │
-                 meta atingida
-                       │
-                       ▼
-                  COMPLETED
-                       │
-                 nova dosagem
-                       │
-                       ▼
-                    SELECT_MODE
+                         │     IDLE      │◄──────────────┐
+                         └───┬───────┬───┘                │
+                             │   manual_release           │
+                          iniciar ▼                       │
+                             │   liberação manual         │
+                             │   (permanece em IDLE)      │
+                             ▼                            │
+               ┌─────────────────────────┐                │
+               │     SELECT_MODE         │                │
+               └────────────┬────────────┘                │
+                            │                             │
+                     selecionar modo                      │
+                            │                             │
+                            ▼                             │
+               ┌─────────────────────────┐                │
+               │      CONFIGURING        │                │
+               └────────────┬────────────┘                │
+                            │                             │
+                         iniciar                          │
+                            │                             │
+                            ▼                             │
+               ┌─────────────────────────┐                │
+               │        DOSING           │                │
+               └──┬──────────┬────────┬──┘                │
+                  │          │        │                   │
+            meta atingida  cancelar/  erro                 │
+                           emergência                     │
+                  │          │        │                   │
+                  ▼          ▼        ▼                   │
+              COMPLETED   INTERRUPTED ERROR                │
+                  │          │        │                   │
+                  └──────────┴────────┴── finalizar ────────┘
+                       │          │        │
+                  nova dosagem  nova dosagem  reconhecer
+                      (tara)      (tara)
+                       └──────────┴──────────┘
+                                    │
+                                    ▼
+                                 IDLE
 ```
 
 Essa é a direção arquitetural desejada.
 
-A implementação atual possui um subconjunto simplificado desses estados.
+`SELECT_MODE`, `CONFIGURING` e `ERROR` fazem parte da evolução prevista.
+
+A implementação atual possui um subconjunto simplificado desses estados (ver seção 4).
 
 ---
 
@@ -127,7 +124,8 @@ Atualmente o controller possui:
 typedef enum {
     DOSING_STATE_IDLE,
     DOSING_STATE_DOSING,
-    DOSING_STATE_COMPLETED
+    DOSING_STATE_COMPLETED,
+    DOSING_STATE_INTERRUPTED
 } DosingState;
 ```
 
@@ -137,9 +135,19 @@ Portanto:
 IDLE
 DOSING
 COMPLETED
+INTERRUPTED
 ```
 
 já existem na implementação.
+
+O controller também possui as fases da dosagem:
+
+```c
+typedef enum {
+    DOSING_PHASE_FAST,
+    DOSING_PHASE_FINE
+} DosingPhase;
+```
 
 Estados como:
 

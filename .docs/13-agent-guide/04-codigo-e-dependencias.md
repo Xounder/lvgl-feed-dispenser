@@ -194,6 +194,7 @@ Mode
 Config
 Dosing
 Completed
+Interrupted
 ```
 
 Fluxo:
@@ -201,22 +202,13 @@ Fluxo:
 ```text
 Home
  ↓
-Mode
- ├── Quantidade fixa
- │       ↓
- │    Config
- │       ↓
- │    Dosing
- │       ↓
- │   Completed
- │
- └── Porções
-         ↓
-      Config
-         ↓
-      Dosing
-         ↓
-     Completed
+Mode (Massa / Valor R$)
+ ↓
+Config
+ ↓
+Dosing
+ ├──→ Completed
+ └──→ Interrupted
 ```
 
 ---
@@ -232,6 +224,7 @@ Home → Mode
 Mode → Config
 Config → Dosing
 Dosing → Completed
+Dosing → Interrupted
 ```
 
 Também existem caminhos de retorno:
@@ -239,9 +232,10 @@ Também existem caminhos de retorno:
 ```text
 Mode → Home
 Config → Home
-Dosing → Home
 Completed → Home
 Completed → Mode
+Interrupted → Home
+Interrupted → Mode
 ```
 
 ---
@@ -254,8 +248,9 @@ Por isso existem textos sem acentos, por exemplo:
 
 ```text
 Dosador de Racao
-Porcoes
+Liberacao manual
 Dosagem concluida
+Dosagem interrompida
 ```
 
 Não considerar automaticamente isso como erro de lógica.

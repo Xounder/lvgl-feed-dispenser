@@ -95,8 +95,11 @@ O controller fornece um ponto central para o processo:
 start
 update
 cancel
+new_dosing
+manual_release_start/stop
 get_weight
 get_state
+get_phase
 ```
 
 Status: **Atual**.
@@ -117,6 +120,7 @@ Atualmente existe:
 IDLE
 DOSING
 COMPLETED
+INTERRUPTED
 ```
 
 A arquitetura prevista poderá evoluir para estados adicionais, como:
@@ -167,7 +171,9 @@ Isso evita que valores como:
 
 ```text
 target_grams
-portions
+target_money_cents
+price_per_kg_cents
+mode
 ```
 
 fiquem espalhados entre telas e callbacks.

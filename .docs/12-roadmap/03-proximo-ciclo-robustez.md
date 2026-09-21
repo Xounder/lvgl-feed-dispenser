@@ -29,6 +29,7 @@ Atualmente a máquina de estados implementada é:
 IDLE
 DOSING
 COMPLETED
+INTERRUPTED
 ```
 
 A evolução planejada é:
@@ -42,6 +43,7 @@ CONFIGURING
  ↓
 DOSING
  ├──→ COMPLETED
+ ├──→ INTERRUPTED  (já implementado)
  └──→ ERROR
 ```
 
@@ -125,8 +127,8 @@ O domínio deverá gradualmente assumir maior responsabilidade pela validação.
 A intenção é garantir que:
 
 ```text
-target > 0
-portions > 0
+modo Massa:      target_grams > 0
+modo Valor (R$): target_money_cents > 0 e price_per_kg_cents > 0
 ```
 
 e que valores acima da capacidade do sistema possam ser tratados adequadamente.

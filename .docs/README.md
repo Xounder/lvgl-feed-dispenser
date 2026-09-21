@@ -22,12 +22,12 @@ Mais detalhes sobre a evolução e as decisões tomadas estão em:
 
 ## 🎯 Visão geral
 
-O sistema permite configurar uma dosagem e acompanhar sua execução, seguindo o fluxo **Home → Seleção de modo → Configuração → Dosagem → Conclusão**.
+O sistema permite configurar uma dosagem e acompanhar sua execução, seguindo o fluxo **Home → Seleção de modo → Configuração → Dosagem → (Conclusão | Interrupção)**.
 
-Existem atualmente dois modos de configuração:
+Existem atualmente dois modos de dosagem:
 
-- **Quantidade fixa** — configuração da quantidade em gramas.
-- **Porções** — configuração da quantidade de porções.
+- **Massa (gramas)** — o usuário informa diretamente a massa desejada em gramas.
+- **Valor (R$)** — o usuário informa o valor em centavos; o sistema converte para gramas usando o preço de referência por unidade de massa (padrão R$ 12,00/kg).
 
 No simulador, o peso e o dispenser são representados por implementações de hardware simuladas.
 
@@ -65,7 +65,7 @@ Documentação:
 
 ## 📊 Estado atual
 
-O simulador desktop está funcional: o ciclo completo — configuração, dosagem, conclusão, cancelamento, reset e nova dosagem — já pode ser executado no PC, com peso e dispenser simulados.
+O simulador desktop está funcional: o ciclo completo — configuração (Massa / Valor R$), dosagem em etapas rápida/fina, conclusão, interrupção (Parar/Emergência), tara, liberação manual e nova dosagem — já pode ser executado no PC, com peso e dispenser simulados.
 
 A evolução imediata está concentrada na **fase de robustez**: tratamento de erros, timeout, simulação de falhas e testes mais robustos, antes da migração para o ESP32-S3.
 
@@ -117,7 +117,7 @@ O simulador permite validar o fluxo principal sem depender do hardware físico:
 Dispenser ativo → Peso aumenta → Meta atingida → Dispenser para → Dosagem concluída
 ```
 
-Também existe suporte ao cancelamento e reset da operação.
+Também existe suporte à interrupção da operação (botões Parar/Emergência → tela Interrompida), à liberação manual com LED na Home e à tara ao iniciar uma nova dosagem.
 
 A estratégia de testes e os cenários futuros estão documentados em:
 

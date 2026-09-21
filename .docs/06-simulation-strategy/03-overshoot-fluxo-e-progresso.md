@@ -4,30 +4,26 @@
 
 Um dos comportamentos mais importantes a simular é o overshoot.
 
-Exemplo:
+Na simulação atual, o passo de peso é adicionado **antes** da verificação da meta, então o peso pode passar da meta antes do fechamento do mecanismo.
+
+No modo atual, o overshoot costuma ocorrer na **etapa fina**:
 
 ```text
 objetivo = 100 g
-peso = 97 g
-```
+etapa fina (+2 g/tick)
 
-O dispenser continua ativo.
-
-Na próxima leitura:
-
-```text
-peso = 103 g
+peso = 99 g   → add 2 g → peso = 101 g
 ```
 
 Então:
 
 ```text
-103 >= 100
+101 >= 100
 ```
 
 e o sistema deve parar.
 
-Esse comportamento pode ocorrer fisicamente porque a ração já está em movimento quando o sistema decide fechar o mecanismo.
+Na etapa rápida o passo é de 20 g, portanto o overshoot também é possível se a leitura cruzar a meta entre os ticks de 300 ms. Esse comportamento pode ocorrer fisicamente porque a ração já está em movimento quando o sistema decide fechar o mecanismo.
 
 ---
 
@@ -53,7 +49,7 @@ overshoot grande
 +10 g
 ```
 
-Isso permite avaliar como o controller reage.
+Isso permite avaliar como o controller reage. Hoje o próprio passo da etapa fina (+2 g) já produz um pequeno overshoot determinístico (ex.: `99 → 101`).
 
 ---
 

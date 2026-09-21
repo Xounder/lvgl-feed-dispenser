@@ -7,7 +7,7 @@ _Voltar ao índice: [`../04-domain-and-state-machine.md`](../04-domain-and-state
 A regra fundamental é:
 
 ```text
-Se peso atual >= peso alvo:
+Se peso atual >= alvo efetivo (em gramas):
     parar dispenser
     concluir dosagem
 ```
@@ -15,7 +15,7 @@ Se peso atual >= peso alvo:
 Formalmente:
 
 ```text
-current_weight >= target_grams
+current_weight >= target_grams_efetivo
 ```
 
 resulta em:
@@ -23,6 +23,12 @@ resulta em:
 ```text
 dispenser.stop()
 state = COMPLETED
+```
+
+O alvo efetivo em gramas é obtido pelo controller: diretamente de `target_grams` no modo Massa, ou pela conversão do modo Valor:
+
+```text
+target_grams = (target_money_cents * 1000) / price_per_kg_cents
 ```
 
 Essa é uma das regras centrais do domínio.
@@ -34,18 +40,28 @@ Essa é uma das regras centrais do domínio.
 Enquanto:
 
 ```text
-current_weight < target_grams
+current_weight < target_grams_efetivo
 ```
 
 o processo continua.
 
-No simulador atual, quando o dispenser está ativo:
+A dosagem é dividida em duas etapas controladas por fases:
 
 ```text
-peso += 2 g
+faltam > 30 g  → fase RÁPIDA (FAST) → +20 g por tick
+faltam <= 30 g → fase FINA (FINE)   → +2 g por tick
 ```
 
-a cada atualização do controller.
+Cada `tick` corresponde a uma atualização do controller (intervalo de 300 ms no simulador).
+
+Formalmente:
+
+```c
+typedef enum {
+    DOSING_PHASE_FAST,
+    DOSING_PHASE_FINE
+} DosingPhase;
+```
 
 Isso é apenas um modelo de simulação.
 
@@ -105,34 +121,58 @@ COMPLETED
 
 ---
 
-## 16. Cancelamento
+## 16. Interrupção da dosagem
 
-O usuário pode cancelar uma dosagem em andamento.
+A dosagem pode ser interrompida por dois eventos prioritários:
+
+```text
+CANCEL         — botão "Parar" na tela
+EMERGENCY_STOP — botão de emergência físico
+```
 
 Fluxo:
 
 ```text
 DOSING
    │
-   │ cancelar
+   │ cancelar / emergência
    ▼
 parar dispenser
    │
    ▼
-IDLE
+INTERRUPTED
 ```
 
-O dispenser nunca deve permanecer ativo após um cancelamento.
+O dispenser nunca deve permanecer ativo após uma interrupção.
 
 A regra é:
 
 ```text
-cancelar
+interromper (CANCEL / EMERGENCY_STOP)
     ↓
 stop dispenser
     ↓
-state = IDLE
+state = INTERRUPTED
 ```
+
+### Massa parcial preservada
+
+A interrupção preserva a massa parcialmente liberada: **não** é feita tara/reset do sensor nesse momento.
+
+Para iniciar uma nova dosagem, o usuário utiliza `new_dosing`:
+
+```text
+INTERRUPTED
+    │
+    │ new_dosing
+    ▼
+tara/reset do sensor
+    │
+    ▼
+IDLE
+```
+
+A partir de `IDLE`, uma nova dosagem pode ser iniciada (o ciclo volta ao fluxo normal).
 
 ---
 

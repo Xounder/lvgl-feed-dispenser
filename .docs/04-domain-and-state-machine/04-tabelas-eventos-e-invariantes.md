@@ -9,8 +9,9 @@ _Voltar ao índice: [`../04-domain-and-state-machine.md`](../04-domain-and-state
 | `IDLE`        | Sistema parado      | parado        | inativo          | `SELECT_MODE`                     |
 | `SELECT_MODE` | Escolha do modo     | parado        | inativo          | `CONFIGURING`                     |
 | `CONFIGURING` | Configuração        | parado        | inativo          | `DOSING`                          |
-| `DOSING`      | Dosagem em execução | ativo/parando | monitorado       | `COMPLETED`, `ERROR`, `IDLE`      |
+| `DOSING`      | Dosagem em execução | ativo/parando | monitorado       | `COMPLETED`, `INTERRUPTED`, `ERROR` |
 | `COMPLETED`   | Dosagem concluída   | parado        | leitura final    | `SELECT_MODE`, `IDLE`             |
+| `INTERRUPTED` | Interrompida (Parar/Emergência) | parado | massa parcial preservada | `SELECT_MODE`, `IDLE` |
 | `ERROR`       | Falha no processo   | parado        | depende da falha | `IDLE`, futuramente `CONFIGURING` |
 
 ---
@@ -25,11 +26,13 @@ Principais eventos:
 START
 MODE_SELECTED
 CONFIG_CONFIRMED
-CANCEL
+INTERRUPT
 TARGET_REACHED
 ERROR_DETECTED
 ERROR_ACKNOWLEDGED
 NEW_DOSING
+MANUAL_RELEASE_START
+MANUAL_RELEASE_STOP
 ```
 
 Nem todos estão implementados como eventos explícitos no código atual.
@@ -40,16 +43,18 @@ Alguns são atualmente representados diretamente por chamadas de funções ou ca
 
 ## 23. Relação entre eventos e estados
 
-| Evento               | Estado atual  | Resultado     |
-| -------------------- | ------------- | ------------- |
-| `START`              | `IDLE`        | `SELECT_MODE` |
-| `MODE_SELECTED`      | `SELECT_MODE` | `CONFIGURING` |
-| `CONFIG_CONFIRMED`   | `CONFIGURING` | `DOSING`      |
-| `CANCEL`             | `DOSING`      | `IDLE`        |
-| `TARGET_REACHED`     | `DOSING`      | `COMPLETED`   |
-| `ERROR_DETECTED`     | `DOSING`      | `ERROR`       |
-| `ERROR_ACKNOWLEDGED` | `ERROR`       | `IDLE`        |
-| `NEW_DOSING`         | `COMPLETED`   | `SELECT_MODE` |
+| Evento               | Estado atual  | Resultado         |
+| -------------------- | ------------- | ----------------- |
+| `START`              | `IDLE`        | `SELECT_MODE`     |
+| `MODE_SELECTED`      | `SELECT_MODE` | `CONFIGURING`     |
+| `CONFIG_CONFIRMED`   | `CONFIGURING` | `DOSING`          |
+| `INTERRUPT`          | `DOSING`      | `INTERRUPTED`     |
+| `TARGET_REACHED`     | `DOSING`      | `COMPLETED`       |
+| `ERROR_DETECTED`     | `DOSING`      | `ERROR`           |
+| `ERROR_ACKNOWLEDGED` | `ERROR`       | `IDLE`            |
+| `NEW_DOSING`         | `COMPLETED`/`INTERRUPTED` | `SELECT_MODE` (com tara) |
+
+A interrupção (`INTERRUPT`) pode ser disparada por **Parar** (comando) ou **Emergencia** (botão físico), com prioridade sobre o controle automático.
 
 ---
 
@@ -87,15 +92,19 @@ current_weight < target_grams
 
 ---
 
-### Regra 3 — cancelar sempre para o dispenser
+### Regra 3 — interromper sempre para o dispenser
 
-Ao cancelar:
+Ao interromper:
 
 ```text
-CANCEL
+INTERRUPT
   ↓
 stop dispenser
+  ↓
+INTERRUPTED (massa parcial preservada)
 ```
+
+A interrupção é uma ação de prioridade: independe do estado automático da dosagem.
 
 ---
 
@@ -122,12 +131,30 @@ O processo deve começar com uma nova referência de peso.
 No simulador atual:
 
 ```text
-dosing_controller_start()
+dosing_controller_new_dosing()
     ↓
-simulated_weight_sensor.reset()
+simulated_weight_sensor.reset()   (tara)
+    ↓
+IDLE
 ```
 
 No hardware real, isso deverá corresponder à estratégia de tara/referência adotada (ver [`../05-hardware-abstraction.md`](../05-hardware-abstraction.md)).
+
+---
+
+### Regra 6 — liberação manual é exclusiva do estado parado
+
+A liberação manual (RS14/RS16) só é permitida em `IDLE`:
+
+```text
+MANUAL_RELEASE_START (IDLE)
+    ↓
+dispenser liberando manualmente (+5 g por tick)
+    ↓
+MANUAL_RELEASE_STOP
+```
+
+Durante a dosagem automática, a liberação manual fica bloqueada (RS15), evitando conflito com o controle do servo.
 
 ---
 
@@ -208,13 +235,8 @@ Antes de iniciar a dosagem, a configuração deve ser validada.
 Exemplos:
 
 ```text
-target_grams > 0
-```
-
-e:
-
-```text
-portions >= 1
+modo Massa:      target_grams > 0
+modo Valor (R$): target_money_cents > 0 e price_per_kg_cents > 0
 ```
 
 Dependendo do modo, apenas os campos relevantes precisam ser considerados.
@@ -222,11 +244,17 @@ Dependendo do modo, apenas os campos relevantes precisam ser considerados.
 Exemplo:
 
 ```text
-FIXED_AMOUNT
+DOSING_MODE_GRAMS
     → target_grams obrigatório
 ```
 
 ```text
-PORTIONS
-    → portions obrigatório
+DOSING_MODE_CURRENCY
+    → target_money_cents e price_per_kg_cents obrigatórios
+```
+
+No modo Valor (R$), o alvo em gramas é derivado no domínio:
+
+```text
+grams = (target_money_cents * 1000) / price_per_kg_cents
 ```
