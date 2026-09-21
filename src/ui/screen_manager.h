@@ -10,12 +10,13 @@ typedef enum {
     SCREEN_MODE,
     SCREEN_CONFIG,
     SCREEN_DOSING,
-    SCREEN_COMPLETED
+    SCREEN_COMPLETED,
+    SCREEN_INTERRUPTED
 } Screen;
 
 void screen_manager_init(void);
 void screen_manager_show(Screen screen);
-void screen_manager_show_config(ConfigMode mode);
+void screen_manager_show_config(DosingMode mode);
 
 DosingConfig *screen_manager_get_dosing_config(void);
 

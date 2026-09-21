@@ -1,9 +1,11 @@
 #include "config_screen.h"
 #include "../screen_manager.h"
+#include "../../domain/dosing_controller.h"
 
 typedef struct {
     lv_obj_t *value_label;
-    ConfigMode mode;
+    lv_obj_t *equiv_label;
+    DosingMode mode;
 } ConfigScreenContext;
 
 static void home_button_event_cb(lv_event_t *e)
@@ -17,19 +19,30 @@ static void update_value_label(ConfigScreenContext *context)
 {
     DosingConfig *config = screen_manager_get_dosing_config();
 
-    if (context->mode == CONFIG_MODE_FIXED_AMOUNT) {
+    if (context->mode == DOSING_MODE_GRAMS) {
         lv_label_set_text_fmt(
             context->value_label,
             "%d g",
             config->target_grams
         );
+        if (context->equiv_label != NULL) {
+            lv_label_set_text(context->equiv_label, "");
+        }
     } else {
         lv_label_set_text_fmt(
             context->value_label,
-            "%d porcao%s",
-            config->portions,
-            config->portions == 1 ? "" : "es"
+            "R$ %d,%02d",
+            config->target_money_cents / 100,
+            config->target_money_cents % 100
         );
+        if (context->equiv_label != NULL) {
+            int grams = dosing_controller_get_target_grams();
+            lv_label_set_text_fmt(
+                context->equiv_label,
+                "Equivale a %d g",
+                grams
+            );
+        }
     }
 }
 
@@ -38,13 +51,13 @@ static void decrease_value_event_cb(lv_event_t *e)
     ConfigScreenContext *context = lv_event_get_user_data(e);
     DosingConfig *config = screen_manager_get_dosing_config();
 
-    if (context->mode == CONFIG_MODE_FIXED_AMOUNT) {
+    if (context->mode == DOSING_MODE_GRAMS) {
         if (config->target_grams > 10) {
             config->target_grams -= 10;
         }
     } else {
-        if (config->portions > 1) {
-            config->portions--;
+        if (config->target_money_cents > 50) {
+            config->target_money_cents -= 50;
         }
     }
 
@@ -56,10 +69,10 @@ static void increase_value_event_cb(lv_event_t *e)
     ConfigScreenContext *context = lv_event_get_user_data(e);
     DosingConfig *config = screen_manager_get_dosing_config();
 
-    if (context->mode == CONFIG_MODE_FIXED_AMOUNT) {
+    if (context->mode == DOSING_MODE_GRAMS) {
         config->target_grams += 10;
     } else {
-        config->portions++;
+        config->target_money_cents += 50;
     }
 
     update_value_label(context);
@@ -72,7 +85,7 @@ static void continue_event_cb(lv_event_t *e)
     screen_manager_show(SCREEN_DOSING);
 }
 
-lv_obj_t *config_screen_create(ConfigMode mode)
+lv_obj_t *config_screen_create(DosingMode mode)
 {
     lv_obj_t *screen = lv_obj_create(NULL);
 
@@ -86,15 +99,16 @@ lv_obj_t *config_screen_create(ConfigMode mode)
 
     lv_obj_t *mode_label = lv_label_create(screen);
 
-    if (mode == CONFIG_MODE_FIXED_AMOUNT) {
-        lv_label_set_text(mode_label, "Modo: Quantidade fixa");
+    if (mode == DOSING_MODE_GRAMS) {
+        lv_label_set_text(mode_label, "Modo: Massa");
     } else {
-        lv_label_set_text(mode_label, "Modo: Porcoes");
+        lv_label_set_text(mode_label, "Modo: Valor (R$)");
     }
 
     lv_obj_align(mode_label, LV_ALIGN_TOP_MID, 0, 90);
 
     context->value_label = lv_label_create(screen);
+    context->equiv_label = lv_label_create(screen);
 
     update_value_label(context);
 
@@ -103,6 +117,13 @@ lv_obj_t *config_screen_create(ConfigMode mode)
         LV_ALIGN_CENTER,
         0,
         -20
+    );
+
+    lv_obj_align(
+        context->equiv_label,
+        LV_ALIGN_CENTER,
+        0,
+        15
     );
 
     lv_obj_t *decrease_button = lv_button_create(screen);
