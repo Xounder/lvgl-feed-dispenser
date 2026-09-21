@@ -104,7 +104,7 @@ ManualReleaseWidget *manual_release_widget_create(
     widget->user_data = user_data;
 
     lv_obj_t *col = lv_obj_create(parent);
-    lv_obj_set_size(col, 560, 92);
+    lv_obj_set_size(col, 440, 92);
     lv_obj_clear_flag(col, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_align(col, align, x, y);
     lv_obj_set_style_bg_color(col, CHROME_CARD_DISABLED, 0);
@@ -113,7 +113,7 @@ ManualReleaseWidget *manual_release_widget_create(
     lv_obj_set_style_border_color(col, CHROME_GREEN_BTN, 0);
 
     lv_obj_t *led_row = lv_obj_create(col);
-    lv_obj_set_size(led_row, 540, 26);
+    lv_obj_set_size(led_row, 420, 26);
     lv_obj_clear_flag(led_row, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_align(led_row, LV_ALIGN_TOP_MID, 0, 6);
     lv_obj_set_style_border_width(led_row, 0, 0);
@@ -138,7 +138,7 @@ ManualReleaseWidget *manual_release_widget_create(
     lv_obj_align(hint_label, LV_ALIGN_LEFT_MID, 26, 0);
 
     lv_obj_t *button = lv_button_create(col);
-    lv_obj_set_size(button, 500, 48);
+    lv_obj_set_size(button, 400, 48);
     lv_obj_align(button, LV_ALIGN_BOTTOM_MID, 0, -4);
     lv_obj_set_style_bg_color(button, CHROME_GREEN_BTN, 0);
     lv_obj_set_style_radius(button, 10, 0);

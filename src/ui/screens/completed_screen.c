@@ -70,8 +70,8 @@ lv_obj_t *completed_screen_create(void)
     lv_obj_align(check_icon, LV_ALIGN_TOP_MID, 100, 150);
 
     lv_obj_t *meta_row = lv_obj_create(screen);
-    lv_obj_set_size(meta_row, 560, 24);
-    lv_obj_align(meta_row, LV_ALIGN_TOP_MID, 0, 194);
+    lv_obj_set_size(meta_row, 440, 24);
+    lv_obj_align(meta_row, LV_ALIGN_TOP_MID, 0, 200);
     lv_obj_clear_flag(meta_row, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_border_width(meta_row, 0, 0);
     lv_obj_set_style_bg_opa(meta_row, LV_OPA_TRANSP, 0);
@@ -89,8 +89,8 @@ lv_obj_t *completed_screen_create(void)
     lv_obj_align(target_label, LV_ALIGN_RIGHT_MID, 0, 0);
 
     lv_obj_t *new_dosing_button = lv_button_create(screen);
-    lv_obj_set_size(new_dosing_button, 560, 44);
-    lv_obj_align(new_dosing_button, LV_ALIGN_TOP_MID, 0, 228);
+    lv_obj_set_size(new_dosing_button, 440, 46);
+    lv_obj_align(new_dosing_button, LV_ALIGN_TOP_MID, 0, 244);
     lv_obj_set_style_bg_color(new_dosing_button, CHROME_BTN_BLUE, 0);
     lv_obj_set_style_radius(new_dosing_button, 8, 0);
 
@@ -111,7 +111,7 @@ lv_obj_t *completed_screen_create(void)
         screen,
         LV_ALIGN_TOP_MID,
         0,
-        292,
+        330,
         tick_cb,
         ctx
     );

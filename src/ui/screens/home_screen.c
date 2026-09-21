@@ -25,7 +25,7 @@ static lv_obj_t *create_mode_card(
     lv_event_cb_t event_cb
 )
 {
-    lv_obj_t *card = screen_chrome_add_card(screen, y, 560, 76);
+    lv_obj_t *card = screen_chrome_add_card(screen, y, 440, 76);
 
     lv_obj_add_flag(card, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_add_event_cb(card, event_cb, LV_EVENT_CLICKED, NULL);
@@ -52,11 +52,11 @@ lv_obj_t *home_screen_create(void)
     screen_chrome_add_status_bar(screen);
     screen_chrome_add_title(screen);
     screen_chrome_add_state(screen, "AGUARDANDO", "", CHROME_BLUE);
-    screen_chrome_add_subtitle(screen, "Selecione o modo de dosagem", 132);
+    screen_chrome_add_subtitle(screen, "Selecione o modo de dosagem", 136);
 
     create_mode_card(
         screen,
-        158,
+        176,
         "MASSA",
         "Dosar por peso (g)",
         grams_card_event_cb
@@ -64,7 +64,7 @@ lv_obj_t *home_screen_create(void)
 
     create_mode_card(
         screen,
-        246,
+        260,
         "VALOR MONETARIO",
         "Dosar por valor (R$)",
         currency_card_event_cb
@@ -74,7 +74,7 @@ lv_obj_t *home_screen_create(void)
         screen,
         LV_ALIGN_TOP_MID,
         0,
-        330,
+        352,
         NULL,
         NULL
     );

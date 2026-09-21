@@ -3,8 +3,9 @@
 
 /* Pinos provisorios; validar contra a montagem fisica e o exemplo do fabricante. */
 
-#define BOARD_DISPLAY_HOR_RES 800
-#define BOARD_DISPLAY_VER_RES 480
+/* Display 4,3" 800x480 (SpotPear) usado em orientacao retrato (480x800). */
+#define BOARD_DISPLAY_HOR_RES 480
+#define BOARD_DISPLAY_VER_RES 800
 
 #define BOARD_TOUCH_I2C_SDA_PIN 38
 #define BOARD_TOUCH_I2C_SCL_PIN 39

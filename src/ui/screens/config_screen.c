@@ -3,7 +3,7 @@
 #include "screen_chrome.h"
 #include "../../domain/dosing_controller.h"
 
-#define CHIP_W 170
+#define CHIP_W 140
 #define CHIP_H 34
 
 typedef struct {
@@ -120,8 +120,8 @@ static lv_obj_t *create_tab(
 )
 {
     lv_obj_t *tab = lv_button_create(screen);
-    lv_obj_set_size(tab, 240, 34);
-    lv_obj_align(tab, LV_ALIGN_TOP_MID, x, 120);
+    lv_obj_set_size(tab, 200, 34);
+    lv_obj_align(tab, LV_ALIGN_TOP_MID, x, 132);
     lv_obj_set_style_radius(tab, 8, 0);
 
     lv_obj_add_event_cb(tab, event_cb, LV_EVENT_CLICKED, NULL);
@@ -216,8 +216,8 @@ static void create_chip_grid(
     for (int i = 0; i < 6; i++) {
         int col = i % 3;
         int row = i / 3;
-        lv_coord_t x = (col - 1) * (CHIP_W + 12);
-        lv_coord_t y = 254 + row * (CHIP_H + 6);
+        lv_coord_t x = (col - 1) * (CHIP_W + 10);
+        lv_coord_t y = 296 + row * (CHIP_H + 6);
 
         char text[24];
 
@@ -268,14 +268,14 @@ lv_obj_t *config_screen_create(DosingMode mode)
 
     create_tab(
         screen,
-        -130,
+        -110,
         "MASSA (g)",
         mode == DOSING_MODE_GRAMS,
         grams_tab_event_cb
     );
     create_tab(
         screen,
-        130,
+        110,
         "VALOR (R$)",
         mode == DOSING_MODE_CURRENCY,
         currency_tab_event_cb
@@ -285,7 +285,7 @@ lv_obj_t *config_screen_create(DosingMode mode)
     lv_label_set_text(quantity_hint, "Quantidade desejada");
     lv_obj_set_style_text_color(quantity_hint, CHROME_WHITE, 0);
     lv_obj_set_style_text_font(quantity_hint, &lv_font_montserrat_14, 0);
-    lv_obj_align(quantity_hint, LV_ALIGN_TOP_MID, 0, 162);
+    lv_obj_align(quantity_hint, LV_ALIGN_TOP_MID, 0, 178);
 
     context->value_label = lv_label_create(screen);
     context->equiv_label = lv_label_create(screen);
@@ -296,7 +296,7 @@ lv_obj_t *config_screen_create(DosingMode mode)
         &lv_font_montserrat_24,
         0
     );
-    lv_obj_align(context->value_label, LV_ALIGN_TOP_MID, 0, 186);
+    lv_obj_align(context->value_label, LV_ALIGN_TOP_MID, 0, 200);
 
     lv_obj_set_style_text_color(context->equiv_label, CHROME_GREY, 0);
     lv_obj_set_style_text_font(
@@ -304,13 +304,13 @@ lv_obj_t *config_screen_create(DosingMode mode)
         &lv_font_montserrat_12,
         0
     );
-    lv_obj_align(context->equiv_label, LV_ALIGN_TOP_MID, 0, 218);
+    lv_obj_align(context->equiv_label, LV_ALIGN_TOP_MID, 0, 234);
 
     update_value_label(context);
 
     lv_obj_t *decrease_button = lv_button_create(screen);
     lv_obj_set_size(decrease_button, 90, 40);
-    lv_obj_align(decrease_button, LV_ALIGN_TOP_MID, -212, 184);
+    lv_obj_align(decrease_button, LV_ALIGN_TOP_MID, -150, 196);
     lv_obj_set_style_bg_color(decrease_button, CHROME_CARD, 0);
     lv_obj_set_style_radius(decrease_button, 8, 0);
     lv_obj_add_event_cb(
@@ -327,7 +327,7 @@ lv_obj_t *config_screen_create(DosingMode mode)
 
     lv_obj_t *increase_button = lv_button_create(screen);
     lv_obj_set_size(increase_button, 90, 40);
-    lv_obj_align(increase_button, LV_ALIGN_TOP_MID, 212, 184);
+    lv_obj_align(increase_button, LV_ALIGN_TOP_MID, 150, 196);
     lv_obj_set_style_bg_color(increase_button, CHROME_CARD, 0);
     lv_obj_set_style_radius(increase_button, 8, 0);
     lv_obj_add_event_cb(
@@ -346,13 +346,13 @@ lv_obj_t *config_screen_create(DosingMode mode)
     lv_label_set_text(quick_hint, "Valores rapidos");
     lv_obj_set_style_text_color(quick_hint, CHROME_GREY, 0);
     lv_obj_set_style_text_font(quick_hint, &lv_font_montserrat_12, 0);
-    lv_obj_align(quick_hint, LV_ALIGN_TOP_MID, 0, 236);
+    lv_obj_align(quick_hint, LV_ALIGN_TOP_MID, 0, 268);
 
     create_chip_grid(screen, context);
 
     lv_obj_t *continue_button = lv_button_create(screen);
-    lv_obj_set_size(continue_button, 560, 40);
-    lv_obj_align(continue_button, LV_ALIGN_TOP_MID, 0, 332);
+    lv_obj_set_size(continue_button, 440, 44);
+    lv_obj_align(continue_button, LV_ALIGN_TOP_MID, 0, 408);
     lv_obj_set_style_bg_color(continue_button, CHROME_GREEN_BTN, 0);
     lv_obj_set_style_radius(continue_button, 8, 0);
     lv_obj_add_event_cb(
@@ -372,8 +372,8 @@ lv_obj_t *config_screen_create(DosingMode mode)
     lv_obj_center(continue_label);
 
     lv_obj_t *voltar_button = lv_button_create(screen);
-    lv_obj_set_size(voltar_button, 560, 32);
-    lv_obj_align(voltar_button, LV_ALIGN_TOP_MID, 0, 380);
+    lv_obj_set_size(voltar_button, 440, 36);
+    lv_obj_align(voltar_button, LV_ALIGN_TOP_MID, 0, 466);
     lv_obj_set_style_bg_color(voltar_button, CHROME_BTN_DISABLED, 0);
     lv_obj_set_style_radius(voltar_button, 8, 0);
     lv_obj_add_event_cb(

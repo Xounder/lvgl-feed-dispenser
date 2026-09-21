@@ -121,14 +121,14 @@ lv_obj_t *dosing_screen_create(void)
     lv_obj_align(context->weight_label, LV_ALIGN_TOP_MID, 0, 150);
 
     lv_obj_t *progress_row = lv_obj_create(screen);
-    lv_obj_set_size(progress_row, 560, 26);
-    lv_obj_align(progress_row, LV_ALIGN_TOP_MID, 0, 192);
+    lv_obj_set_size(progress_row, 440, 26);
+    lv_obj_align(progress_row, LV_ALIGN_TOP_MID, 0, 204);
     lv_obj_clear_flag(progress_row, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_border_width(progress_row, 0, 0);
     lv_obj_set_style_bg_opa(progress_row, LV_OPA_TRANSP, 0);
 
     context->progress_bar = lv_bar_create(progress_row);
-    lv_obj_set_size(context->progress_bar, 480, 18);
+    lv_obj_set_size(context->progress_bar, 380, 18);
     lv_obj_align(context->progress_bar, LV_ALIGN_LEFT_MID, 0, 0);
     lv_bar_set_range(context->progress_bar, 0, 100);
     lv_bar_set_value(context->progress_bar, 0, LV_ANIM_OFF);
@@ -154,8 +154,8 @@ lv_obj_t *dosing_screen_create(void)
     lv_obj_align(context->percent_label, LV_ALIGN_RIGHT_MID, 0, 0);
 
     lv_obj_t *meta_row = lv_obj_create(screen);
-    lv_obj_set_size(meta_row, 560, 24);
-    lv_obj_align(meta_row, LV_ALIGN_TOP_MID, 0, 226);
+    lv_obj_set_size(meta_row, 440, 24);
+    lv_obj_align(meta_row, LV_ALIGN_TOP_MID, 0, 240);
     lv_obj_clear_flag(meta_row, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_border_width(meta_row, 0, 0);
     lv_obj_set_style_bg_opa(meta_row, LV_OPA_TRANSP, 0);
@@ -180,11 +180,11 @@ lv_obj_t *dosing_screen_create(void)
         &lv_font_montserrat_12,
         0
     );
-    lv_obj_align(context->phase_label, LV_ALIGN_TOP_MID, 0, 252);
+    lv_obj_align(context->phase_label, LV_ALIGN_TOP_MID, 0, 270);
 
     lv_obj_t *stop_button = lv_button_create(screen);
-    lv_obj_set_size(stop_button, 560, 40);
-    lv_obj_align(stop_button, LV_ALIGN_TOP_MID, 0, 268);
+    lv_obj_set_size(stop_button, 440, 42);
+    lv_obj_align(stop_button, LV_ALIGN_TOP_MID, 0, 298);
     lv_obj_set_style_bg_color(stop_button, CHROME_RED_BTN, 0);
     lv_obj_set_style_radius(stop_button, 8, 0);
 
@@ -204,7 +204,7 @@ lv_obj_t *dosing_screen_create(void)
     lv_obj_set_style_text_font(stop_label, &lv_font_montserrat_16, 0);
     lv_obj_center(stop_label);
 
-    lv_obj_t *manual_card = screen_chrome_add_card(screen, 320, 560, 80);
+    lv_obj_t *manual_card = screen_chrome_add_card(screen, 376, 440, 80);
     lv_obj_set_style_bg_color(manual_card, CHROME_CARD_DISABLED, 0);
     lv_obj_set_style_border_color(manual_card, CHROME_BORDER, 0);
 
@@ -215,7 +215,7 @@ lv_obj_t *dosing_screen_create(void)
     lv_obj_align(manual_hint, LV_ALIGN_TOP_MID, 0, 10);
 
     lv_obj_t *manual_button = lv_obj_create(manual_card);
-    lv_obj_set_size(manual_button, 500, 36);
+    lv_obj_set_size(manual_button, 400, 36);
     lv_obj_align(manual_button, LV_ALIGN_BOTTOM_MID, 0, -8);
     lv_obj_clear_flag(manual_button, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_bg_color(manual_button, CHROME_BTN_DISABLED, 0);

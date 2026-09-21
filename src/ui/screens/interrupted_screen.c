@@ -86,7 +86,7 @@ lv_obj_t *interrupted_screen_create(void)
     lv_obj_align(ctx->weight_label, LV_ALIGN_TOP_MID, 0, 148);
 
     lv_obj_t *meta_row = lv_obj_create(screen);
-    lv_obj_set_size(meta_row, 560, 24);
+    lv_obj_set_size(meta_row, 440, 24);
     lv_obj_align(meta_row, LV_ALIGN_TOP_MID, 0, 192);
     lv_obj_clear_flag(meta_row, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_border_width(meta_row, 0, 0);
@@ -105,14 +105,14 @@ lv_obj_t *interrupted_screen_create(void)
     lv_obj_align(target_label, LV_ALIGN_RIGHT_MID, 0, 0);
 
     lv_obj_t *progress_row = lv_obj_create(screen);
-    lv_obj_set_size(progress_row, 560, 26);
+    lv_obj_set_size(progress_row, 440, 26);
     lv_obj_align(progress_row, LV_ALIGN_TOP_MID, 0, 222);
     lv_obj_clear_flag(progress_row, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_border_width(progress_row, 0, 0);
     lv_obj_set_style_bg_opa(progress_row, LV_OPA_TRANSP, 0);
 
     ctx->progress_bar = lv_bar_create(progress_row);
-    lv_obj_set_size(ctx->progress_bar, 480, 18);
+    lv_obj_set_size(ctx->progress_bar, 380, 18);
     lv_obj_align(ctx->progress_bar, LV_ALIGN_LEFT_MID, 0, 0);
     lv_bar_set_range(ctx->progress_bar, 0, 100);
     lv_bar_set_value(ctx->progress_bar, percent, LV_ANIM_OFF);
@@ -138,8 +138,8 @@ lv_obj_t *interrupted_screen_create(void)
     lv_obj_align(ctx->percent_label, LV_ALIGN_RIGHT_MID, 0, 0);
 
     lv_obj_t *new_dosing_button = lv_button_create(screen);
-    lv_obj_set_size(new_dosing_button, 560, 44);
-    lv_obj_align(new_dosing_button, LV_ALIGN_TOP_MID, 0, 260);
+    lv_obj_set_size(new_dosing_button, 440, 46);
+    lv_obj_align(new_dosing_button, LV_ALIGN_TOP_MID, 0, 292);
     lv_obj_set_style_bg_color(new_dosing_button, CHROME_BTN_BLUE, 0);
     lv_obj_set_style_radius(new_dosing_button, 8, 0);
 
@@ -160,7 +160,7 @@ lv_obj_t *interrupted_screen_create(void)
         screen,
         LV_ALIGN_TOP_MID,
         0,
-        316,
+        376,
         tick_cb,
         ctx
     );

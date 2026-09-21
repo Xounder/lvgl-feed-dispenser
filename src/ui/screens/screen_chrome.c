@@ -4,7 +4,7 @@
 void screen_chrome_add_status_bar(lv_obj_t *screen)
 {
     lv_obj_t *bar = lv_obj_create(screen);
-    lv_obj_set_size(bar, 800, 24);
+    lv_obj_set_size(bar, 480, 24);
     lv_obj_align(bar, LV_ALIGN_TOP_MID, 0, 0);
     lv_obj_clear_flag(bar, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_border_width(bar, 0, 0);
@@ -36,7 +36,7 @@ void screen_chrome_add_title(lv_obj_t *screen)
     lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 28);
 
     lv_obj_t *divider = lv_obj_create(screen);
-    lv_obj_set_size(divider, 760, 2);
+    lv_obj_set_size(divider, 440, 2);
     lv_obj_align(divider, LV_ALIGN_TOP_MID, 0, 58);
     lv_obj_clear_flag(divider, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_border_width(divider, 0, 0);
@@ -85,7 +85,7 @@ void screen_chrome_add_bottom_nav(lv_obj_t *screen)
     };
 
     lv_obj_t *nav = lv_obj_create(screen);
-    lv_obj_set_size(nav, 800, 56);
+    lv_obj_set_size(nav, 480, 56);
     lv_obj_align(nav, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_clear_flag(nav, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_border_width(nav, 1, 0);
@@ -95,11 +95,11 @@ void screen_chrome_add_bottom_nav(lv_obj_t *screen)
 
     for (int i = 0; i < 4; i++) {
         lv_obj_t *item = lv_obj_create(nav);
-        lv_obj_set_size(item, 200, 56);
+        lv_obj_set_size(item, 120, 56);
         lv_obj_clear_flag(item, LV_OBJ_FLAG_SCROLLABLE);
         lv_obj_set_style_border_width(item, 0, 0);
         lv_obj_set_style_bg_opa(item, LV_OPA_TRANSP, 0);
-        lv_obj_align(item, LV_ALIGN_CENTER, (i * 200) - 300, 0);
+        lv_obj_align(item, LV_ALIGN_CENTER, (i * 120) - 180, 0);
 
         lv_color_t color;
 
