@@ -10,20 +10,21 @@ O display alvo possui aproximadamente:
 
 ```text
 4,3"
-800 × 480 pixels
+800 × 480 pixels (RGB)
 touch capacitivo
 ```
 
-A resolução:
+O display é usado em **orientação retrato**, de modo que a área útil da
+UI é:
 
 ```text
-800 × 480
+480 × 800
 ```
 
-já é utilizada no simulador:
+A área em retrato já é utilizada no simulador:
 
 ```c
-sdl_hal_init(800, 480);
+sdl_hal_init(480, 800);
 ```
 
 Isso permite desenvolver a interface levando em consideração a resolução real desde o início.
@@ -35,7 +36,7 @@ Isso permite desenvolver a interface levando em consideração a resolução rea
 Desenvolver a interface em:
 
 ```text
-800 × 480
+480 × 800 (retrato)
 ```
 
 permite validar antecipadamente:
@@ -64,7 +65,7 @@ LVGL
   ↓
 SDL2
   ↓
-janela 800×480
+janela 480×800 (retrato)
 ```
 
 No hardware:

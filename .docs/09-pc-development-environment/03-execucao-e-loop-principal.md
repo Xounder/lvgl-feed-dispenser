@@ -19,7 +19,7 @@ main()
    ↓
 lv_init()
    ↓
-sdl_hal_init(800, 480)
+sdl_hal_init(480, 800)
    ↓
 ui_init()
    ↓
@@ -37,7 +37,7 @@ O fluxo principal é:
 ```c
 lv_init();
 
-sdl_hal_init(800, 480);
+sdl_hal_init(480, 800);
 
 ui_init();
 ```
@@ -166,15 +166,16 @@ Essa camada é importante porque o restante da aplicação não deve precisar co
 O simulador é inicializado através de:
 
 ```c
-sdl_hal_init(800, 480);
+sdl_hal_init(480, 800);
 ```
 
 Essa chamada configura o ambiente SDL utilizado pelo LVGL.
 
-O tamanho é explicitamente alinhado com o display físico alvo:
+O tamanho é explicitamente alinhado ao display físico alvo (4,3"
+800×480 montado em **retrato**):
 
 ```text
-800 × 480
+480 × 800 (área útil da UI)
 ```
 
 ---

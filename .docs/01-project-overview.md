@@ -63,10 +63,11 @@ A implementação atual utiliza **C** (em migração para **C++**), **LVGL**, **
 
 O desktop funciona como uma plataforma de desenvolvimento e simulação.
 
-A aplicação é executada em uma janela com a mesma resolução pretendida para o display:
+A aplicação é executada em uma janela com a área útil do display alvo,
+que é um LCD 4,3" 800×480 usado em **orientação retrato**:
 
 ```text
-800 × 480
+480 × 800 (área útil da UI)
 ```
 
 Isso permite testar a interface em uma proporção próxima à do hardware final.

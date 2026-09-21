@@ -231,7 +231,7 @@ Possíveis melhorias futuras:
 * feedback de interação;
 * animações;
 * suporte adequado a acentuação;
-* layouts específicos para 800×480;
+* layouts específicos para 480×800 (retrato);
 * melhor aproveitamento do touchscreen.
 
 Essas melhorias não devem alterar desnecessariamente o domínio.
@@ -257,12 +257,13 @@ Isso é uma preocupação de apresentação e não deve modificar a lógica da a
 
 ---
 
-## 55. Interface de 800×480
+## 55. Interface em retrato (480×800)
 
-O display alvo possui:
+O display alvo é um LCD 4,3" **800×480** (SpotPear), usado na orientação
+**retrato**:
 
 ```text
-800 × 480
+480 × 800 (área útil da UI)
 ```
 
 A UI deve ser desenvolvida considerando essa resolução.
@@ -270,7 +271,7 @@ A UI deve ser desenvolvida considerando essa resolução.
 No simulador, a inicialização atual utiliza:
 
 ```c
-sdl_hal_init(800, 480);
+sdl_hal_init(480, 800);
 ```
 
 Isso permite validar antecipadamente:
