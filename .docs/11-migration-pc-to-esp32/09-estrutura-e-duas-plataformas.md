@@ -63,8 +63,8 @@ src/
     │   └── simulated_dispenser.c
     │
     └── esp32/
-        ├── real_weight_sensor.c
-        └── real_dispenser.c
+        ├── real_weight_sensor.cpp
+        └── real_dispenser.cpp
 ```
 
 A estrutura exata pode mudar.
@@ -85,7 +85,7 @@ Uma visão mais completa:
           ▼                           ▼
       PC Platform                ESP32 Platform
           │                           │
-      SDL2/HAL                    ESP-IDF/HAL
+      SDL2/HAL                    Arduino/ESP-IDF HAL
           │                           │
    Simulated HW                   Real HW
           │                           │
@@ -98,7 +98,7 @@ Uma visão mais completa:
 
 ### 61. O que deve permanecer independente
 
-Idealmente, o seguinte código não deve depender diretamente de ESP-IDF:
+Idealmente, o seguinte código não deve depender diretamente de Arduino/ESP-IDF:
 
 ```text
 domain/
@@ -114,7 +114,7 @@ deve depender somente das APIs do LVGL e das interfaces da aplicação, e não d
 
 ---
 
-### 62. O que pode depender do ESP-IDF
+### 62. O que pode depender do Arduino/ESP-IDF
 
 A camada específica do ESP32 pode conhecer:
 
@@ -129,7 +129,7 @@ tasks
 queues
 NVS
 drivers
-ESP-IDF APIs
+Arduino/ESP-IDF APIs
 ```
 
 Esses detalhes pertencem à plataforma.
@@ -155,7 +155,7 @@ Evitar:
 ```text
 Domain
  ↓
-ESP-IDF
+Arduino/ESP-IDF
  ↓
 GPIO
  ↓

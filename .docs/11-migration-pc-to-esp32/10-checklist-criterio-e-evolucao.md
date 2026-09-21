@@ -9,7 +9,7 @@
 #### Ambiente
 
 ```text
-[ ] ESP-IDF configurado
+[ ] PlatformIO + Arduino configurado
 [ ] ESP32-S3 reconhecido
 [ ] build funcionando
 [ ] flash funcionando
@@ -291,7 +291,7 @@ A arquitetura desejada é:
               ▼                   ▼
           Plataforma PC       Plataforma ESP32
               │                   │
-          SDL2/HAL             ESP-IDF/HAL
+          SDL2/HAL             Arduino/ESP-IDF HAL
               │                   │
           Simulação              Real
               │                   │

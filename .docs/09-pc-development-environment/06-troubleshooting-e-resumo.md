@@ -105,7 +105,7 @@ Além do código-fonte do projeto.
 | vcpkg                     | gerenciamento de dependências       |
 | SDL2                      | plataforma gráfica do simulador     |
 | LVGL                      | framework gráfico                   |
-| C                         | linguagem da aplicação              |
+| C                         | linguagem da aplicação (em migração para C++)       |
 | `build/`                  | artefatos do CMake                  |
 | `bin/Debug/`              | executável e DLLs necessárias       |
 

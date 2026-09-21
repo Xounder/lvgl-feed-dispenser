@@ -54,9 +54,9 @@ Eles serão substituídos por:
 ```text
 ESP32-S3 HAL
 display/touch drivers
-real WeightSensor
-real Dispenser
-ESP32 toolchain
+real WeightSensor (HX711)
+real Dispenser (SG90 / mecanismo)
+ESP32 toolchain (PlatformIO + Arduino)
 hardware-specific build system
 ```
 
@@ -68,7 +68,8 @@ hardware-specific build system
 | ---------- | ---------------------- | ------------------------------------------- |
 | Plataforma | Windows                | ESP32-S3                                    |
 | CPU        | x64                    | Xtensa/RISC-V conforme variante/SDK adotado |
-| Build      | CMake + Visual Studio  | CMake + ESP-IDF                             |
+| Linguagem  | C++ (domínio atual em C)| C++                                        |
+| Build      | CMake + Visual Studio  | PlatformIO + Arduino framework (sobre ESP-IDF) |
 | Gráficos   | LVGL + SDL2            | LVGL + driver de display                    |
 | Touch      | mouse/SDL2             | touch controller real                       |
 | Peso       | sensor simulado        | HX711 + load cell                           |

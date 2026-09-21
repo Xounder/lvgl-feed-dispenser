@@ -21,24 +21,26 @@ Detalhes do ambiente de build do PC: [09-pc-development-environment.md](../09-pc
 No ESP32, a expectativa é utilizar:
 
 ```text
-ESP-IDF
+PlatformIO
 +
-CMake
+Arduino framework
 ```
 
-O CMake continuará fazendo parte do ecossistema, mas a configuração de build será específica do ESP-IDF.
+O PlatformIO gerencia o build, flash e monitoramento do ESP32-S3, e o Arduino framework serve como camada de aplicação sobre o ESP-IDF/FreeRTOS.
+
+Detalhes da decisão de linguagem: [03-architecture-decisions.md](../03-architecture-decisions.md).
 
 ---
 
-### 32. ESP-IDF
+### 32. PlatformIO + Arduino no ESP32
 
 A implementação final deverá utilizar o ambiente apropriado para ESP32-S3.
 
-O ESP-IDF fornecerá recursos como:
+O Arduino framework (que roda sobre o ESP-IDF) fornecerá recursos como:
 
 * drivers;
 * GPIO;
-* PWM;
+* PWM (servo via bibliotecas como ESP32Servo);
 * tarefas;
 * timers;
 * comunicação;
@@ -47,13 +49,15 @@ O ESP-IDF fornecerá recursos como:
 * flash;
 * monitoramento.
 
+A linguagem de aplicação será **C++**, aproveitando as bibliotecas Arduino para os periféricos (HX711, servo, display).
+
 Esses recursos devem permanecer concentrados nas camadas específicas da plataforma.
 
 ---
 
 ### 33. FreeRTOS
 
-O ESP-IDF utiliza FreeRTOS em sua arquitetura.
+O Arduino framework (assim como o ESP-IDF) utiliza FreeRTOS em sua arquitetura.
 
 O projeto não deve assumir que o loop desktop:
 

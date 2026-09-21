@@ -1,6 +1,6 @@
 # Simulation Strategy — Estratégia de Simulação
 
-Documento canônico da **estratégia de simulação** do dosador (simulador desktop LVGL+SDL2 em C; futuro ESP32-S3). O simulador não é um protótipo descartável: é um ambiente de desenvolvimento para observar, desenvolver e testar o comportamento do dosador antes da disponibilidade e integração do hardware físico.
+Documento canônico da **estratégia de simulação** do dosador (simulador desktop LVGL+SDL2 em C, em migração para C++; futuro ESP32-S3). O simulador não é um protótipo descartável: é um ambiente de desenvolvimento para observar, desenvolver e testar o comportamento do dosador antes da disponibilidade e integração do hardware físico.
 
 **Conteúdo canônico aqui:** o que simular (peso, liberação de ração, evolução da dosagem em duas etapas, conversão monetária, liberação manual, tempo, falhas, condições anormais, conclusão, interrupção e cancelamento) e os níveis de simulação:
 

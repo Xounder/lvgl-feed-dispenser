@@ -1,6 +1,6 @@
 # UI e Navegação
 
-Documento canônico da **interface e da navegação** do dosador de ração (simulador desktop LVGL+SDL2 em C; futuro ESP32-S3): a responsabilidade de cada tela, o fluxo de navegação e a relação entre a UI e o domínio da aplicação.
+Documento canônico da **interface e da navegação** do dosador de ração (simulador desktop LVGL+SDL2 em C, em migração para C++; futuro ESP32-S3): a responsabilidade de cada tela, o fluxo de navegação e a relação entre a UI e o domínio da aplicação.
 
 A interface é construída com **LVGL** e, atualmente, executada no simulador desktop através de **SDL2** (no futuro, no display/touch do ESP32-S3).
 

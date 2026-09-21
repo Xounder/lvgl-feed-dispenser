@@ -82,6 +82,8 @@ A placa considerada no projeto é uma variante:
 ESP32-S3 N16R8
 ```
 
+a qual, nesta escolha, vem integrada a um display 4,3" 800×480 com touch capacitivo (ex.: placa SpotPear ESP32-S3-Touch-LCD-4.3G ou similar, com interface RGB e touch GT911 via I²C).
+
 A nomenclatura indica uma variante com memória flash e PSRAM adequadas para uma aplicação gráfica relativamente mais exigente.
 
 O ESP32-S3 será responsável por executar:

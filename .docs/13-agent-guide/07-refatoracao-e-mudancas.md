@@ -129,19 +129,25 @@ O projeto possui decisões arquiteturais deliberadas.
 
 ---
 
-## 62. Não trocar C sem motivo
+## 62. Linguagem da aplicação: C++ (sem "C++zão")
 
-O projeto utiliza C intencionalmente por sua proximidade com:
+A aplicação passará a usar **C++** como linguagem principal, por decisão documentada.
 
-* firmware;
-* ESP32;
-* controle de memória;
-* APIs de hardware;
-* LVGL.
+Os motivos são:
 
-Não migrar para C++, Rust, Python ou outra linguagem apenas por preferência.
+* integração com as bibliotecas Arduino para o ESP32-S3 (HX711, servo, display LVGL RGB da placa);
+* menor esforço na camada de drivers/hardware no dispositivo;
+* manter o código existente em C ainda é válido (LVGL e SDL2 continuam C, consumidos de C++).
 
-Uma mudança de linguagem seria uma decisão arquitetural grande e exigiria justificativa específica.
+Regras de uso:
+
+* **Linguagem:** C++ para a aplicação, C nas bibliotecas existentes.
+* **Estilo:** C++ direto e simples — sem exigir classes/herança/templates em todo lugar.
+* **Domínio atual em C:** não precisa ser reescrito de uma vez; pode ser consumido de C++ e migrado progressivamente.
+
+Não trocar a linguagem novamente apenas por preferência, e não introduzir abstrações C++ excessivas sem necessidade concreta.
+
+Uma mudança de linguagem é uma decisão arquitetural grande e exigiria nova justificativa específica.
 
 ---
 

@@ -4,15 +4,19 @@
 
 ---
 
-### 1. Decisão: utilizar C
+### 1. Decisão: utilizar C++ como linguagem da aplicação
 
 **Decisão**
 
-A aplicação principal será desenvolvida em:
+A aplicação será desenvolvida em:
 
 ```text
-C
+C++
 ```
+
+utilizando um subconjunto direto e simples da linguagem (C++ "pragmático"), sem exigir abstrações excessivas.
+
+O domínio atual, escrito em C, permanece válido e pode ser consumido a partir do código C++; a migração progressiva do domínio/UI para C++ é esperada, mas não precisa acontecer de uma só vez.
 
 **Motivos**
 
@@ -22,76 +26,57 @@ O projeto possui como destino final um microcontrolador:
 ESP32-S3
 ```
 
-e possui requisitos de integração direta com:
-
-* GPIO;
-* PWM;
-* sensores;
-* atuadores;
-* display;
-* touch;
-* interfaces de comunicação;
-* drivers de hardware.
-
-C é uma linguagem naturalmente adequada a esse contexto.
-
-Além disso, o próprio LVGL possui uma base fortemente orientada a C, o que torna a integração direta e natural.
-
-**Por que não começar com C++?**
-
-C++ seria uma alternativa tecnicamente válida para o ESP32-S3.
-
-Entretanto, não havia necessidade inicial de introduzir:
-
-* classes;
-* herança;
-* templates;
-* RAII;
-* STL;
-* abstrações adicionais da linguagem.
-
-O projeto precisava principalmente de:
+e os componentes de hardware que o firmware precisará integrar são fortemente orientados ao ecossistema C++/Arduino:
 
 ```text
-interfaces simples
-+
-estruturas de dados
-+
-funções
-+
-ponteiros para funções
+HX711 (balança)
+servo (SG90)
+display + touch LVGL (exemplos da placa)
 ```
 
-O modelo de `struct + function pointers` utilizado nas abstrações atuais é suficiente para representar os contratos de hardware.
+No Arduino, essas integrações possuem bibliotecas maduras e prontas que reduzem o esforço de desenvolvimento. Por exemplo, o servo:
 
-**Benefício adicional**
-
-Utilizar C no simulador significa que grande parte do código que futuramente será executado no ESP32-S3 já pode ser desenvolvida e validada no PC.
-
-Isso reduz a diferença entre:
-
-```text
-código do simulador
+```cpp
+servo.attach(pin);
+servo.write(90);
 ```
 
-e:
+e o HX711:
 
-```text
-código do dispositivo
+```cpp
+scale.begin(DOUT, SCK);
+scale.tare();
+scale.get_units();
 ```
+
+Isso é especialmente importante para o display RGB 800×480 da placa alvo, cujo bring-up via exemplo oficial da fabricante é muito mais direto no Arduino.
+
+**Linguagem das bibliotecas**
+
+O uso de C++ não exige que todas as bibliotecas sejam C++:
+
+| Componente         | Linguagem            |
+| ------------------ | -------------------- |
+| LVGL               | C (consumido de C++) |
+| SDL2 (simulador)   | C                    |
+| Arduino core       | C/C++                |
+| HX711 / servo libs | C++                  |
+
+**Como era antes e por que mudou**
+
+Inicialmente a escolha foi **C**: como o LVGL é orientado a C e todo o domínio podia ser validado no PC, C era suficiente e mantinha a proximidade com o firmware.
+
+A decisão foi revisada ao identificar o hardware alvo (placa integrada com display/touch) e o ecossistema de componentes (HX711, servo): **C++/Arduino acelera a integração física real**, que é a próxima etapa do projeto, sem exigir reescrever o que já foi validado.
+
+**Por que não "C++zão"**
+
+O domínio não precisa ser reescrito com classes, herança, templates e RAII.
+
+Um C++ direto (funções, estruturas, ponteiros, classes pontuais para os adaptadores de hardware e para a aplicação) é suficiente e mantém o projeto simples, testável e claro.
 
 **Consequência**
 
-A escolha por C exige maior disciplina em relação a:
-
-* gerenciamento de memória;
-* ownership;
-* ciclo de vida;
-* interfaces;
-* encapsulamento;
-* validação de ponteiros.
-
-Essa complexidade deve ser tratada explicitamente na arquitetura e não escondida atrás de abstrações excessivas.
+A linguagem da aplicação passa a ser C++; o código existente em C continua valendo e é consumido de dentro do C++ (via `extern "C"` quando necessário).
 
 Status: **Atual**.
 
@@ -127,6 +112,10 @@ CMake fornece uma forma estruturada de descrever:
 * configurações de plataforma.
 
 Também evita depender exclusivamente da configuração manual do IDE.
+
+**Observação**
+
+Esta decisão de CMake se refere ao **simulador PC**. Para o alvo ESP32-S3, o build seguirá **PlatformIO + Arduino framework** — ver [11-migration-pc-to-esp32.md](../11-migration-pc-to-esp32.md).
 
 Status: **Atual**.
 

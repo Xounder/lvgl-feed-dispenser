@@ -91,7 +91,7 @@ O domínio deve depender o mínimo possível de:
 LVGL
 SDL2
 Windows
-ESP-IDF
+Arduino/ESP-IDF
 GPIO
 drivers físicos
 ```

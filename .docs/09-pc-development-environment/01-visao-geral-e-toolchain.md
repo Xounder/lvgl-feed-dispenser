@@ -28,7 +28,7 @@ LVGL
 Simulador desktop
 ```
 
-A aplicação é escrita em **C**.
+A aplicação é escrita em **C**, em migração para **C++** (decisão em [03-architecture-decisions.md](../03-architecture-decisions.md)).
 
 ---
 

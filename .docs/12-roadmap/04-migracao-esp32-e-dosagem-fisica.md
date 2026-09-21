@@ -9,7 +9,7 @@ Depois de o simulador estar suficientemente estável, começa a preparação do 
 Primeiro:
 
 ```text
-✓ ESP-IDF
+✓ PlatformIO + Arduino
 ✓ compilação
 ✓ flash
 ✓ monitor serial

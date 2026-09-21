@@ -1,6 +1,6 @@
 # Ambiente de Desenvolvimento no PC
 
-> **Documento canônico** do **ambiente, build e execução** no PC do dosador de ração (simulador desktop LVGL+SDL2 em C; futuro ESP32-S3): Windows + Visual Studio Build Tools 2026, MSVC, CMake 4.3.1-msvc1, vcpkg, SDL2, LVGL, comandos de configuração/build/execução e troubleshooting.
+> **Documento canônico** do **ambiente, build e execução** no PC do dosador de ração (simulador desktop LVGL+SDL2 em C; futuro ESP32-S3): Windows + Visual Studio Build Tools 2026, MSVC, CMake 4.3.1-msvc1, vcpkg, SDL2, LVGL, comandos de configuração/build/execução e troubleshooting. A aplicação está em migração para C++ (ver [03-architecture-decisions.md](03-architecture-decisions.md)).
 > Este arquivo é o índice; o conteúdo completo está nas partes listadas abaixo.
 
 ---
@@ -27,7 +27,7 @@ LVGL
 Simulador desktop
 ```
 
-A aplicação é escrita em **C**.
+A aplicação é escrita em **C**, em migração para **C++** (decisão em [03-architecture-decisions.md](03-architecture-decisions.md)).
 
 O comando completo de configuração do CMake (com gerador `Visual Studio 18 2026`, arquitetura `x64`, toolchain do vcpkg e `CMAKE_PREFIX_PATH`) está na [parte 02](09-pc-development-environment/02-configuracao-e-build.md).
 
@@ -54,4 +54,4 @@ O arquivo original excedia 500 linhas e foi dividido em partes lógicas na subpa
 - [06-simulation-strategy.md](06-simulation-strategy.md) — estratégia de simulação (peso, taxa, falhas, cenários)
 - [07-ui-and-navigation.md](07-ui-and-navigation.md) — UI e navegação (fluxo Home → Mode → Config → Dosing → Completed)
 - [10-testing-strategy.md](10-testing-strategy.md) — procedimentos de teste do simulador
-- [11-migration-pc-to-esp32.md](11-migration-pc-to-esp32.md) — migração do PC para o ESP32-S3 (GPIO, placa, build ESP-IDF)
+- [11-migration-pc-to-esp32.md](11-migration-pc-to-esp32.md) — migração do PC para o ESP32-S3 (GPIO, placa, build PlatformIO + Arduino)

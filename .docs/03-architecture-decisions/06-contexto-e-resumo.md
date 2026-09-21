@@ -32,11 +32,12 @@ Status: **Atual** (princípio permanente).
 
 | Decisão                                   | Motivo principal                                              | Status    |
 | ----------------------------------------- | ------------------------------------------------------------- | --------- |
-| **C**                                     | Adequação ao ambiente embarcado e integração natural com LVGL | Atual     |
+| **C++ (com C no LVGL/SDL2/domínio atual)** | Integração com Arduino/bibliotecas do ESP32 sem abrir mão do validado | Atual |
 | **LVGL**                                  | Interface gráfica adequada para sistemas embarcados           | Atual     |
 | **SDL2 no PC**                            | Executar/testar LVGL em desktop                               | Atual     |
-| **CMake**                                 | Build estruturado e multiplataforma                           | Atual     |
+| **CMake**                                 | Build estruturado do simulador PC                            | Atual     |
 | **vcpkg**                                 | Gerenciamento de dependências do simulador                    | Atual     |
+| **PlatformIO + Arduino (ESP32)**          | Build/impl. do firmware com bibliotecas prontas               | Planejado |
 | **Simular antes do ESP32**                | Reduzir variáveis e acelerar desenvolvimento                  | Atual     |
 | **Simulador permanente**                  | Testes, regressão e desenvolvimento sem hardware              | Atual     |
 | **Evolução incremental**                  | Reduzir risco e facilitar validação                           | Atual     |

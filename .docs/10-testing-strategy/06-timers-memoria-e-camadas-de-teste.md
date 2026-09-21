@@ -54,7 +54,7 @@ Esse teste é particularmente importante porque as telas são criadas dinamicame
 
 ## 46. Teste de memória
 
-Como o projeto é escrito em C, gerenciamento de memória deve ser observado.
+Como o projeto (ainda com código em C, em migração para C++) opera com alocação manual, gerenciamento de memória deve ser observado.
 
 Devem ser investigados:
 
