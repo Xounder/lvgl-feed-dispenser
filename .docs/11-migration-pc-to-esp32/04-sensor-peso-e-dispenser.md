@@ -19,7 +19,7 @@ No PC:
 ```text
 WeightSensor
       ↓
-simulated_weight_sensor
+weight_sensor (simulada)
 ```
 
 No ESP32:
@@ -172,7 +172,7 @@ No PC:
 ```text
 Dispenser
     ↓
-simulated_dispenser
+dispenser (simulada)
 ```
 
 No hardware:

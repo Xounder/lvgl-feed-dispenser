@@ -133,7 +133,7 @@ No simulador atual:
 ```text
 dosing_controller_new_dosing()
     ↓
-simulated_weight_sensor.reset()   (tara)
+weight_sensor.reset()   (tara)
     ↓
 IDLE
 ```

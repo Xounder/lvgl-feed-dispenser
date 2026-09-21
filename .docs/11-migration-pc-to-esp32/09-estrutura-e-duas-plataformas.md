@@ -255,9 +255,9 @@ LVGL
  ↓
 SDL2
  ↓
-simulated_weight_sensor
+weight_sensor (simulada)
  ↓
-simulated_dispenser
+dispenser (simulada)
 ```
 
 Depois:

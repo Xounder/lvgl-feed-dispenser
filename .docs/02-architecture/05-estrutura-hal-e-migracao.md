@@ -40,9 +40,18 @@ src/
 │
 └── hardware/
     ├── weight_sensor.h
-    ├── simulated_weight_sensor.c
     ├── dispenser.h
-    └── simulated_dispenser.c
+    ├── simulated/
+    │   ├── simulated_weight_sensor.c
+    │   └── simulated_dispenser.c
+    └── esp32/
+        ├── board_config.h
+        ├── board_display.h
+        ├── board_display.cpp
+        ├── real_weight_sensor.h
+        ├── real_weight_sensor.cpp
+        ├── real_dispenser.h
+        └── real_dispenser.cpp
 ```
 
 A organização dos arquivos de UI é detalhada em [07-ui-and-navigation.md](../07-ui-and-navigation.md).

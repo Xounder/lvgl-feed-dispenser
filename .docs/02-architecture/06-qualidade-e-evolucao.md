@@ -137,11 +137,11 @@ O projeto está em evolução.
 
 Alguns pontos ainda são simplificados no código atual.
 
-Por exemplo, o `DosingController` atualmente utiliza diretamente as implementações simuladas:
+Por exemplo, o `DosingController` atualmente utiliza diretamente as instâncias expostas pela plataforma (no PC, as simuladas):
 
 ```text
-simulated_weight_sensor
-simulated_dispenser
+weight_sensor
+dispenser
 ```
 
 A direção arquitetural futura é permitir uma composição mais limpa:

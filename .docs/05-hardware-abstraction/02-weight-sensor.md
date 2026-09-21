@@ -12,15 +12,30 @@ Interface atual:
 #ifndef WEIGHT_SENSOR_H
 #define WEIGHT_SENSOR_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
     int (*read_grams)(void);
     void (*add_grams)(int grams);
     void (*reset)(void);
 } WeightSensor;
 
-extern WeightSensor simulated_weight_sensor;
+extern WeightSensor weight_sensor;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
+```
+
+A instância exposta pela plataforma (`weight_sensor`) é compartilhada entre domínio e UI:
+
+```text
+PC       → weight_sensor (simulada, em src/hardware/simulated/)
+ESP32    → weight_sensor (real, em src/hardware/esp32/)
 ```
 
 ---
@@ -146,7 +161,7 @@ Portanto:
 Arquivo:
 
 ```text
-src/hardware/simulated_weight_sensor.c
+src/hardware/simulated/simulated_weight_sensor.c
 ```
 
 Implementação atual:

@@ -200,8 +200,8 @@ hardware/
 │   └── simulated_dispenser.c
 │
 └── esp32/
-    ├── real_weight_sensor.c
-    └── real_dispenser.c
+    ├── real_weight_sensor.cpp
+    └── real_dispenser.cpp
 ```
 
 O objetivo é deixar claro quais implementações pertencem a cada plataforma.

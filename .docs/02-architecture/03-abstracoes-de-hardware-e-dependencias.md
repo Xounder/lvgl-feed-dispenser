@@ -46,7 +46,7 @@ No PC:
 ```text
 WeightSensor
       ↓
-simulated_weight_sensor
+weight_sensor (simulada)
 ```
 
 Essa implementação mantém um valor interno de peso e o incrementa durante a simulação, por exemplo de `0 g` até `100 g`.
@@ -90,7 +90,7 @@ No PC:
 ```text
 Dispenser
     ↓
-simulated_dispenser
+dispenser (simulada)
 ```
 
 A implementação mantém apenas um estado:

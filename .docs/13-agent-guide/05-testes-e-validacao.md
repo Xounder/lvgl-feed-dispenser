@@ -151,8 +151,7 @@ Substituir principalmente:
 ```text
 SDL2
 SDL HAL
-simulated_weight_sensor
-simulated_dispenser
+hardware simulado (src/hardware/simulated/)
 ```
 
 por implementações adequadas ao ESP32.

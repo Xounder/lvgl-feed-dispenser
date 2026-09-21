@@ -17,7 +17,7 @@ simulated_read_grams()
 e o controller aumenta artificialmente o peso por tick:
 
 ```c
-simulated_weight_sensor.add_grams(step);
+weight_sensor.add_grams(step);
 ```
 
 A dosagem automática usa **duas etapas** decididas em `dosing_controller_update()`:

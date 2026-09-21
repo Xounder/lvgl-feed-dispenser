@@ -12,15 +12,30 @@ Interface atual:
 #ifndef DISPENSER_H
 #define DISPENSER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
     void (*start)(void);
     void (*stop)(void);
     int (*is_active)(void);
 } Dispenser;
 
-extern Dispenser simulated_dispenser;
+extern Dispenser dispenser;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
+```
+
+A instância exposta pela plataforma (`dispenser`) é compartilhada entre domínio e UI:
+
+```text
+PC       → dispenser (simulada, em src/hardware/simulated/)
+ESP32    → dispenser (real, em src/hardware/esp32/)
 ```
 
 ---
@@ -54,7 +69,7 @@ Informa se o mecanismo está considerado ativo.
 Arquivo:
 
 ```text
-src/hardware/simulated_dispenser.c
+src/hardware/simulated/simulated_dispenser.c
 ```
 
 O simulador mantém:

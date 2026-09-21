@@ -149,7 +149,7 @@ gramas
 No simulador:
 
 ```text
-simulated_weight_sensor.read_grams()
+weight_sensor.read_grams()
 ```
 
 No hardware, a cadeia (`HX711 → raw reading → calibration/filtering → grams → WeightSensor → Controller`) pertence à abstração de hardware (ver [`../05-hardware-abstraction.md`](../05-hardware-abstraction.md)).

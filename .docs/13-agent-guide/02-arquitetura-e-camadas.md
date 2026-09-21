@@ -36,9 +36,13 @@ src/
 │   └── dosing_controller.h
 └── hardware/
     ├── weight_sensor.h
-    ├── simulated_weight_sensor.c
     ├── dispenser.h
-    └── simulated_dispenser.c
+    ├── simulated/
+    │   ├── simulated_weight_sensor.c
+    │   └── simulated_dispenser.c
+    └── esp32/
+        ├── real_weight_sensor.cpp
+        └── real_dispenser.cpp
 ```
 
 ---
@@ -319,11 +323,10 @@ A implementação física decide como isso será realizado.
 
 ## 15. Simulação deve continuar existindo
 
-Quando o hardware real for implementado, não remover automaticamente:
+Quando o hardware real for implementado, não remover automaticamente as implementações simuladas:
 
 ```text
-simulated_weight_sensor
-simulated_dispenser
+src/hardware/simulated/
 ```
 
 O simulador continuará sendo útil para:

@@ -209,7 +209,7 @@ estado = DOSING
 Na implementação atual, esse fluxo resume-se a `dosing_controller_start()`:
 
 ```text
-reset/tara do sensor (simulated_weight_sensor.reset)
+reset/tara do sensor (weight_sensor.reset)
         ↓
 estado = DOSING, fase = FAST
         ↓

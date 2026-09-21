@@ -321,7 +321,7 @@ Ao iniciar uma nova dosagem:
 ```text
 dosing_controller_new_dosing()
     ↓
-simulated_weight_sensor.reset()
+weight_sensor.reset()
 ```
 
 deve ser executado.

@@ -43,8 +43,7 @@ Os principais elementos específicos do simulador são:
 ```text
 SDL2
 SDL HAL
-simulated_weight_sensor
-simulated_dispenser
+hardware simulado (src/hardware/simulated/)
 Windows-specific code
 MSVC-specific build environment
 ```

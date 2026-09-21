@@ -118,9 +118,14 @@ Estrutura atual:
 ```text
 src/hardware/
 ├── weight_sensor.h
-├── simulated_weight_sensor.c
 ├── dispenser.h
-└── simulated_dispenser.c
+├── simulated/
+│   ├── simulated_weight_sensor.c
+│   └── simulated_dispenser.c
+└── esp32/
+    ├── board_config.h
+    ├── real_weight_sensor.cpp
+    └── real_dispenser.cpp
 ```
 
 A intenção é manter os contratos separados das implementações.

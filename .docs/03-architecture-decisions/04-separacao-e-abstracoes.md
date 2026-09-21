@@ -64,7 +64,8 @@ Por exemplo:
                    │
           ┌────────┴────────┐
           ▼                 ▼
- simulated_sensor      hx711_sensor
+ simulated_weight_sensor  real_weight_sensor
+ (simulada, PC)           (HX711, ESP32)
 ```
 
 O mesmo princípio vale para o dispenser:
@@ -74,7 +75,8 @@ O mesmo princípio vale para o dispenser:
                     │
            ┌────────┴────────┐
            ▼                 ▼
- simulated_dispenser    servo_dispenser
+ simulated_dispenser    real_dispenser
+ (simulada, PC)         (SG90, ESP32)
 ```
 
 Status: **Atual**.

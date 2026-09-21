@@ -290,7 +290,7 @@ servo_stop()
 ou:
 
 ```text
-simulated_dispenser.stop()
+dispenser.stop()
 ```
 
 diretamente.

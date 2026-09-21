@@ -70,18 +70,16 @@ Mas essas capacidades não devem ser adicionadas até que o mecanismo físico re
 
 O objetivo futuro é permitir escolher a implementação adequada para cada ambiente.
 
-No simulador:
+As duas plataformas expõem o mesmo símbolo de interface (`weight_sensor` e `dispenser`); a seleção ocorre no build:
 
 ```text
-WeightSensor → simulated_weight_sensor
-Dispenser    → simulated_dispenser
-```
+PC (build CMake):
+WeightSensor → weight_sensor  (src/hardware/simulated/simulated_weight_sensor.c)
+Dispenser    → dispenser     (src/hardware/simulated/simulated_dispenser.c)
 
-No ESP32:
-
-```text
-WeightSensor → hx711_weight_sensor
-Dispenser    → servo_dispenser
+ESP32 (build PlatformIO):
+WeightSensor → weight_sensor  (src/hardware/esp32/real_weight_sensor.cpp)
+Dispenser    → dispenser     (src/hardware/esp32/real_dispenser.cpp)
 ```
 
 O restante da aplicação deve permanecer o mais estável possível.
@@ -326,15 +324,15 @@ Atualmente o projeto possui:
 
 ```text
 WeightSensor
-    └── simulated_weight_sensor
+    └── weight_sensor (simulada, no PC)
 
 Dispenser
-    └── simulated_dispenser
+    └── dispenser (simulada, no PC)
 ```
 
-O controller utiliza essas implementações para validar o fluxo da dosagem.
+O controller utiliza essas instâncias para validar o fluxo da dosagem.
 
-O hardware real ainda não foi integrado.
+O hardware real possui um esqueleto em `src/hardware/esp32/` (HX711/SG90 e pinos), mas o display/driver de tela ainda não foi integrado.
 
 ---
 

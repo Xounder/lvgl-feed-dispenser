@@ -127,11 +127,11 @@ Hardware Interface
       └── Real
 ```
 
-Porém, a implementação atual do controller ainda referencia diretamente:
+Porém, a implementação atual do controller ainda referencia diretamente as instâncias da plataforma:
 
 ```text
-simulated_weight_sensor
-simulated_dispenser
+weight_sensor
+dispenser
 ```
 
 Isso é uma característica do estágio atual.

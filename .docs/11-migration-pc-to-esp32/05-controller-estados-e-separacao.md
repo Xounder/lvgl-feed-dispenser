@@ -38,8 +38,8 @@ No PC:
 ```text
 dosing_controller
        │
-       ├── simulated_weight_sensor
-       └── simulated_dispenser
+       ├── weight_sensor (simulada)
+       └── dispenser (simulada)
 ```
 
 No ESP32:

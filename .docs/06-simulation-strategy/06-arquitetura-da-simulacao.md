@@ -366,7 +366,11 @@ A estrutura atual permanece simples:
 ```text
 src/hardware/
 ├── weight_sensor.h
-├── simulated_weight_sensor.c
 ├── dispenser.h
-└── simulated_dispenser.c
+├── simulated/
+│   ├── simulated_weight_sensor.c
+│   └── simulated_dispenser.c
+└── esp32/
+    ├── real_weight_sensor.cpp
+    └── real_dispenser.cpp
 ```

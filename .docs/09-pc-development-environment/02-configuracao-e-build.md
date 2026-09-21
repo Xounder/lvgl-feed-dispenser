@@ -188,8 +188,8 @@ set(MAIN_SOURCES
     src/ui/screens/dosing_screen.c
     src/ui/screens/completed_screen.c
     src/domain/dosing_controller.c
-    src/hardware/simulated_weight_sensor.c
-    src/hardware/simulated_dispenser.c
+    src/hardware/simulated/simulated_weight_sensor.c
+    src/hardware/simulated/simulated_dispenser.c
 )
 ```
 
