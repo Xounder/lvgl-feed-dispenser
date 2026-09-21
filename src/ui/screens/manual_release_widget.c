@@ -1,4 +1,5 @@
 #include "manual_release_widget.h"
+#include "screen_chrome.h"
 #include "../../domain/dosing_controller.h"
 
 #define MANUAL_RELEASE_TICK_MS 200
@@ -8,13 +9,13 @@ static void update_led(ManualReleaseWidget *widget)
     if (dosing_controller_manual_release_is_active()) {
         lv_obj_set_style_bg_color(
             widget->led,
-            lv_palette_main(LV_PALETTE_GREEN),
+            CHROME_GREEN_BTN,
             0
         );
     } else {
         lv_obj_set_style_bg_color(
             widget->led,
-            lv_palette_main(LV_PALETTE_GREY),
+            CHROME_DARK_GREY,
             0
         );
     }
@@ -103,37 +104,44 @@ ManualReleaseWidget *manual_release_widget_create(
     widget->user_data = user_data;
 
     lv_obj_t *col = lv_obj_create(parent);
-    lv_obj_set_size(col, 260, 150);
+    lv_obj_set_size(col, 560, 92);
     lv_obj_clear_flag(col, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_align(col, align, x, y);
-    lv_obj_set_style_border_width(col, 0, 0);
-    lv_obj_set_style_bg_opa(col, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_bg_color(col, CHROME_CARD_DISABLED, 0);
+    lv_obj_set_style_radius(col, 12, 0);
+    lv_obj_set_style_border_width(col, 2, 0);
+    lv_obj_set_style_border_color(col, CHROME_GREEN_BTN, 0);
 
     lv_obj_t *led_row = lv_obj_create(col);
-    lv_obj_set_size(led_row, 240, 50);
+    lv_obj_set_size(led_row, 540, 26);
     lv_obj_clear_flag(led_row, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_align(led_row, LV_ALIGN_TOP_MID, 0, 0);
+    lv_obj_align(led_row, LV_ALIGN_TOP_MID, 0, 6);
     lv_obj_set_style_border_width(led_row, 0, 0);
     lv_obj_set_style_bg_opa(led_row, LV_OPA_TRANSP, 0);
 
     widget->led = lv_obj_create(led_row);
-    lv_obj_set_size(widget->led, 30, 30);
+    lv_obj_set_size(widget->led, 14, 14);
     lv_obj_align(widget->led, LV_ALIGN_LEFT_MID, 0, 0);
     lv_obj_set_style_bg_color(
         widget->led,
-        lv_palette_main(LV_PALETTE_GREY),
+        CHROME_DARK_GREY,
         0
     );
     lv_obj_set_style_radius(widget->led, LV_RADIUS_CIRCLE, 0);
-    lv_obj_set_style_border_width(widget->led, 1, 0);
+    lv_obj_set_style_border_width(widget->led, 0, 0);
+    lv_obj_clear_flag(widget->led, LV_OBJ_FLAG_SCROLLABLE);
 
-    lv_obj_t *led_label = lv_label_create(led_row);
-    lv_label_set_text(led_label, "LED: modo manual");
-    lv_obj_align(led_label, LV_ALIGN_LEFT_MID, 45, 0);
+    lv_obj_t *hint_label = lv_label_create(led_row);
+    lv_label_set_text(hint_label, "LIBERACAO MANUAL DISPONIVEL");
+    lv_obj_set_style_text_color(hint_label, CHROME_ACCENT_GREEN, 0);
+    lv_obj_set_style_text_font(hint_label, &lv_font_montserrat_14, 0);
+    lv_obj_align(hint_label, LV_ALIGN_LEFT_MID, 26, 0);
 
     lv_obj_t *button = lv_button_create(col);
-    lv_obj_set_size(button, 250, 60);
-    lv_obj_align(button, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_set_size(button, 500, 48);
+    lv_obj_align(button, LV_ALIGN_BOTTOM_MID, 0, -4);
+    lv_obj_set_style_bg_color(button, CHROME_GREEN_BTN, 0);
+    lv_obj_set_style_radius(button, 10, 0);
 
     lv_obj_add_event_cb(
         button,
@@ -150,7 +158,9 @@ ManualReleaseWidget *manual_release_widget_create(
     );
 
     lv_obj_t *label = lv_label_create(button);
-    lv_label_set_text(label, "Liberacao manual");
+    lv_label_set_text(label, "LIBERAR MANUALMENTE");
+    lv_obj_set_style_text_color(label, CHROME_WHITE, 0);
+    lv_obj_set_style_text_font(label, &lv_font_montserrat_16, 0);
     lv_obj_center(label);
 
     return widget;

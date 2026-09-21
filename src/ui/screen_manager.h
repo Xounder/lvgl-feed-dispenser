@@ -11,7 +11,6 @@ extern "C" {
 
 typedef enum {
     SCREEN_HOME,
-    SCREEN_MODE,
     SCREEN_CONFIG,
     SCREEN_DOSING,
     SCREEN_COMPLETED,

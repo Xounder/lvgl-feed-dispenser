@@ -75,10 +75,10 @@ set(MAIN_SOURCES
     src/ui/ui.c
     src/ui/screen_manager.c
     src/ui/screens/home_screen.c
-    src/ui/screens/mode_screen.c
     src/ui/screens/config_screen.c
     src/ui/screens/dosing_screen.c
     src/ui/screens/manual_release_widget.c
+    src/ui/screens/screen_chrome.c
     src/hardware/simulated/simulated_weight_sensor.c
     src/domain/dosing_controller.c
     src/hardware/simulated/simulated_dispenser.c

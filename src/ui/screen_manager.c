@@ -1,7 +1,6 @@
 #include "screen_manager.h"
 #include "../domain/dosing_controller.h"
 #include "screens/home_screen.h"
-#include "screens/mode_screen.h"
 #include "screens/config_screen.h"
 #include "screens/dosing_screen.h"
 #include "screens/completed_screen.h"
@@ -42,10 +41,6 @@ void screen_manager_show(Screen screen)
     switch (screen) {
         case SCREEN_HOME:
             lv_screen_load(home_screen_create());
-            break;
-
-        case SCREEN_MODE:
-            lv_screen_load(mode_screen_create());
             break;
 
         case SCREEN_CONFIG:
