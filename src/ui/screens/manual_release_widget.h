@@ -10,7 +10,6 @@ extern "C" {
 typedef void (*ManualReleaseTickCb)(void *user_data);
 
 typedef struct ManualReleaseWidget {
-    lv_obj_t *led;
     lv_timer_t *timer;
     ManualReleaseTickCb tick_cb;
     void *user_data;

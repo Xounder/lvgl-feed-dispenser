@@ -255,14 +255,13 @@ lv_obj_t *config_screen_create(DosingMode mode)
 
     context->mode = mode;
 
-    screen_chrome_add_status_bar(screen);
     screen_chrome_add_title(screen);
 
     lv_obj_t *state_label = lv_label_create(screen);
     lv_label_set_text(state_label, "AGUARDANDO");
     lv_obj_set_style_text_color(state_label, CHROME_BLUE, 0);
     lv_obj_set_style_text_font(state_label, &lv_font_montserrat_20, 0);
-    lv_obj_align(state_label, LV_ALIGN_TOP_MID, 0, 66);
+    lv_obj_align(state_label, LV_ALIGN_TOP_LEFT, 20, 66);
 
     screen_chrome_add_subtitle(screen, "Defina a quantidade", 96);
 

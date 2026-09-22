@@ -38,7 +38,6 @@ lv_obj_t *completed_screen_create(void)
     int final_grams = dosing_controller_get_weight();
     int target_grams = dosing_controller_get_target_grams();
 
-    screen_chrome_add_status_bar(screen);
     screen_chrome_add_title(screen);
     screen_chrome_add_state(
         screen,
@@ -109,9 +108,9 @@ lv_obj_t *completed_screen_create(void)
 
     manual_release_widget_create(
         screen,
-        LV_ALIGN_TOP_MID,
+        LV_ALIGN_BOTTOM_MID,
         0,
-        330,
+        -60,
         tick_cb,
         ctx
     );

@@ -26,8 +26,6 @@ extern "C" {
 
 lv_obj_t *screen_chrome_create(void);
 
-void screen_chrome_add_status_bar(lv_obj_t *screen);
-
 void screen_chrome_add_title(lv_obj_t *screen);
 
 void screen_chrome_add_state(lv_obj_t *screen, const char *state, const char *icon, lv_color_t accent);

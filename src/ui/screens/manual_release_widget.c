@@ -4,28 +4,9 @@
 
 #define MANUAL_RELEASE_TICK_MS 200
 
-static void update_led(ManualReleaseWidget *widget)
-{
-    if (dosing_controller_manual_release_is_active()) {
-        lv_obj_set_style_bg_color(
-            widget->led,
-            CHROME_GREEN_BTN,
-            0
-        );
-    } else {
-        lv_obj_set_style_bg_color(
-            widget->led,
-            CHROME_DARK_GREY,
-            0
-        );
-    }
-}
-
 void manual_release_widget_run_tick(ManualReleaseWidget *widget)
 {
     dosing_controller_update();
-
-    update_led(widget);
 
     if (widget->tick_cb != NULL) {
         widget->tick_cb(widget->user_data);
@@ -55,8 +36,6 @@ static void press_event_cb(lv_event_t *e)
 
     dosing_controller_manual_release_start();
 
-    update_led(widget);
-
     if (widget->tick_cb != NULL) {
         widget->tick_cb(widget->user_data);
     }
@@ -75,8 +54,6 @@ static void release_event_cb(lv_event_t *e)
     ManualReleaseWidget *widget = lv_event_get_user_data(e);
 
     dosing_controller_manual_release_stop();
-
-    update_led(widget);
 
     if (widget->tick_cb != NULL) {
         widget->tick_cb(widget->user_data);
@@ -104,42 +81,15 @@ ManualReleaseWidget *manual_release_widget_create(
     widget->user_data = user_data;
 
     lv_obj_t *col = lv_obj_create(parent);
-    lv_obj_set_size(col, 440, 92);
+    lv_obj_set_size(col, 440, 84);
     lv_obj_clear_flag(col, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_align(col, align, x, y);
-    lv_obj_set_style_bg_color(col, CHROME_CARD_DISABLED, 0);
-    lv_obj_set_style_radius(col, 12, 0);
-    lv_obj_set_style_border_width(col, 2, 0);
-    lv_obj_set_style_border_color(col, CHROME_GREEN_BTN, 0);
-
-    lv_obj_t *led_row = lv_obj_create(col);
-    lv_obj_set_size(led_row, 420, 26);
-    lv_obj_clear_flag(led_row, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_align(led_row, LV_ALIGN_TOP_MID, 0, 6);
-    lv_obj_set_style_border_width(led_row, 0, 0);
-    lv_obj_set_style_bg_opa(led_row, LV_OPA_TRANSP, 0);
-
-    widget->led = lv_obj_create(led_row);
-    lv_obj_set_size(widget->led, 14, 14);
-    lv_obj_align(widget->led, LV_ALIGN_LEFT_MID, 0, 0);
-    lv_obj_set_style_bg_color(
-        widget->led,
-        CHROME_DARK_GREY,
-        0
-    );
-    lv_obj_set_style_radius(widget->led, LV_RADIUS_CIRCLE, 0);
-    lv_obj_set_style_border_width(widget->led, 0, 0);
-    lv_obj_clear_flag(widget->led, LV_OBJ_FLAG_SCROLLABLE);
-
-    lv_obj_t *hint_label = lv_label_create(led_row);
-    lv_label_set_text(hint_label, "LIBERACAO MANUAL DISPONIVEL");
-    lv_obj_set_style_text_color(hint_label, CHROME_ACCENT_GREEN, 0);
-    lv_obj_set_style_text_font(hint_label, &lv_font_montserrat_14, 0);
-    lv_obj_align(hint_label, LV_ALIGN_LEFT_MID, 26, 0);
+    lv_obj_set_style_bg_opa(col, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_width(col, 0, 0);
 
     lv_obj_t *button = lv_button_create(col);
     lv_obj_set_size(button, 400, 48);
-    lv_obj_align(button, LV_ALIGN_BOTTOM_MID, 0, -4);
+    lv_obj_align(button, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_set_style_bg_color(button, CHROME_GREEN_BTN, 0);
     lv_obj_set_style_radius(button, 10, 0);
 

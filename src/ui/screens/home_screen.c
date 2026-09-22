@@ -49,7 +49,6 @@ lv_obj_t *home_screen_create(void)
 {
     lv_obj_t *screen = screen_chrome_create();
 
-    screen_chrome_add_status_bar(screen);
     screen_chrome_add_title(screen);
     screen_chrome_add_state(screen, "AGUARDANDO", "", CHROME_BLUE);
     screen_chrome_add_subtitle(screen, "Selecione o modo de dosagem", 136);
@@ -72,9 +71,9 @@ lv_obj_t *home_screen_create(void)
 
     manual_release_widget_create(
         screen,
-        LV_ALIGN_TOP_MID,
+        LV_ALIGN_BOTTOM_MID,
         0,
-        352,
+        -60,
         NULL,
         NULL
     );

@@ -60,7 +60,6 @@ lv_obj_t *interrupted_screen_create(void)
         percent = 100;
     }
 
-    screen_chrome_add_status_bar(screen);
     screen_chrome_add_title(screen);
     screen_chrome_add_state(
         screen,
@@ -158,9 +157,9 @@ lv_obj_t *interrupted_screen_create(void)
 
     manual_release_widget_create(
         screen,
-        LV_ALIGN_TOP_MID,
+        LV_ALIGN_BOTTOM_MID,
         0,
-        376,
+        -60,
         tick_cb,
         ctx
     );

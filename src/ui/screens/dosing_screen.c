@@ -95,7 +95,6 @@ lv_obj_t *dosing_screen_create(void)
 
     context->target_grams = dosing_controller_get_target_grams();
 
-    screen_chrome_add_status_bar(screen);
     screen_chrome_add_title(screen);
     screen_chrome_add_state(
         screen,
@@ -204,15 +203,9 @@ lv_obj_t *dosing_screen_create(void)
     lv_obj_set_style_text_font(stop_label, &lv_font_montserrat_16, 0);
     lv_obj_center(stop_label);
 
-    lv_obj_t *manual_card = screen_chrome_add_card(screen, 376, 440, 80);
+    lv_obj_t *manual_card = screen_chrome_add_card(screen, 660, 440, 80);
     lv_obj_set_style_bg_color(manual_card, CHROME_CARD_DISABLED, 0);
     lv_obj_set_style_border_color(manual_card, CHROME_BORDER, 0);
-
-    lv_obj_t *manual_hint = lv_label_create(manual_card);
-    lv_label_set_text(manual_hint, "LIBERACAO MANUAL DESABILITADA");
-    lv_obj_set_style_text_color(manual_hint, CHROME_GREY, 0);
-    lv_obj_set_style_text_font(manual_hint, &lv_font_montserrat_12, 0);
-    lv_obj_align(manual_hint, LV_ALIGN_TOP_MID, 0, 10);
 
     lv_obj_t *manual_button = lv_obj_create(manual_card);
     lv_obj_set_size(manual_button, 400, 36);
