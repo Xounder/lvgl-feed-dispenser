@@ -15,7 +15,6 @@ A Home é a porta de entrada da aplicação e corresponde à **TELA 1**
 O layout segue o chrome compartilhado (`screen_chrome.c`):
 
 ```text
-10:30                                     ıll 100%
 Pesagem e Dosagem
 ──────────────────────────────────────────
 ESTADO ATUAL
@@ -31,16 +30,16 @@ Selecione o modo de dosagem
 │ Dosar por valor (R$)                 │
 └──────────────────────────────────────┘
 
-✋ LIBERACAO MANUAL DISPONIVEL         [ LED ]
 ┌──────────────────────────────────────┐
 │ LIBERAR MANUALMENTE                  │
 └──────────────────────────────────────┘
+────────────────────────────────────────
 🏠 Inicio   Dosagens   Historico   Config.
 ```
 
-Os textos aparecem sem acentuação (`LIBERACAO`, `MONETARIO`,
-`Historicos`) porque a fonte padrão do LVGL (Montserrat) só cobre
-ASCII básico + símbolos (ver nota na seção 9b).
+Os textos aparecem sem acentuação (`MONETARIO`, `Historicos`) porque a
+fonte padrão do LVGL (Montserrat) só cobre ASCII básico + símbolos (ver
+nota na seção 9b).
 
 ---
 
@@ -49,15 +48,14 @@ ASCII básico + símbolos (ver nota na seção 9b).
 A Home hospeda a **liberação manual** (RS14-RS16 do Trabalho.md):
 
 * o botão **LIBERAR MANUALMENTE** deve ser mantido pressionado;
-* enquanto pressionado, o controller adiciona ração manualmente e o
-  **LED** (indicador circular no widget) fica verde;
-* ao soltar, a liberação manual para e o LED volta a ficar acinzentado;
+* enquanto pressionado, o controller adiciona ração manualmente;
+* ao soltar, a liberação manual para;
 * a liberação manual só é permitida quando o estado do domínio é
   `IDLE` (bloqueada durante dosagem automática — RS15).
 
-O widget usado é `manual_release_widget.c` (card verde, contorno verde
-escuro, LED + botão), compartilhado com as telas de conclusão e
-interrupção.
+O widget usado é `manual_release_widget.c` (apenas o botão),
+compartilhado com as telas de conclusão e interrupção. Na Home, o widget
+fica na **parte inferior da tela**, logo acima da barra de navegação.
 
 ---
 

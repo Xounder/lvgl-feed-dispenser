@@ -23,7 +23,6 @@ Massa final
 │ NOVA DOSAGEM             │
 └──────────────────────────┘
 
-✋ LIBERACAO MANUAL DISPONIVEL         [ LED ]
 ┌──────────────────────────────────────┐
 │ LIBERAR MANUALMENTE                  │
 └──────────────────────────────────────┘
@@ -40,6 +39,9 @@ Além da liberação manual (mesmo widget da Home), a tela oferece:
 ```text
 NOVA DOSAGEM
 ```
+
+O widget de liberação manual fica na **parte inferior da tela**, logo
+acima da barra de navegação (como na Home).
 
 ---
 
@@ -124,7 +126,6 @@ Massa parcial: 240 g de 500 g
 │ NOVA DOSAGEM             │
 └──────────────────────────┘
 
-✋ LIBERACAO MANUAL DISPONIVEL         [ LED ]
 ┌──────────────────────────────────────┐
 │ LIBERAR MANUALMENTE                  │
 └──────────────────────────────────────┘

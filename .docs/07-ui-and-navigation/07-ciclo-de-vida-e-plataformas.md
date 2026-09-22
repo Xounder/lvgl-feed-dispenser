@@ -82,9 +82,16 @@ Concluído e Interrompido
 Responsável por:
 
 ```text
-barra de status, título, blocos de estado, barra inferior e cards
+título, blocos de estado, barra inferior e cards
 (cores e layout compartilhados)
 ```
+
+> **Nota:** os cards criados por `screen_chrome_add_card` zeram o
+> padding do tema padrão do LVGL (`lv_obj_set_style_pad_all(card, 0, 0)`)
+> porque o layout posiciona os filhos com coordenadas absolutas. Sem
+> isso, o tema injeta `pad` (~18–24px) e rótulos próximos à borda
+> inferior do card (ex.: subtítulo dos cards da Home) saem da área
+> visível.
 
 ### `dosing_screen.c`
 

@@ -249,7 +249,6 @@ Por isso existem textos sem acentos, por exemplo:
 Pesagem e Dosagem
 Liberacao manual
 LIBERAR MANUALMENTE
-LIBERACAO MANUAL DISPONIVEL
 Dosagem concluida
 Dosagem interrompida
 ```

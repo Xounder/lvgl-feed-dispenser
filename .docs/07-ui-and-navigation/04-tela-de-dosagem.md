@@ -28,13 +28,17 @@ Etapa rapida: vazao alta
 ■ INTERROMPER DOSAGEM
 
 ┌──────────────────────────────────────┐
-│ LIBERACAO MANUAL DESABILITADA        │
+│ LIBERACAO MANUAL (desabilitado)      │
 └──────────────────────────────────────┘
 ```
 
 A tela **não possui** botão separado de emergência: conforme o mockup,
 há apenas o comando **INTERROMPER DOSAGEM** (RS11). O botão físico de
 emergência é tratado no alvo embarcado (ver [05-botoes-e-indicadores.md](../08-target-hardware/05-botoes-e-indicadores.md)).
+
+Como nas demais telas, o card desabilitado
+`LIBERACAO MANUAL` fica na **parte inferior da tela**,
+logo acima da barra de navegação.
 
 ---
 
@@ -283,7 +287,7 @@ SCREEN_INTERRUPTED
 
 O comando tem prioridade sobre o controle automático (RS12). Durante a
 dosagem a **liberação manual é bloqueada** (RS15), o que é refletido na
-tela pelo card estático `LIBERACAO MANUAL DESABILITADA`.
+tela pelo card desabilitado `LIBERACAO MANUAL`.
 
 ---
 
