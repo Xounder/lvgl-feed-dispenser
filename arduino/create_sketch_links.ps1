@@ -22,7 +22,9 @@ $links = @(
 
 foreach ($link in $links) {
     if (Test-Path -LiteralPath $link.Path) {
-        Remove-Item -LiteralPath $link.Path -Force
+        # `cmd /c rmdir` remove apenas o link da junction (sem tocar no destino),
+        # diferente do Remove-Item que pede confirmacao interativa.
+        cmd /c rmdir "$($link.Path)" 2>$null
     }
     New-Item -ItemType Junction -Path $link.Path -Target $link.Target | Out-Null
     Write-Host "junction criada: $($link.Path) -> $($link.Target)"
