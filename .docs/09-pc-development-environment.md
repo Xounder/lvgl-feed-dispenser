@@ -54,4 +54,4 @@ O arquivo original excedia 500 linhas e foi dividido em partes lógicas na subpa
 - [06-simulation-strategy.md](06-simulation-strategy.md) — estratégia de simulação (peso, taxa, falhas, cenários)
 - [07-ui-and-navigation.md](07-ui-and-navigation.md) — UI e navegação (fluxo Home → Mode → Config → Dosing → Completed)
 - [10-testing-strategy.md](10-testing-strategy.md) — procedimentos de teste do simulador
-- [11-migration-pc-to-esp32.md](11-migration-pc-to-esp32.md) — migração do PC para o ESP32-S3 (GPIO, placa, build PlatformIO + Arduino)
+- [11-migration-pc-to-esp32.md](11-migration-pc-to-esp32.md) — migração do PC para o ESP32-S3 (GPIO, placa, build Arduino IDE + core ESP32)

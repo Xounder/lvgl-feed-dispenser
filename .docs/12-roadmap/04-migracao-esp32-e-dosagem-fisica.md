@@ -9,7 +9,7 @@ Depois de o simulador estar suficientemente estável, começa a preparação do 
 Primeiro:
 
 ```text
-✓ PlatformIO + Arduino
+✓ Arduino IDE + core ESP32
 ✓ compilação
 ✓ flash
 ✓ monitor serial

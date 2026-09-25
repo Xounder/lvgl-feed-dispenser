@@ -330,7 +330,7 @@ A implementação física decide como isso será realizado.
 Quando o hardware real for implementado, não remover automaticamente as implementações simuladas:
 
 ```text
-src/hardware/simulated/
+src_pc/hardware/simulated/
 ```
 
 O simulador continuará sendo útil para:

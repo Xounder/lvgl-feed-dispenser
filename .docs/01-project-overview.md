@@ -59,7 +59,7 @@ Portanto, o software não deve assumir detalhes mecânicos que ainda não foram 
 
 Antes da integração com o ESP32-S3, o sistema é desenvolvido em um ambiente desktop.
 
-A implementação atual utiliza **C** (em migração para **C++**), **LVGL**, **SDL2**, **CMake**, **vcpkg** e Visual Studio Build Tools no Windows. Para o ESP32-S3 o alvo é **C++ com Arduino framework via PlatformIO**.
+A implementação atual utiliza **C** (em migração para **C++**), **LVGL**, **SDL2**, **CMake**, **vcpkg** e Visual Studio Build Tools no Windows. Para o ESP32-S3 o alvo é **C++ com Arduino framework via Arduino IDE (core ESP32)**.
 
 O desktop funciona como uma plataforma de desenvolvimento e simulação.
 

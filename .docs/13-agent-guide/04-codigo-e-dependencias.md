@@ -165,7 +165,7 @@ O loop principal deve permanecer pequeno.
 O diretório:
 
 ```text
-src/hal/
+src_pc/hal/
 ```
 
 representa o suporte de plataforma do simulador.

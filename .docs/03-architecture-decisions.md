@@ -12,7 +12,7 @@ Um agente ou desenvolvedor que trabalhar no projeto deve consultar este document
 
 | Parte | Conteúdo |
 | ----- | -------- |
-| [01-linguagem-e-build.md](03-architecture-decisions/01-linguagem-e-build.md) | Decisão de usar C++ (com C no LVGL/SDL2 e no domínio atual), CMake/vcpkg no PC e PlatformIO+Arduino no ESP32 |
+| [01-linguagem-e-build.md](03-architecture-decisions/01-linguagem-e-build.md) | Decisão de usar C++ (com C no LVGL/SDL2 e no domínio atual), CMake/vcpkg no PC e Arduino IDE + core ESP32 no alvo |
 | [02-interface-grafica.md](03-architecture-decisions/02-interface-grafica.md) | Decisões de UI: LVGL e SDL2 no simulador |
 | [03-estrategia-de-desenvolvimento.md](03-architecture-decisions/03-estrategia-de-desenvolvimento.md) | Simulador antes do ESP32, simulador permanente, evolução incremental |
 | [04-separacao-e-abstracoes.md](03-architecture-decisions/04-separacao-e-abstracoes.md) | Separação domínio/hardware, interfaces, abstrações justificadas |

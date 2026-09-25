@@ -43,7 +43,7 @@ Os principais elementos específicos do simulador são:
 ```text
 SDL2
 SDL HAL
-hardware simulado (src/hardware/simulated/)
+hardware simulado (src_pc/hardware/simulated/)
 Windows-specific code
 MSVC-specific build environment
 ```
@@ -55,7 +55,7 @@ ESP32-S3 HAL
 display/touch drivers
 real WeightSensor (HX711)
 real Dispenser (SG90 / mecanismo)
-ESP32 toolchain (PlatformIO + Arduino)
+ESP32 toolchain (Arduino IDE + core ESP32)
 hardware-specific build system
 ```
 
@@ -68,7 +68,7 @@ hardware-specific build system
 | Plataforma | Windows                | ESP32-S3                                    |
 | CPU        | x64                    | Xtensa/RISC-V conforme variante/SDK adotado |
 | Linguagem  | C++ (domínio atual em C)| C++                                        |
-| Build      | CMake + Visual Studio  | PlatformIO + Arduino framework (sobre ESP-IDF) |
+| Build      | CMake + Visual Studio  | Arduino IDE + core ESP32 (sobre ESP-IDF) |
 | Gráficos   | LVGL + SDL2            | LVGL + driver de display                    |
 | Touch      | mouse/SDL2             | touch controller real                       |
 | Peso       | sensor simulado        | HX711 + load cell                           |

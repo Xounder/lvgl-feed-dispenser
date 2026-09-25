@@ -9,7 +9,7 @@
 #### Ambiente
 
 ```text
-[ ] PlatformIO + Arduino configurado
+[ ] Arduino IDE + core ESP32 configurado
 [ ] ESP32-S3 reconhecido
 [ ] build funcionando
 [ ] flash funcionando

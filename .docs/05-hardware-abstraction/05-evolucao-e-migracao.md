@@ -74,10 +74,10 @@ As duas plataformas expõem o mesmo símbolo de interface (`weight_sensor` e `di
 
 ```text
 PC (build CMake):
-WeightSensor → weight_sensor  (src/hardware/simulated/simulated_weight_sensor.c)
-Dispenser    → dispenser     (src/hardware/simulated/simulated_dispenser.c)
+WeightSensor → weight_sensor  (src_pc/hardware/simulated/simulated_weight_sensor.c)
+Dispenser    → dispenser     (src_pc/hardware/simulated/simulated_dispenser.c)
 
-ESP32 (build PlatformIO):
+ESP32 (Arduino IDE + core ESP32):
 WeightSensor → weight_sensor  (src/hardware/esp32/real_weight_sensor.cpp)
 Dispenser    → dispenser     (src/hardware/esp32/real_dispenser.cpp)
 ```

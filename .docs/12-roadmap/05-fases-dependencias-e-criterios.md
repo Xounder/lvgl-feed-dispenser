@@ -83,7 +83,7 @@ _Voltar ao índice: [`../12-roadmap.md`](../12-roadmap.md)._
 ### Fase 6 — ESP32-S3
 
 ```text
-○ PlatformIO + Arduino
+○ Arduino IDE + core ESP32
 ○ build
 ○ flash
 ○ monitor serial

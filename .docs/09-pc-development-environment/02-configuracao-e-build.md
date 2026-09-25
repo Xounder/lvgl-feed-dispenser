@@ -178,8 +178,8 @@ O CMake possui uma lista de fontes principais semelhante a:
 
 ```cmake
 set(MAIN_SOURCES
-    src/mouse_cursor_icon.c
-    src/hal/hal.c
+    src_pc/mouse_cursor_icon.c
+    src_pc/hal/hal.c
     src/ui/ui.c
     src/ui/screen_manager.c
     src/ui/screens/screen_chrome.c
@@ -190,8 +190,8 @@ set(MAIN_SOURCES
     src/ui/screens/interrupted_screen.c
     src/ui/screens/manual_release_widget.c
     src/domain/dosing_controller.c
-    src/hardware/simulated/simulated_weight_sensor.c
-    src/hardware/simulated/simulated_dispenser.c
+    src_pc/hardware/simulated/simulated_weight_sensor.c
+    src_pc/hardware/simulated/simulated_dispenser.c
 )
 ```
 

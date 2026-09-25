@@ -18,21 +18,25 @@ vcpkg
 
 Detalhes do ambiente de build do PC: [09-pc-development-environment.md](../09-pc-development-environment.md).
 
-No ESP32, a expectativa é utilizar:
+No ESP32, a expectativa (padrão da equipe) é utilizar:
 
 ```text
-PlatformIO
+Arduino IDE
++
+core ESP32 (Espressif)
 +
 Arduino framework
 ```
 
-O PlatformIO gerencia o build, flash e monitoramento do ESP32-S3, e o Arduino framework serve como camada de aplicação sobre o ESP-IDF/FreeRTOS.
+A **Arduino IDE** gerencia build, flash e monitoramento do ESP32-S3, e o Arduino framework serve como camada de aplicação sobre o ESP-IDF/FreeRTOS.
+
+O sketch vive em `arduino/`: `src/` e `libraries/lvgl` são junctions para o código compartilhado e o LVGL do repositório (não duplicam arquivos; recriar com `arduino/create_sketch_links.ps1`), e `libraries/lv_conf.h` encaminha para `config/lv_conf_esp32.h`.
 
 Detalhes da decisão de linguagem: [03-architecture-decisions.md](../03-architecture-decisions.md).
 
 ---
 
-### 32. PlatformIO + Arduino no ESP32
+### 32. Arduino IDE + core ESP32
 
 A implementação final deverá utilizar o ambiente apropriado para ESP32-S3.
 

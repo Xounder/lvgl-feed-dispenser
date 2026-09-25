@@ -34,7 +34,7 @@ extern Dispenser dispenser;
 A instância exposta pela plataforma (`dispenser`) é compartilhada entre domínio e UI:
 
 ```text
-PC       → dispenser (simulada, em src/hardware/simulated/)
+PC       → dispenser (simulada, em src_pc/hardware/simulated/)
 ESP32    → dispenser (real, em src/hardware/esp32/)
 ```
 
@@ -69,7 +69,7 @@ Informa se o mecanismo está considerado ativo.
 Arquivo:
 
 ```text
-src/hardware/simulated/simulated_dispenser.c
+src_pc/hardware/simulated/simulated_dispenser.c
 ```
 
 O simulador mantém:

@@ -115,7 +115,7 @@ Também evita depender exclusivamente da configuração manual do IDE.
 
 **Observação**
 
-Esta decisão de CMake se refere ao **simulador PC**. Para o alvo ESP32-S3, o build seguirá **PlatformIO + Arduino framework** — ver [11-migration-pc-to-esp32.md](../11-migration-pc-to-esp32.md).
+Esta decisão de CMake se refere ao **simulador PC**. Para o alvo ESP32-S3, o build seguirá **Arduino IDE (core ESP32) + Arduino framework** — ver [11-migration-pc-to-esp32.md](../11-migration-pc-to-esp32.md).
 
 Status: **Atual**.
 

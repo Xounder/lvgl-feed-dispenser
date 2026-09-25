@@ -37,7 +37,7 @@ Status: **Atual** (princípio permanente).
 | **SDL2 no PC**                            | Executar/testar LVGL em desktop                               | Atual     |
 | **CMake**                                 | Build estruturado do simulador PC                            | Atual     |
 | **vcpkg**                                 | Gerenciamento de dependências do simulador                    | Atual     |
-| **PlatformIO + Arduino (ESP32)**          | Build/impl. do firmware com bibliotecas prontas               | Planejado |
+| **Arduino IDE + core ESP32 (ESP32)**   | Build/impl. do firmware com bibliotecas prontas               | Atual     |
 | **Simular antes do ESP32**                | Reduzir variáveis e acelerar desenvolvimento                  | Atual     |
 | **Simulador permanente**                  | Testes, regressão e desenvolvimento sem hardware              | Atual     |
 | **Evolução incremental**                  | Reduzir risco e facilitar validação                           | Atual     |

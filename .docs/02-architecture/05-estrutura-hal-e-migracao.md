@@ -162,7 +162,7 @@ ou a uma camada específica de plataforma que venha a ser criada.
 Provavelmente pertence a:
 
 ```text
-src/hal/
+src_pc/hal/
 ```
 
 ---

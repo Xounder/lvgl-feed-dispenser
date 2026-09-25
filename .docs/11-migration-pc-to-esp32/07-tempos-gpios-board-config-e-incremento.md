@@ -123,7 +123,7 @@ hardware/
         led
 ```
 
-O formato exato dependerá da implementação na plataforma ESP32 (Arduino/PlatformIO).
+O formato exato dependerá da implementação na plataforma ESP32 (Arduino IDE + core ESP32).
 
 A intenção é evitar que o restante da aplicação precise saber:
 

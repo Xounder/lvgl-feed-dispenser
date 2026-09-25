@@ -151,7 +151,7 @@ Substituir principalmente:
 ```text
 SDL2
 SDL HAL
-hardware simulado (src/hardware/simulated/)
+hardware simulado (src_pc/hardware/simulated/)
 ```
 
 por implementações adequadas ao ESP32.

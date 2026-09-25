@@ -34,7 +34,7 @@ extern WeightSensor weight_sensor;
 A instância exposta pela plataforma (`weight_sensor`) é compartilhada entre domínio e UI:
 
 ```text
-PC       → weight_sensor (simulada, em src/hardware/simulated/)
+PC       → weight_sensor (simulada, em src_pc/hardware/simulated/)
 ESP32    → weight_sensor (real, em src/hardware/esp32/)
 ```
 
@@ -161,7 +161,7 @@ Portanto:
 Arquivo:
 
 ```text
-src/hardware/simulated/simulated_weight_sensor.c
+src_pc/hardware/simulated/simulated_weight_sensor.c
 ```
 
 Implementação atual:

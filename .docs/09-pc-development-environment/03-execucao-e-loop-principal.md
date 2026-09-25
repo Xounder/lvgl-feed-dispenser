@@ -145,7 +145,7 @@ Isso evita que o loop principal precise ser reescrito completamente para diferen
 A camada:
 
 ```text
-src/hal/
+src_pc/hal/
 ```
 
 contém a integração específica da plataforma desktop.
@@ -153,8 +153,8 @@ contém a integração específica da plataforma desktop.
 Atualmente:
 
 ```text
-src/hal/hal.c
-src/hal/hal.h
+src_pc/hal/hal.c
+src_pc/hal/hal.h
 ```
 
 Essa camada é importante porque o restante da aplicação não deve precisar conhecer detalhes da janela SDL.
