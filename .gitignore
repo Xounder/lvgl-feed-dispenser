@@ -9,6 +9,10 @@ vcpkg_installed/
 lvgl/
 FreeRTOS/
 
+# Sketch Arduino: junctions (recriar com arduino/create_sketch_links.ps1)
+arduino/src/
+arduino/libraries/lvgl/
+
 # Visual Studio
 .vs/
 *.suo

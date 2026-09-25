@@ -70,8 +70,8 @@ add_subdirectory(lvgl)
 target_include_directories(lvgl PUBLIC ${PROJECT_SOURCE_DIR} ${SDL2_INCLUDE_DIRS})
 
 set(MAIN_SOURCES
-    src/mouse_cursor_icon.c
-    src/hal/hal.c
+    src_pc/mouse_cursor_icon.c
+    src_pc/hal/hal.c
     src/ui/ui.c
     src/ui/screen_manager.c
     src/ui/screens/home_screen.c
@@ -79,9 +79,9 @@ set(MAIN_SOURCES
     src/ui/screens/dosing_screen.c
     src/ui/screens/manual_release_widget.c
     src/ui/screens/screen_chrome.c
-    src/hardware/simulated/simulated_weight_sensor.c
+    src_pc/hardware/simulated/simulated_weight_sensor.c
     src/domain/dosing_controller.c
-    src/hardware/simulated/simulated_dispenser.c
+    src_pc/hardware/simulated/simulated_dispenser.c
     src/ui/screens/completed_screen.c
     src/ui/screens/interrupted_screen.c
 )
@@ -89,10 +89,10 @@ set(MAIN_LIBS lvgl lvgl::examples lvgl::demos lvgl::thorvg ${SDL2_LIBRARIES})
 
 # Create the main executable, depending on the FreeRTOS option
 if(USE_FREERTOS)
-    list(APPEND MAIN_SOURCES src/freertos_main.c src/freertos/freertos_posix_port.c ${FREERTOS_SOURCES})
+    list(APPEND MAIN_SOURCES src_pc/freertos_main.c src_pc/freertos/freertos_posix_port.c ${FREERTOS_SOURCES})
     list(APPEND MAIN_LIBS freertos_config freertos_kernel)
 else()
-    list(APPEND MAIN_SOURCES src/main.c)
+    list(APPEND MAIN_SOURCES src_pc/main.c)
 endif()
 
 

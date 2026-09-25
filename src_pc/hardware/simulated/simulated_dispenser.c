@@ -1,4 +1,4 @@
-#include "../dispenser.h"
+#include "../../../src/hardware/dispenser.h"
 
 static int active = 0;
 

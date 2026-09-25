@@ -1,4 +1,4 @@
-#include "../weight_sensor.h"
+#include "../../../src/hardware/weight_sensor.h"
 
 static int simulated_weight = 0;
 

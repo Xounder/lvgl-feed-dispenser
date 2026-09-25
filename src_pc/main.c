@@ -23,7 +23,7 @@
 #include "lvgl/examples/lv_examples.h"
 #include "lvgl/demos/lv_demos.h"
 #include <SDL.h>
-#include "ui/ui.h"
+#include "../src/ui/ui.h"
 
 #include "hal/hal.h"
 
