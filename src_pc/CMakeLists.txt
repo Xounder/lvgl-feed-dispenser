@@ -15,22 +15,22 @@ if(USE_FREERTOS)
 
     # FreeRTOS integration when USE_FREERTOS is enabled
     add_library(freertos_config INTERFACE)
-    target_include_directories(freertos_config SYSTEM INTERFACE ${PROJECT_SOURCE_DIR}/config)
+    target_include_directories(freertos_config SYSTEM INTERFACE ${PROJECT_SOURCE_DIR})
     target_compile_definitions(freertos_config INTERFACE projCOVERAGE_TEST=0)
 
     # Add FreeRTOS as a subdirectory
-    add_subdirectory(FreeRTOS)
+    add_subdirectory(../FreeRTOS ${CMAKE_BINARY_DIR}/FreeRTOS)
 
     # FreeRTOS-specific include directories
-    include_directories(${PROJECT_SOURCE_DIR}/FreeRTOS/include)
-    include_directories(${PROJECT_SOURCE_DIR}/FreeRTOS/portable/ThirdParty/GCC/Posix)
-    include_directories(${PROJECT_SOURCE_DIR}/config)
+    include_directories(${PROJECT_SOURCE_DIR}/../FreeRTOS/include)
+    include_directories(${PROJECT_SOURCE_DIR}/../FreeRTOS/portable/ThirdParty/GCC/Posix)
+    include_directories(${PROJECT_SOURCE_DIR})
 
     # Add FreeRTOS sources
     file(GLOB FREERTOS_SOURCES
-        "${PROJECT_SOURCE_DIR}/FreeRTOS/*.c"
-        "${PROJECT_SOURCE_DIR}/FreeRTOS/portable/MemMang/heap_4.c"
-        "${PROJECT_SOURCE_DIR}/FreeRTOS/portable/ThirdParty/GCC/Posix/*.c"
+        "${PROJECT_SOURCE_DIR}/../FreeRTOS/*.c"
+        "${PROJECT_SOURCE_DIR}/../FreeRTOS/portable/MemMang/heap_4.c"
+        "${PROJECT_SOURCE_DIR}/../FreeRTOS/portable/ThirdParty/GCC/Posix/*.c"
     )
 else()
     message(STATUS "FreeRTOS is disabled")
@@ -38,7 +38,9 @@ else()
 endif()
 
 # Main include files of the project
-include_directories(${PROJECT_SOURCE_DIR}/main/inc)
+include_directories(${PROJECT_SOURCE_DIR}/../main/inc)
+include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/..)
 
 # Define options for LVGL with default values (OFF)
 option(LV_USE_DRAW_SDL "Use SDL draw unit" OFF)
@@ -53,8 +55,17 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Set the output path for the executable
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-set(WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/../bin)
+set(WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/..)
+
+# Resolve vcpkg_installed absolute (relative paths in CMAKE_PREFIX_PATH are
+# interpreted from the source dir, now that this file lives in src_pc/)
+get_filename_component(VCPKG_PREFIX "${PROJECT_SOURCE_DIR}/../../vcpkg_installed" ABSOLUTE)
+if(VCPKG_TARGET_TRIPLET)
+    list(APPEND CMAKE_PREFIX_PATH "${VCPKG_PREFIX}/${VCPKG_TARGET_TRIPLET}")
+else()
+    list(APPEND CMAKE_PREFIX_PATH "${VCPKG_PREFIX}/x64-windows")
+endif()
 
 # Find and include SDL2 library
 find_package(SDL2 REQUIRED)
@@ -66,33 +77,33 @@ add_compile_definitions($<$<BOOL:${LV_USE_LIBJPEG_TURBO}>:LV_USE_LIBJPEG_TURBO=1
 add_compile_definitions($<$<BOOL:${LV_USE_FFMPEG}>:LV_USE_FFMPEG=1>)
 
 # Add LVGL subdirectory
-add_subdirectory(lvgl)
+add_subdirectory(../lvgl ${CMAKE_BINARY_DIR}/lvgl)
 target_include_directories(lvgl PUBLIC ${PROJECT_SOURCE_DIR} ${SDL2_INCLUDE_DIRS})
 
 set(MAIN_SOURCES
-    src_pc/mouse_cursor_icon.c
-    src_pc/hal/hal.c
-    src/ui/ui.c
-    src/ui/screen_manager.c
-    src/ui/screens/home_screen.c
-    src/ui/screens/config_screen.c
-    src/ui/screens/dosing_screen.c
-    src/ui/screens/manual_release_widget.c
-    src/ui/screens/screen_chrome.c
-    src_pc/hardware/simulated/simulated_weight_sensor.c
-    src/domain/dosing_controller.c
-    src_pc/hardware/simulated/simulated_dispenser.c
-    src/ui/screens/completed_screen.c
-    src/ui/screens/interrupted_screen.c
+    mouse_cursor_icon.c
+    hal/hal.c
+    ../src/ui/ui.c
+    ../src/ui/screen_manager.c
+    ../src/ui/screens/home_screen.c
+    ../src/ui/screens/config_screen.c
+    ../src/ui/screens/dosing_screen.c
+    ../src/ui/screens/manual_release_widget.c
+    ../src/ui/screens/screen_chrome.c
+    hardware/simulated/simulated_weight_sensor.c
+    ../src/domain/dosing_controller.c
+    hardware/simulated/simulated_dispenser.c
+    ../src/ui/screens/completed_screen.c
+    ../src/ui/screens/interrupted_screen.c
 )
 set(MAIN_LIBS lvgl lvgl::examples lvgl::demos lvgl::thorvg ${SDL2_LIBRARIES})
 
 # Create the main executable, depending on the FreeRTOS option
 if(USE_FREERTOS)
-    list(APPEND MAIN_SOURCES src_pc/freertos_main.c src_pc/freertos/freertos_posix_port.c ${FREERTOS_SOURCES})
+    list(APPEND MAIN_SOURCES freertos_main.c freertos/freertos_posix_port.c ${FREERTOS_SOURCES})
     list(APPEND MAIN_LIBS freertos_config freertos_kernel)
 else()
-    list(APPEND MAIN_SOURCES src_pc/main.c)
+    list(APPEND MAIN_SOURCES main.c)
 endif()
 
 
@@ -105,7 +116,7 @@ add_custom_target(run COMMAND ${EXECUTABLE_OUTPUT_PATH}/main DEPENDS main)
 
 # Conditionally include and link SDL2_image if LV_USE_DRAW_SDL is enabled
 if(LV_USE_DRAW_SDL)
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/../cmake")
     find_package(SDL2_image REQUIRED)
     target_include_directories(lvgl PUBLIC ${SDL2_IMAGE_INCLUDE_DIRS})
     list(APPEND MAIN_LIBS ${SDL2_IMAGE_LIBRARIES})
@@ -145,7 +156,7 @@ if(LVGL_PRO_PROJECT_DIR)
     target_compile_definitions(lib-ui PUBLIC LV_LVGL_H_INCLUDE_SIMPLE)
     target_include_directories(lib-ui PUBLIC
       ${LVGL_PRO_PROJECT_DIR}  # local headers like ui.h, generated files, etc.
-      ${CMAKE_SOURCE_DIR}/lvgl # include "lvgl.h" works
+      ${PROJECT_SOURCE_DIR}/../lvgl # include "lvgl.h" works
     )
     message(STATUS "LVGL Pro Project enabled from: ${LVGL_PRO_PROJECT_DIR}")
   else()
