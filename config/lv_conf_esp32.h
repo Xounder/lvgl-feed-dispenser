@@ -149,7 +149,7 @@
 #define LV_COLOR_MIX_ROUND_OFS 0
 
 /** Default display refresh, input device read and animation step period. */
-#define LV_DEF_REFR_PERIOD 33
+#define LV_DEF_REFR_PERIOD 16
 
 /** Used to initialize default sizes such as widget sizes and style paddings. */
 #define LV_DPI_DEF 130
@@ -845,7 +845,7 @@
 #define LV_THEME_DEFAULT_GROW 1
 
 /** Transition time (ms) */
-#define LV_THEME_DEFAULT_TRANSITION_TIME 80
+#define LV_THEME_DEFAULT_TRANSITION_TIME 20
 
 #endif /*LV_USE_THEME_DEFAULT*/
 
