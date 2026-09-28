@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 #include "../../domain/dosing_config.h"
 
 lv_obj_t *config_screen_create(DosingMode mode);

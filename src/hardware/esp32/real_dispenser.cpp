@@ -1,11 +1,7 @@
 #include "real_dispenser.h"
 
 #include <Arduino.h>
-#if __has_include(<ESP32Servo.h>)
 #include <ESP32Servo.h>
-#else
-#include <Servo.h>
-#endif
 
 #include "../dispenser.h"
 #include "board_config.h"

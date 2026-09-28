@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 
 /* Cores canonicas do layout (mockups .images) */
 #define CHROME_BG            lv_color_hex(0x050505)

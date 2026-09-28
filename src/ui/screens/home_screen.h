@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 
 lv_obj_t *home_screen_create(void);
 

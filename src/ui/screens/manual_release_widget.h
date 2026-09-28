@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 
 typedef void (*ManualReleaseTickCb)(void *user_data);
 

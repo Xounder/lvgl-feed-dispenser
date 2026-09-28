@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 #include "screens/config_screen.h"
 #include "../domain/dosing_config.h"
 

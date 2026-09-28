@@ -18,6 +18,8 @@
  * A config do LVGL para o ESP32 e resolvida pela library em
  * `libraries/lv_conf.h`, que encaminha para `config/lv_conf_esp32.h`.
  *
- * Nota: o driver de display/touch (src/hardware/esp32/board_display.cpp) ainda
- * e um stub - so compila a UI quando implementado (retorna o lv_display_t).
+ * Nota: o driver de display/touch (src/hardware/esp32/board_display.cpp)
+ * cria o painel RGB + GT911 e retorna o lv_display_t (UI sobe no ESP32).
+ * Detalhes e knobs de primeiro boot (byte-order, orientação) em
+ * MIGRACAO-ESP32-NOTAS.md e arduino/README.md.
  */

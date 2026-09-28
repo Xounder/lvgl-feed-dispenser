@@ -1,7 +1,7 @@
 #ifndef BOARD_DISPLAY_H
 #define BOARD_DISPLAY_H
 
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 
 #ifdef __cplusplus
 extern "C" {
