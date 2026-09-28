@@ -55,6 +55,8 @@ A meta é reproduzir o comportamento de interação já validado no simulador.
 
 O touch da placa VIEWE é um **GT911 em `0x14`** (via I²C, SDA 19 / SCL 20, reset em GPIO38).
 
+Os pins físicos dos periféricos de domínio estão definidos em `src/hardware/esp32/board_config.h`: HX711 (11/12), servo (13), botões (10 e 18) e LED (17). Como o microSD (GPIO10–13) e o WS2812B (GPIO17) competem com esses periféricos, o slot SD fica indisponível e o comportamento do LED deve ser validado fisicamente — ver [`08-target-hardware/11-limitacoes-e-seguranca.md`](../08-target-hardware/11-limitacoes-e-seguranca.md).
+
 ---
 
 ## 4. Port da UI

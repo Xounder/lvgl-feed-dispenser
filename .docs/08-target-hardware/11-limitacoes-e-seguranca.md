@@ -10,7 +10,6 @@ Neste estágio, alguns detalhes ainda não estão definitivamente definidos:
 
 * modelo exato da célula de carga;
 * capacidade da célula;
-* pinagem definitiva dos periféricos externos (HX711, servo, botões, LED);
 * mecanismo mecânico final;
 * posições exatas do SG90;
 * estratégia final de alimentação;
@@ -21,6 +20,13 @@ Neste estágio, alguns detalhes ainda não estão definitivamente definidos:
 * estratégia final contra overshoot.
 
 O controlador do touch (**GT911**) e os pinos de display/touch/backlight já estão definidos em `src/hardware/esp32/board_config.h`; os demais pontos devem ser definidos com base nos componentes efetivamente disponíveis e nos testes físicos.
+
+A **pinagem dos periféricos externos (HX711, servo, botões, LED)** também já é definida em `src/hardware/esp32/board_config.h`. Como o módulo ESP32-S3 N16R8 tem os GPIOs quase todos ocupados (display, touch, backlight, microSD, UART e BOOT), os periféricos de domínio **sacrificam o slot microSD** (GPIO10–13) e usam ainda GPIO17 (WS2812B "free IO") e GPIO18 (INT do touch, não utilizado pelo firmware). Implicações:
+
+- GPIO10–13 = microSD SPI → slot de cartão fica indisponível; o projeto não usa SD.
+- GPIO17 = trilho do WS2812B on-board (header 1,5 mm, removível) → LED passa a competir com o RGB da placa; confirmar fisicamente.
+- GPIO18 = pino INT do GT911 (roteado ao conector do touch, não usado pelo firmware) → usar como botão exige validação de que o GT911 não aciona esse pino.
+- 2 botões físicos (emergência e liberação) ainda **não estão integrados no firmware**; apenas definidos no `board_config.h`.
 
 ---
 

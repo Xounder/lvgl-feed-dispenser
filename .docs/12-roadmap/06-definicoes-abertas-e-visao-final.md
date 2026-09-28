@@ -19,7 +19,7 @@ Alguns detalhes permanecem deliberadamente abertos:
 ○ estrutura mecânica definitiva
 ```
 
-Removidos desta lista (definidos): **controlador do touch (GT911 em `0x14`)** e **pinagem de display/touch/backlight/indicador** — ver `src/hardware/esp32/board_config.h`.
+Removidos desta lista (definidos): **controlador do touch (GT911 em `0x14`)**, **pinagem de display/touch/backlight/indicador** e **pinagem dos periféricos externos (HX711, servo, botões, LED)** — ver `src/hardware/esp32/board_config.h` (periféricos de domínio sacrificam o slot microSD e o WS2812B; detalhes em `08-target-hardware/11-limitacoes-e-seguranca.md`).
 
 Esses itens devem ser definidos conforme o hardware e os testes avançarem.
 
