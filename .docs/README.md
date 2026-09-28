@@ -93,7 +93,7 @@ LVGL
 
 ### Passos rápidos
 
-Na raiz do projeto (`pc-vscode`):
+Na raiz do projeto:
 
 ```powershell
 cmake --build build --config Debug
