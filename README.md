@@ -28,7 +28,7 @@ agentes em [`AGENTS.md`](AGENTS.md).
 
 ### Modo PC (simulador desktop)
 
-Roda `main.exe` (LVGL + SDL2), usando peso e dispenser simulados.
+Roda `.\bin\Debug\main.exe` (LVGL + SDL2), usando peso e dispenser simulados.
 
 **Pré-requisitos**
 

@@ -10,7 +10,7 @@ código para o alvo embarcado ESP32-S3 (ver `.docs/11-migration-pc-to-esp32/`).
 
 Referências canônicas de requisitos:
 
-- `Trabalho.md` — requisitos acadêmicos (tabelas **RP** = requisitos de
+- `.docs/Trabalho.md` — requisitos acadêmicos (tabelas **RP** = requisitos de
   produto, **RS** = requisitos de software) e regras de telas.
 - `.images/telas-regras.md` — regras canônicas de fluxo/layout de telas,
   acompanhadas dos mockups `.images/*.png`.
@@ -25,7 +25,7 @@ Referências canônicas de requisitos:
 - A GUI do simulador (`main.exe`) exige display e interação; quem valida é o
   **usuário**.
 - O agente **não consegue ver imagens PNG** (mockups em `.images/`) — usar
-  apenas os textos (`telas-regras.md`, `Trabalho.md`, docs).
+  apenas os textos (`telas-regras.md`, `Trabalho.md`, docs, em `.docs/`).
 
 Build manual (pelo usuário, VS Build Tools já instalado):
 ```powershell

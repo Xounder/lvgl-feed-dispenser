@@ -68,7 +68,7 @@ trocar `LV_COLOR_FORMAT_RGB565` por `LV_COLOR_FORMAT_RGB565_SWAPPED` no
 flush (knob em `config/lv_conf_esp32.h` já tem suporte). Se a orientação
 estiver invertida, ajustar o mapeamento na rotação/touch em
 `src/hardware/esp32/board_display.cpp`. Referência completa de pesquisa:
-`MIGRACAO-ESP32-NOTAS.md` (raiz).
+`../.docs/MIGRACAO-ESP32-NOTAS.md`.
 
 ## Referencia
 

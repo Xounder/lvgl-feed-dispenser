@@ -21,5 +21,5 @@
  * Nota: o driver de display/touch (src/hardware/esp32/board_display.cpp)
  * cria o painel RGB + GT911 e retorna o lv_display_t (UI sobe no ESP32).
  * Detalhes e knobs de primeiro boot (byte-order, orientação) em
- * MIGRACAO-ESP32-NOTAS.md e arduino/README.md.
+ * .docs/MIGRACAO-ESP32-NOTAS.md e arduino/README.md.
  */
