@@ -204,7 +204,7 @@ O princípio é:
 Evite adicionar:
 
 ```c
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 ```
 
 em:

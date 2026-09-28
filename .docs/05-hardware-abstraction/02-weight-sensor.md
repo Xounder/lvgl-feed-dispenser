@@ -303,6 +303,11 @@ A implementação real poderá ser responsável por:
 * detectar leituras inválidas;
 * reportar falhas.
 
+A implementação real (`src/hardware/esp32/real_weight_sensor.cpp`) é
+**tolerante a hardware ausente**: se o HX711 não responder em ~1 s no init,
+a célula de carga é considerada indisponível — `read_grams()` retorna 0 e
+`reset()` (tara) é ignorada, permitindo rodar a UI apenas com o display/touch.
+
 O domínio não deve precisar conhecer esses detalhes.
 
 ---

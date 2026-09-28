@@ -53,7 +53,7 @@ touch capacitivo
 
 A meta é reproduzir o comportamento de interação já validado no simulador.
 
-O controlador exato do touch ainda depende do módulo físico utilizado.
+O touch da placa VIEWE é um **GT911 em `0x14`** (via I²C, SDA 19 / SCL 20, reset em GPIO38).
 
 ---
 

@@ -30,7 +30,7 @@ Arduino framework
 
 A **Arduino IDE** gerencia build, flash e monitoramento do ESP32-S3, e o Arduino framework serve como camada de aplicação sobre o ESP-IDF/FreeRTOS.
 
-O sketch vive em `arduino/`: `src/` e `libraries/lvgl` são junctions para o código compartilhado e o LVGL do repositório (não duplicam arquivos; recriar com `arduino/create_sketch_links.ps1`), e `libraries/lv_conf.h` encaminha para `config/lv_conf_esp32.h`.
+O sketch vive em `arduino/`: `src/` é a junction para o código compartilhado (não duplica arquivos; recriar com `arduino/create_sketch_links.ps1`), e `lv_conf.h` (na raiz do sketch) encaminha para `config/lv_conf_esp32.h`. O **LVGL vem do Library Manager** (versão 9.6.0, pasta global da Arduino IDE): o `lv_conf.h` do sketch é resolvido pelos include paths (`__has_include`/`LV_CONF_INCLUDE_SIMPLE` do `lv_conf_internal.h`), sem junction `libraries/lvgl` nem dependência de path absoluto.
 
 Detalhes da decisão de linguagem: [03-architecture-decisions.md](../03-architecture-decisions.md).
 
@@ -167,6 +167,12 @@ No ESP32:
 RAM limitada
 PSRAM disponível na variante alvo
 ```
+
+O `config/lv_conf_esp32.h` usa `LV_USE_STDLIB_MALLOC = LV_STDLIB_CUSTOM` com um
+alocador próprio (`src/hardware/esp32/lv_mem_custom.cpp`) que aloca da
+**PSRAM** (com fallback para a RAM interna): o pool fixo de 1 MB do LVGL
+(`LV_MEM_SIZE`, `LV_STDLIB_BUILTIN`) não cabe na DRAM do ESP32-S3. O mesmo
+arquivo implementa o frame buffer do display via `heap_caps_malloc(SPIRAM)`.
 
 O projeto deverá revisar:
 

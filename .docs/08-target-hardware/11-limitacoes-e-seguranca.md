@@ -10,19 +10,17 @@ Neste estágio, alguns detalhes ainda não estão definitivamente definidos:
 
 * modelo exato da célula de carga;
 * capacidade da célula;
-* controlador exato do touch;
-* pinagem definitiva;
+* pinagem definitiva dos periféricos externos (HX711, servo, botões, LED);
 * mecanismo mecânico final;
 * posições exatas do SG90;
 * estratégia final de alimentação;
 * necessidade de reguladores adicionais;
 * comportamento final dos botões;
-* implementação definitiva do LED;
 * método de calibração;
 * filtro de peso;
 * estratégia final contra overshoot.
 
-Esses pontos devem ser definidos com base nos componentes efetivamente disponíveis e nos testes físicos.
+O controlador do touch (**GT911**) e os pinos de display/touch/backlight já estão definidos em `src/hardware/esp32/board_config.h`; os demais pontos devem ser definidos com base nos componentes efetivamente disponíveis e nos testes físicos.
 
 ---
 

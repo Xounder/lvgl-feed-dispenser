@@ -118,7 +118,7 @@ No ESP32, a plataforma será diferente, mas a camada de UI deverá permanecer co
 
 ## 35. ThorVG
 
-A configuração atual do LVGL utiliza recursos que exigem:
+A configuração do **PC** (`lv_conf.h` da raiz) utiliza recursos que exigem:
 
 ```text
 LV_USE_THORVG = 1
@@ -131,6 +131,11 @@ LV_USE_VECTOR_GRAPHIC = 1
 ```
 
 está habilitado.
+
+No **ESP32** (`config/lv_conf_esp32.h`) o ThorVG está **desativado**
+(`LV_USE_THORVG 0`, `LV_USE_VECTOR_GRAPHIC 0`): o codebase não usa
+vector/SVG/Lottie, e o ThorVG interno não compila no core ESP32 3.x. Se um
+dia precisar de vector no ESP32, reativar e revisar as dependências.
 
 Ao alterar `lv_conf.h`, verificar dependências entre as opções.
 

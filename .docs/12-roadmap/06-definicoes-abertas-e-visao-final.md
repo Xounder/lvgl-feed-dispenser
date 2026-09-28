@@ -8,8 +8,6 @@ Alguns detalhes permanecem deliberadamente abertos:
 
 ```text
 ○ controlador exato do display
-○ controlador exato do touch
-○ pinagem final
 ○ modelo exato da load cell
 ○ mecanismo definitivo do dispenser
 ○ posições do SG90
@@ -20,6 +18,8 @@ Alguns detalhes permanecem deliberadamente abertos:
 ○ arquitetura final de alimentação
 ○ estrutura mecânica definitiva
 ```
+
+Removidos desta lista (definidos): **controlador do touch (GT911 em `0x14`)** e **pinagem de display/touch/backlight/indicador** — ver `src/hardware/esp32/board_config.h`.
 
 Esses itens devem ser definidos conforme o hardware e os testes avançarem.
 

@@ -82,7 +82,7 @@ A placa considerada no projeto é uma variante:
 ESP32-S3 N16R8
 ```
 
-a qual, nesta escolha, vem integrada a um display 4,3" 800×480 com touch capacitivo (ex.: placa SpotPear ESP32-S3-Touch-LCD-4.3G ou similar, com interface RGB e touch GT911 via I²C).
+a qual, nesta escolha, vem integrada a um display 4,3" 800×480 com touch capacitivo. A placa efetivamente utilizada no projeto é a **VIEWE UEDX80480043E-WB-B** (ESP32-S3 N16R8, display RGB ST7262E43-G4 800×480 e touch **GT911 via I²C**), com pinagem em `src/hardware/esp32/board_config.h`.
 
 A nomenclatura indica uma variante com memória flash e PSRAM adequadas para uma aplicação gráfica relativamente mais exigente.
 
