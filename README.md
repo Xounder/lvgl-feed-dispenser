@@ -1,189 +1,137 @@
-# VSCode Simulator project for LVGL
+# Simulador — Dosador de Ração
 
-[LVGL](https://github.com/lvgl/lvgl) is written mainly for microcontrollers and embedded systems, however you can run the library **on your PC** as well without any embedded hardware. The code written on PC can be simply copied when your are using an embedded system.
+Simulador desktop **e** firmware ESP32-S3 de um sistema de **dosagem automática
+de ração** para animais, escrito em **C** (UI em **LVGL**) com abordagem
+*simulation-first*: o comportamento é desenvolvido e validado no PC e depois
+portado para o hardware físico (LVGL + SDL2 no PC; LVGL + Espressif no ESP32).
 
-This project is pre-configured for VSCode and should work work on Windows, Linux and MacOs as well. FreeRTOS is also included and can be optionally enabled to better simulate embedded system's behavior. 
-
-## Get started
-
-### Install SDL and the build tools
-
-- **Windows (vcpkg):** `vcpkg install sdl2`  (`vcpkg` can be installed from [https://github.com/microsoft/vcpkg](https://github.com/microsoft/vcpkg)) Also install either MinGW or another compiler and `cmake`.
-- **macOS (Homebrew):** `brew install sdl2 cmake make`  
-- **Linux:**  
-  - **Debian/Ubuntu:** `sudo apt install build-essential cmake libsdl2-dev`  
-  - **Arch:** `sudo pacman -S base-devel cmake sdl2`  
-  - **Fedora:** `sudo dnf install @development-tools cmake SDL2-devel`  
-- **Manual Installation of SDL:** Download from [SDL’s website](https://github.com/libsdl-org/SDL/releases) and place headers/libraries in your project.
-- **Verify Installation:** `sdl2-config --version`, `cmake --version`, `gcc --version`, `g++ --version` (should return the installed version).  
-
-### Get the PC project
-
-Clone the PC project and the related sub modules:
-
-```bash
-git clone --recursive https://github.com/lvgl/lv_port_pc_vscode
+```
+UI (LVGL)
+    ↓
+Domain (DosingController)
+    ↓
+Hardware Interfaces (WeightSensor, Dispenser)
+    ↓
+Implementações simuladas (PC) / reais (ESP32)
 ```
 
-## Usage
+Fluxo da aplicação: **Home → Seleção de modo → Configuração → Dosagem →
+(Conclusão | Interrupção)**, com modos de dosagem **Massa (g)** e **Valor (R$)**
+e liberação manual.
 
-### Visual Studio Code
+Documentação completa em [`.docs/README.md`](.docs/README.md) e regras para
+agentes em [`AGENTS.md`](AGENTS.md).
 
-1. Be sure you have installed [SDL and the build tools](#install-sdl-and-the-build-tools)
-2. Open the project by double clicking on `simulator.code-workspace` or opening it with `File/Open Workspace from File`
-3. Install the recommended plugins
-4. Click the Run and Debug page on the left, and select `Debug LVGL demo with gdb` from the drop-down on the top. Like this:
-![image](https://github.com/lvgl/lv_port_pc_vscode/assets/7599318/f527b235-5718-4949-b5f0-bd807b3a64ba)
-5. Click the Play button or hit F5 to start debugging.
+---
 
-#### ArchLinux User
+## Como rodar
 
-VSCode does not officially provide an installation package under Arch, you need to use the AUR manager `paru` to install it.
-The command is as follows:
+### Modo PC (simulador desktop)
 
-```bash
-paru -S visual-studio-code-bin
+Roda `main.exe` (LVGL + SDL2), usando peso e dispenser simulados.
+
+**Pré-requisitos**
+
+- Windows com **Visual Studio Build Tools** (MSVC)
+- **CMake**
+- **vcpkg** com `SDL2` instalado (x64-windows) — usado pelo toolchain do vcpkg
+- LVGL entra como dependência externa (`.gitignore` deixa `lvgl/`, `FreeRTOS/`
+  e `vcpkg_installed/` fora do repositório)
+
+**Configurar o build** (uma vez, na raiz do projeto), ajustando os caminhos do
+seu ambiente:
+
+```powershell
+cmake -S . -B build -G "Visual Studio 18 2026" -A x64 `
+  -DCMAKE_TOOLCHAIN_FILE="C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg\scripts\buildsystems\vcpkg.cmake" `
+  -DCMAKE_PREFIX_PATH="..\vcpkg_installed\x64-windows"
 ```
 
-#### macOS
+**Compilar**
 
-Apple's default clang does not support the `-fsanitize=leak` flag.
-
-to build using the latest version of clang from homebrew, do the following:
-
-1. `brew install llvm`
-
-2. cmd+shift+p and run `Cmake: select a kit`, then `[Scan for kits]`
-
-3. then cmd+shift+p and run `Cmake: select a kit`, select the version of clang you just installed from homebrew (it should say `Using compilers C=/opt/homebrew/opt/llvm/bin/clang ...`)
-
-4. reconfigure by running cmd+shift+p `Cmake: Configure`
-
-5. build using [step 4 above](#visual-studio-code)
-
-### FreeRTOS configuration
-To correctly configure the project, the RTOS (Real-Time Operating System) requires a significant amount of heap memory, especially when debugging an SDL (Simple DirectMedia Layer) window application. In this project, the heap memory has been experimentally set to **512 MB**.
-
-```c
-#define configTOTAL_HEAP_SIZE ( ( size_t ) ( 512 * 1024 * 1024 ) )  // 512 MB Heap
-```
-This configuration ensures that the SDL window is displayed in a timely manner. If this value is reduced, it may cause significant delays in the SDL window's appearance. If the allocated heap memory is too small, the window may fail to appear altogether.
-Therefore, it is crucial to allocate sufficient heap memory to ensure smooth execution and debugging experience.
-
-### Enable FreeRTOS 
-To enable the rtos part of this project select in lv_conf.h `#define LV_USE_OS   LV_OS_NONE` to `#define LV_USE_OS  LV_OS_FREERTOS`
-Additionaly you have to enable the compilation of all FreeRTOS Files by turning on the `option(USE_FREERTOS "Enable FreeRTOS" OFF)` in the CMakeLists.txt file or
-by enabling the same flag from the command line when bootstrapping `cmake`:
-
-```bash
-cmake -B build -DUSE_FREERTOS=ON
+```powershell
+cmake --build build --config Debug
 ```
 
-### CMake
+**Preparar a DLL do SDL2** (Debug): o executável precisa da `SDL2d.dll` ao lado
+dele no diretório de execução:
 
-This project uses CMake under the hood which can be used without Visula Studio Code too. Just type these in a Terminal when you are in the project's root folder:
-
-```bash
-mkdir build
-cd build
-cmake ..
-make -j
+```powershell
+Copy-Item .\vcpkg_installed\x64-windows\debug\bin\SDL2d.dll .\bin\Debug\
 ```
 
-## Run demos and examples
+**Executar**
 
-By default, the widgets demo (`lv_demo_widgets()`) will run. If you want to run a different demo or example from the LVGL library,
-simply replace the demo function call in the code with another one—such as `lv_demo_benchmark()` or `lv_example_label_1()`.
-
-```c
-int main(int argc, char **argv)
-{
-  /* ... */
-  /* Run the default demo */
-  /* To try a different demo or example, replace this with one of: */
-  /* - lv_demo_benchmark(); */
-  /* - lv_demo_stress(); */
-  /* - lv_example_label_1(); */
-  /* - etc. */
-  lv_demo_widgets(); 
-
-  while(1) {
-      /* ... */
-  }
-  return 0;
-}
+```powershell
+.\bin\Debug\main.exe
 ```
 
-## Optional library
+Detalhes do ambiente PC: [`.docs/09-pc-development-environment.md`](.docs/09-pc-development-environment.md)
+e [`.docs/run-code.md`](.docs/run-code.md).
 
-There are also FreeType and FFmpeg support. You can install these according to the followings:
+---
 
-### Linux
+### Modo Arduino (ESP32-S3)
 
-```bash
-# FreeType support
-wget https://kumisystems.dl.sourceforge.net/project/freetype/freetype2/2.13.2/freetype-2.13.2.tar.xz
-tar -xf freetype-2.13.2.tar.xz
-cd freetype-2.13.2
-make
-make install
+Compila o mesmo código (UI/domínio/abstrações) com drivers reais de display,
+touch, HX711 e dispenser, via **Arduino IDE**.
+
+**Pré-requisitos**
+
+- **Arduino IDE**
+- Core **ESP32 by Espressif** (Board Manager)
+- Placa-alvo: **ESP32S3 Dev Module** (display RGB 4.3" 800×480 + touch GT911)
+- Bibliotecas (Library Manager):
+
+| Nome | Autor | Usada em |
+| --- | --- | --- |
+| **LVGL 9.6.0** | LVGL (kisvegabor) | toda a UI em `src/` |
+| **ESP32Servo** | Kevin Harrington (madhephaestus) | dispenser real |
+| **HX711** | Bogdan Necula (bogde) | sensor de peso real |
+
+> Não usar a biblioteca **Servo** clássica (Michael Margolis/Arduino): só
+> compila em AVR (Uno/Mega), não serve para ESP32.
+
+**Passos**
+
+1. Recriar as junctions do sketch (não são versionadas):
+
+   ```powershell
+   .\arduino\create_sketch_links.ps1
+   ```
+
+   > O `lv_conf.h` do sketch encaminha para `config/lv_conf_esp32.h` (fonte
+   > única da config LVGL do ESP32). O LVGL **não** entra por junction — vem do
+   > Library Manager (9.6.0).
+
+2. Arduino IDE: `File > Open...` e abrir `arduino/arduino.ino`.
+3. Selecionar placa **ESP32S3 Dev Module** e ajustar as opções em `Tools` (os defaults do core não são os corretos):
+  - USB CDC On Boot: "Disabled"
+  - Flash Size: **16MB** (confira o módulo: `N16` = 16MB flash)
+  - Flash Mode: **QIO 80MHz**
+  - Partition Scheme: **16M Flash (3MB APP/9.9MB FATFS)**
+  - PSRAM: conforme o módulo (`R8` = 8MB, sugerido manter **OPI PSRAM** ativo)
+  - Serial monitor: **115200** baud (para debug - opcional)
+4. Instalar as bibliotecas acima (Library Manager).
+5. Compilar e fazer upload.
+
+> Nota: o LVGL 9.6.0 do Library Manager resolve o `lv_conf.h` pelos
+> include paths do sketch (`__has_include`), sem tocar na instalação global —
+> portátil entre PCs.
+
+Detalhes do sketch: [`arduino/README.md`](arduino/README.md). Migração
+PC → ESP32-S3: [`.docs/11-migration-pc-to-esp32.md`](.docs/11-migration-pc-to-esp32.md).
+
+---
+
+## Estrutura
+
 ```
-
-```bash
-# FFmpeg support
-git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
-cd ffmpeg
-git checkout release/6.0
-./configure --disable-all --disable-autodetect --disable-podpages --disable-asm --enable-avcodec --enable-avformat --enable-decoders --enable-encoders --enable-demuxers --enable-parsers --enable-protocol='file' --enable-swscale --enable-zlib
-make
-sudo make install
-```
-### (RT)OS support
-Works with any OS like pthred, Windows, FreeRTOS, etc. It has build in support for FreeRTOS. 
-
-## Test
-This project is configured for [VSCode](https://code.visualstudio.com) and is tested on: 
-- Ubuntu Linux 
-- Windows WSL (Ubuntu Linux)
-
-It requires a working version of GCC, GDB and make in your path.
-
-To allow debugging inside VSCode you will also require a GDB [extension](https://marketplace.visualstudio.com/items?itemName=webfreak.debug) or other suitable debugger. All the requirements, build and debug settings have been pre-configured in the [.workspace](simulator.code-workspace) file.
-
-The project can use **SDL** but it can be easily relaced by any other built-in LVGL dirvers.
-
-## Integration with LVGL Pro
-
-This project supports integration with LVGL Pro projects for UI development.
-
-### Setup
-
-1. Configure CMake with your LVGL Pro project folder:
-
-```bash
-cmake -B build -DLVGL_PRO_PROJECT_DIR=<path-to-lvgl-pro-project>
-```
-
-Build your project:
-
-```bash
-cmake --build build
-```
-
-### Usage in Code
-
-In your main.c, include the UI header from your LVGL Pro project and replace the default demo with your screen.
-
-```c
-#include "ui.h"
-
-int main(void) {
-
-    /*Initialization code for LVGL*/
-    
-    /* Initialize the LVGL Pro UI */
-    ui_init("<path-to-lvgl-pro-project>");
-    
-    /* ... rest of your application ...*/
-}
+├── src/            # compartilhado + plataforma ESP32 (domain/, ui/, hardware/)
+├── src_pc/         # somente PC: main.c, hal/ (SDL2), hardware/simulated/
+├── arduino/        # sketch Arduino IDE (junctions p/ src/, lv_conf.h, script)
+├── config/         # lv_conf_esp32.h (config única do LVGL no ESP32)
+├── .docs/          # documentação canônica do projeto
+├── CMakeLists.txt  # build do simulador PC
+└── lv_conf.h       # config do LVGL no PC
 ```
