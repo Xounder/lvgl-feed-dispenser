@@ -29,7 +29,7 @@ Referências canônicas de requisitos:
 
 Build manual (pelo usuário, VS Build Tools já instalado):
 ```powershell
-cmake -S . -B build
+cmake -S src_pc -B build
 cmake --build build --config Debug
 & .\bin\Debug\main.exe
 ```
@@ -39,7 +39,7 @@ Alternativa quando o agente precisa checar compilação/link:
 & "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\MSBuild.exe" build\main.vcxproj -p:Configuration=Debug -v:m
 ```
 > **Atenção:** quando um **novo arquivo** `.c` é adicionado ao
-> `CMakeLists.txt` (MAIN_SOURCES), o build incremental do MSBuild pode não
+> `src_pc/CMakeLists.txt` (MAIN_SOURCES), o build incremental do MSBuild pode não
 > compilá-lo (LNK2019 em `main.exe`). Nesse caso force rebuild completo:
 > `-t:Rebuild`.
 

@@ -172,7 +172,7 @@ Em vez de depender diretamente de:
 o projeto possui uma definição:
 
 ```text
-CMakeLists.txt
+src_pc/CMakeLists.txt
 ```
 
 Isso facilita uma futura compilação em outro ambiente.
@@ -184,7 +184,7 @@ Isso facilita uma futura compilação em outro ambiente.
 O fluxo utilizado é:
 
 ```text
-CMakeLists.txt
+src_pc/CMakeLists.txt
       ↓
 cmake configure
       ↓
@@ -203,7 +203,7 @@ A pasta `build/` contém artefatos gerados pelo CMake e não representa o códig
 
 ## 10. Diretórios importantes
 
-A estrutura resumida da raiz do projeto (`CMakeLists.txt`, `lv_conf.h`, `src/`, `.docs/`, `lvgl/`, `FreeRTOS/`, `vcpkg_installed/`, `build/`, `bin/`) está em [02-architecture.md](../02-architecture.md).
+A estrutura da raiz do projeto (`src/`, `src_pc/`, `.docs/`, `lvgl/`, `FreeRTOS/`, `build/`, `bin/`) está em [02-architecture.md](../02-architecture.md). O `vcpkg_installed/` fica fora do repositório, na pasta irmã do projeto.
 
 Algumas dessas pastas são dependências ou artefatos gerados e não fazem parte do código principal versionado.
 
@@ -349,10 +349,10 @@ O pacote instalado é:
 sdl2:x64-windows@2.32.10#1
 ```
 
-A instalação local está em:
+A instalação local está em (fora do repositório, na pasta irmã do projeto):
 
 ```text
-vcpkg_installed/x64-windows
+../vcpkg_installed/x64-windows
 ```
 
 ---

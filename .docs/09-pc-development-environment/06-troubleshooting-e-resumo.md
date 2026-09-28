@@ -13,9 +13,12 @@ Verificar:
 ```text
 vcpkg
 CMAKE_TOOLCHAIN_FILE
-CMAKE_PREFIX_PATH
+vcpkg_installed (fora do repositório, na pasta irmã)
 arquitetura x64
 ```
+
+> O `CMakeLists.txt` resolve o `vcpkg_installed` automaticamente
+> (`src_pc/../../vcpkg_installed`) — sem necessidade de `-DCMAKE_PREFIX_PATH`.
 
 ---
 
@@ -64,7 +67,7 @@ build/
 O princípio é:
 
 ```text
-CMakeLists.txt
+src_pc/CMakeLists.txt
    ↓
 configure
    ↓

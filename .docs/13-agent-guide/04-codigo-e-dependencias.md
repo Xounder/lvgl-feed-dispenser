@@ -53,7 +53,7 @@ Ao adicionar um novo arquivo `.c`, verificar se ele está incluído no:
 MAIN_SOURCES
 ```
 
-atualmente definido no `CMakeLists.txt`.
+atualmente definido no `src_pc/CMakeLists.txt`.
 
 Não assumir que o CMake descobrirá automaticamente qualquer novo arquivo.
 
@@ -118,7 +118,7 @@ No ESP32, a plataforma será diferente, mas a camada de UI deverá permanecer co
 
 ## 35. ThorVG
 
-A configuração do **PC** (`lv_conf.h` da raiz) utiliza recursos que exigem:
+A configuração do **PC** (`src_pc/lv_conf.h`) utiliza recursos que exigem:
 
 ```text
 LV_USE_THORVG = 1

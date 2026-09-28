@@ -91,11 +91,16 @@ SDL2
 LVGL
 ```
 
-### Passos rápidos
+### Passos rápidos (simulador PC)
 
 Na raiz do projeto:
 
 ```powershell
+# Configurar o CMake (uma vez, ajustando o caminho do toolchain do vcpkg):
+cmake -S src_pc -B build -G "Visual Studio 18 2026" -A x64 `
+  -DCMAKE_TOOLCHAIN_FILE="C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg\scripts\buildsystems\vcpkg.cmake"
+
+# Compilar e executar:
 cmake --build build --config Debug
 .\bin\Debug\main.exe
 ```
@@ -106,6 +111,16 @@ Detalhes (configuração via CMake com vcpkg, toolchain, `SDL2d.dll` e troublesh
 
 - → [`09-pc-development-environment.md`](09-pc-development-environment.md)
 - → [`run-code.md`](run-code.md)
+
+### Passos rápidos (Arduino/ESP32-S3)
+
+O mesmo código (UI/domínio/abstrações) compila com drivers reais via **Arduino IDE**:
+
+1. Recriar as junctions do sketch: `.\arduino\create_sketch_links.ps1`
+2. Abrir `arduino/arduino.ino` na Arduino IDE (placa **ESP32S3 Dev Module**, flash 16MB, partition 16M; libs **LVGL 9.6.0**, **ESP32Servo**, **HX711**)
+3. Compilar e fazer upload
+
+Detalhes do sketch em [`arduino/README.md`](../arduino/README.md) e da migração em [`11-migration-pc-to-esp32.md`](11-migration-pc-to-esp32.md).
 
 ---
 
@@ -181,11 +196,20 @@ Regra principal:
 ```text
 .
 ├── src/
-│   ├── main.c
-│   ├── hal/
-│   ├── ui/
 │   ├── domain/
+│   ├── ui/
 │   └── hardware/
+│
+├── src_pc/
+│   ├── main.c
+│   ├── CMakeLists.txt
+│   ├── lv_conf.h
+│   ├── FreeRTOSConfig.h
+│   ├── hal/
+│   └── hardware/simulated/
+│
+├── arduino/          # sketch Arduino IDE (junctions p/ src/, lv_conf.h, script)
+├── config/           # lv_conf_esp32.h (config única do LVGL no ESP32)
 │
 ├── .docs/
 │   ├── 00-project-story.md
@@ -203,8 +227,6 @@ Regra principal:
 │   ├── 12-roadmap.md
 │   └── 13-agent-guide.md
 │
-├── CMakeLists.txt
-├── lv_conf.h
 └── README.md
 ```
 

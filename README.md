@@ -42,9 +42,8 @@ Roda `.\bin\Debug\main.exe` (LVGL + SDL2), usando peso e dispenser simulados.
 seu ambiente:
 
 ```powershell
-cmake -S . -B build -G "Visual Studio 18 2026" -A x64 `
-  -DCMAKE_TOOLCHAIN_FILE="C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg\scripts\buildsystems\vcpkg.cmake" `
-  -DCMAKE_PREFIX_PATH="..\vcpkg_installed\x64-windows"
+cmake -S src_pc -B build -G "Visual Studio 18 2026" -A x64 `
+  -DCMAKE_TOOLCHAIN_FILE="C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg\scripts\buildsystems\vcpkg.cmake"
 ```
 
 **Compilar**
@@ -57,7 +56,7 @@ cmake --build build --config Debug
 dele no diretório de execução:
 
 ```powershell
-Copy-Item .\vcpkg_installed\x64-windows\debug\bin\SDL2d.dll .\bin\Debug\
+Copy-Item ..\vcpkg_installed\x64-windows\debug\bin\SDL2d.dll .\bin\Debug\
 ```
 
 **Executar**
@@ -128,10 +127,9 @@ PC → ESP32-S3: [`.docs/11-migration-pc-to-esp32.md`](.docs/11-migration-pc-to-
 
 ```
 ├── src/            # compartilhado + plataforma ESP32 (domain/, ui/, hardware/)
-├── src_pc/         # somente PC: main.c, hal/ (SDL2), hardware/simulated/
+├── src_pc/         # somente PC: main.c, CMakeLists.txt, lv_conf.h, hal/ (SDL2),
+│                   #   hardware/simulated/, FreeRTOSConfig.h
 ├── arduino/        # sketch Arduino IDE (junctions p/ src/, lv_conf.h, script)
 ├── config/         # lv_conf_esp32.h (config única do LVGL no ESP32)
-├── .docs/          # documentação canônica do projeto
-├── CMakeLists.txt  # build do simulador PC
-└── lv_conf.h       # config do LVGL no PC
+└── .docs/          # documentação canônica do projeto
 ```

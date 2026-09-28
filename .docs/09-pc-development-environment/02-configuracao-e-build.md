@@ -9,22 +9,24 @@
 A configuração utilizada atualmente é:
 
 ```powershell
-cmake -S . -B build -G "Visual Studio 18 2026" -A x64 -DCMAKE_TOOLCHAIN_FILE="C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_PREFIX_PATH="..\vcpkg_installed\x64-windows"
+cmake -S src_pc -B build -G "Visual Studio 18 2026" -A x64 -DCMAKE_TOOLCHAIN_FILE="C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg\scripts\buildsystems\vcpkg.cmake"
 ```
 
 Cada parte possui uma função específica.
 
 ---
 
-## 21. `-S .`
+## 21. `-S src_pc`
 
-Indica que o código-fonte está no diretório atual:
+Indica que o código-fonte (o `CMakeLists.txt` do simulador) está na subpasta
+`src_pc/` do projeto:
 
 ```text
-.
+src_pc/
 ```
 
-Ou seja, o `CMakeLists.txt` principal está na raiz do projeto.
+Ou seja, o `CMakeLists.txt` principal do simulador PC fica em `src_pc/`, na
+raiz do repositório.
 
 ---
 
@@ -92,17 +94,21 @@ Isso permite que o CMake encontre e configure as dependências instaladas por el
 
 ---
 
-## 26. `CMAKE_PREFIX_PATH`
+## 26. Localização do `vcpkg_installed`
 
-O projeto também utiliza:
+O `vcpkg_installed` (pacotes instalados, incluindo o SDL2) fica **fora do
+repositório**, na pasta irmã do projeto, para não ser versionado.
+
+O `src_pc/CMakeLists.txt` resolve esse caminho automaticamente, relativo ao
+arquivo:
 
 ```text
--DCMAKE_PREFIX_PATH="..\vcpkg_installed\x64-windows"
+src_pc/../../vcpkg_installed/x64-windows
 ```
 
-para indicar ao CMake onde encontrar os pacotes instalados.
-
-Isso é especialmente relevante para localizar o SDL2 utilizado pelo simulador.
+Por isso o comando de configuração não precisa mais de um
+`-DCMAKE_PREFIX_PATH` explícito (era usado somente quando o build estava na
+raiz do projeto).
 
 ---
 
@@ -137,7 +143,7 @@ bin/Debug/
 através de:
 
 ```powershell
-Copy-Item .\vcpkg_installed\x64-windows\debug\bin\SDL2d.dll .\bin\Debug\
+Copy-Item ..\vcpkg_installed\x64-windows\debug\bin\SDL2d.dll .\bin\Debug\
 ```
 
 Isso permite que:
@@ -174,24 +180,24 @@ A escolha da DLL deve acompanhar a configuração do build.
 
 ## 41. CMake e fontes
 
-O CMake possui uma lista de fontes principais semelhante a:
+O CMake possui uma lista de fontes principais semelhante a (no `src_pc/CMakeLists.txt`):
 
 ```cmake
 set(MAIN_SOURCES
-    src_pc/mouse_cursor_icon.c
-    src_pc/hal/hal.c
-    src/ui/ui.c
-    src/ui/screen_manager.c
-    src/ui/screens/screen_chrome.c
-    src/ui/screens/home_screen.c
-    src/ui/screens/config_screen.c
-    src/ui/screens/dosing_screen.c
-    src/ui/screens/completed_screen.c
-    src/ui/screens/interrupted_screen.c
-    src/ui/screens/manual_release_widget.c
-    src/domain/dosing_controller.c
-    src_pc/hardware/simulated/simulated_weight_sensor.c
-    src_pc/hardware/simulated/simulated_dispenser.c
+    mouse_cursor_icon.c
+    hal/hal.c
+    ../src/ui/ui.c
+    ../src/ui/screen_manager.c
+    ../src/ui/screens/screen_chrome.c
+    ../src/ui/screens/home_screen.c
+    ../src/ui/screens/config_screen.c
+    ../src/ui/screens/dosing_screen.c
+    ../src/ui/screens/completed_screen.c
+    ../src/ui/screens/interrupted_screen.c
+    ../src/ui/screens/manual_release_widget.c
+    ../src/domain/dosing_controller.c
+    hardware/simulated/simulated_weight_sensor.c
+    hardware/simulated/simulated_dispenser.c
 )
 ```
 

@@ -16,7 +16,7 @@ Este guia cobre:
 * a distinção entre **O QUE EXISTE HOJE**, **O QUE É ARQUITETURA DESEJADA**, **O QUE É PLANEJADO** e **O QUE AINDA NÃO FOI DECIDIDO**;
 * as regras que devem ser consideradas antes de alterar arquitetura, domínio, UI, simulação ou hardware;
 * o contexto do que está implementado (estrutura de pastas, CMake, LVGL/SDL2, `DosingController`, sensores/atuadores simulados, telas, fluxo, limitações);
-* `MAIN_SOURCES` no `CMakeLists.txt` para novos `.c`;
+* `MAIN_SOURCES` no `src_pc/CMakeLists.txt` para novos `.c`;
 * a regra de que a simulação não deve ser removida quando o hardware chegar;
 * a distinção do timer ~300 ms de UI em relação à temporização física;
 * a observação de que a fonte LVGL atual não possui acentos.

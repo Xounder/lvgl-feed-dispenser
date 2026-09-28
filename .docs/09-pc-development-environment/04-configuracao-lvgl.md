@@ -9,7 +9,7 @@
 O projeto possui uma configuração própria do LVGL através de:
 
 ```text
-lv_conf.h
+src_pc/lv_conf.h
 ```
 
 Essa configuração determina quais recursos do LVGL ficam habilitados.

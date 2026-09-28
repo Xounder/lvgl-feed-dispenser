@@ -224,7 +224,7 @@ Application
 
 ## 39. Estrutura do código-fonte
 
-A organização de `src/` (`main.c`, `hal/`, `ui/`, `domain/`, `hardware/`), que separa plataforma, interface, domínio e hardware, é detalhada em [02-architecture.md](../02-architecture.md).
+A organização de `src_pc/` (`main.c`, `hal/`, `hardware/simulated/`) e `src/` (`ui/`, `domain/`, `hardware/`), que separa plataforma, interface, domínio e hardware, é detalhada em [02-architecture.md](../02-architecture.md).
 
 ---
 
