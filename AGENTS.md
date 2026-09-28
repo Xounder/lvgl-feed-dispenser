@@ -35,6 +35,7 @@ cmake --build build --config Debug
 ```
 Alternativa quando o agente precisa checar compilação/link:
 ```powershell
+# Caminho varia conforme a instalação local do VS Build Tools.
 & "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\MSBuild.exe" build\main.vcxproj -p:Configuration=Debug -v:m
 ```
 > **Atenção:** quando um **novo arquivo** `.c` é adicionado ao
