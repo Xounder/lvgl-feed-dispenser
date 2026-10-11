@@ -14,7 +14,7 @@ Durante a análise do hardware físico, surgiu a possibilidade de usar um
 sensores, deixando o ESP32-S3 da tela apenas com a responsabilidade de
 **renderizar a UI** e capturar o toque.
 
-Esta organização documenta essa segunda opção, os motivos e o que ela muda.
+Esta organização documenta essa arquitetura, os motivos e o que ela muda.
 
 ---
 
@@ -36,24 +36,17 @@ Esta organização documenta essa segunda opção, os motivos e o que ela muda.
 
 ### 3. Decisão adotada
 
-A opção 2 é considerada **válida e vantajosa** quando:
-
-- a pinagem do ESP32-S3 da tela ficar apertada demais;
-- se quiser separar a falha da UI do controle físico;
-- se o servo/HX711 precisarem de mais hardwired/energia isolada.
-
-Decisões desta análise:
+A **opção 2 (ESP32 externo + ESP32 da tela)** é a **adotada** para o firmware
+real: a pinagem da tela ficou apertada demais (display, touch, microSD, UART,
+BOOT) e a separação deixa o controle físico independente da UI. A **opção 1
+(integrada)** foi **descontinuada**.
 
 | Item | Decisão |
 | ---- | ------- |
-| Transporte | **UART** (recomendado) |
+| Transporte | **UART** |
 | Config da dosagem | **persistida no ESP32 externo** |
 | Botão de emergência | **no ESP32 externo** |
 | Simulador PC | **inalterado** |
-
-A opção 1 continua sendo o caminho mais simples quando couber nos GPIOs
-disponíveis; a opção 2 entra quando essa premissa falhar ou quando houver
-vantagem de separação física.
 
 ---
 

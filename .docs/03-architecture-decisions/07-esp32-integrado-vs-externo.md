@@ -23,16 +23,15 @@ O detalhamento completo dessa alternativa está em
 
 ### 2. Decisão
 
-- A **opção 1 (integrada) continua sendo o caminho padrão** enquanto couber
-  nos GPIOs e nos requisitos elétricos.
-- A **opção 2 (ESP32 externo + ESP32 da tela)** fica documentada e é adotada
-  **quando** houver necessidade concreta: pinagem esgotada, separação entre
-  falha de UI e controle físico, ou necessidade de alimentação/energia
-  isolada para servo e HX711.
+- A **opção 2 (ESP32 externo + ESP32 da tela)** é a **adotada** para o firmware
+  físico: a tela faz apenas UI (LVGL + touch) e um **proxy UART**; o controle
+  (domínio, HX711, servo, botões/LED) fica no **ESP32 externo**.
+- A **opção 1 (integrada)** — firmware único no ESP32-S3 da tela — foi
+  **descontinuada e removida** do código nesta branch.
 - O **simulador PC permanece inalterado**: continua rodando domínio +
-  hardware simulado localmente.
+  hardware simulado localmente, e segue como contrato comportamental.
 
-Status: **Documentada / opcional**.
+Status: **Adotada (opção 2)**.
 
 ---
 
@@ -65,9 +64,8 @@ Status: **Documentada / opcional**.
 
 ### 5. Princípio
 
-> **Primeiro caber em um único ESP32-S3; separar em dois apenas quando a
-> pinagem, a energia ou o isolamento de falhas exigirem — sem mudar o
-> comportamento validado no simulador.**
+> **A tela renderiza, o externo controla.** O simulador PC permanece como
+> contrato comportamental, sem mudanças.
 
 ---
 

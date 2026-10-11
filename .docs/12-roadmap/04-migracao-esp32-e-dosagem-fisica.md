@@ -55,7 +55,7 @@ A meta é reproduzir o comportamento de interação já validado no simulador.
 
 O touch da placa VIEWE é um **GT911 em `0x14`** (via I²C, SDA 19 / SCL 20, reset em GPIO38).
 
-Os pins físicos dos periféricos de domínio estão definidos em `src/hardware/esp32/board_config.h`: HX711 (11/12), servo (13), botões (10 e 18) e LED (17). Como o microSD (GPIO10–13) e o WS2812B (GPIO17) competem com esses periféricos, o slot SD fica indisponível e o comportamento do LED deve ser validado fisicamente — ver [`08-target-hardware/11-limitacoes-e-seguranca.md`](../08-target-hardware/11-limitacoes-e-seguranca.md).
+Os pinos físicos dos periféricos de domínio ficam no **ESP32 externo**, em `src/hardware/esp32/board_config_ctrl.h`: HX711 (4/5), servo (6), botões (7/15) e LED (8). A tela (VIEWE) usa apenas display/touch/backlight e o UART do link em 12/13 — ver [`14-external-esp32-communication/07-conexoes-fisicas.md`](../14-external-esp32-communication/07-conexoes-fisicas.md).
 
 ---
 
@@ -326,4 +326,4 @@ O detalhamento técnico desta fase é tratado em:
 - [`08-target-hardware.md`](../08-target-hardware.md) — hardware físico alvo (ESP32-S3, display/touch, HX711/load cell, SG90/mecanismo, botões, indicadores, alimentação).
 - [`11-migration-pc-to-esp32.md`](../11-migration-pc-to-esp32.md) — plano de migração incremental (etapas 1–10) e checklist de migração.
 - [`10-testing-strategy.md`](../10-testing-strategy.md) — testes físicos, calibração, repetibilidade e falhas no hardware.
-- [`14-external-esp32-communication.md`](../14-external-esp32-communication.md) — variante com ESP32 externo + ESP32 da tela (opcional; ver ADR [`03-architecture-decisions/07-esp32-integrado-vs-externo.md`](../03-architecture-decisions/07-esp32-integrado-vs-externo.md)).
+- [`14-external-esp32-communication.md`](../14-external-esp32-communication.md) — arquitetura de **dois ESP32** (ESP32 externo + ESP32 da tela), adotada para o firmware físico; ADR [`03-architecture-decisions/07-esp32-integrado-vs-externo.md`](../03-architecture-decisions/07-esp32-integrado-vs-externo.md).

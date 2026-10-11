@@ -1,18 +1,17 @@
 # Comunicação ESP32 Externo → ESP32 da Touchscreen
 
-> **Documento canônico** sobre a evolução da arquitetura física: tornar opcional o
-> uso de um **ESP32 externo** que concentra todo o controle (domínio, HX711,
-> servo, botões, LED) enquanto o **ESP32-S3 da tela** passa a ser apenas um
-> **cliente de renderização** (LVGL + touch), recebendo os comandos de atualização
-> de tela pelo barramento de comunicação.
+> **Documento canônico** da arquitetura física **adotada** para o firmware real:
+> um **ESP32 externo** concentra todo o controle (domínio, HX711, servo, botões,
+> LED) e o **ESP32-S3 da tela** fica como **cliente de renderização** (LVGL +
+> touch), recebendo estado e enviando comandos pelo barramento UART.
 > Este arquivo é o índice; o conteúdo completo está nas partes listadas abaixo.
 
 ---
 
 ## Resumo
 
-Hoje (opção 1) o ESP32-S3 integrado à tela roda **tudo**: UI, domínio, HX711,
-servo e botões. A alternativa estudada (opção 2) divide o sistema em **dois
+O ESP32-S3 integrado à tela (opção 1) rodava **tudo**: UI, domínio, HX711, servo
+e botões. A arquitetura **adotada** (opção 2) divide o sistema em **dois
 microcontroladores**:
 
 ```text
@@ -29,7 +28,7 @@ microcontroladores**:
                     └───────────────────────────┘
 ```
 
-Decisões já tomadas nesta análise:
+Decisões adotadas:
 
 - **Transporte**: UART (recomendado — simples, determinístico, sem stack de rede).
 - **Config da dosagem**: persistida no **ESP32 externo** (fonte da verdade);
@@ -37,7 +36,7 @@ Decisões já tomadas nesta análise:
 - **Botão de emergência**: conectado ao **ESP32 externo** (quem controla o
   atuador), independente do estado do link/display.
 - **Simulador PC**: **não muda** — continua rodando domínio + hardware simulado
-  localmente; a opção 2 é adicionada como alternativa do firmware real.
+  localmente; a opção 2 é o firmware real.
 
 ---
 

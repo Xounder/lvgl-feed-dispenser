@@ -187,7 +187,7 @@ domínio:
   ([`08-target-hardware/05-botoes-e-indicadores.md`](08-target-hardware/05-botoes-e-indicadores.md) §22–§25);
 - tratar como um incremento da sequência de migração
   ([`11-migration-pc-to-esp32/07-tempos-gpios-board-config-e-incremento.md`](11-migration-pc-to-esp32/07-tempos-gpios-board-config-e-incremento.md) §45);
-- as implicações elétricas dos pinos (GPIO10/17/18) já estão na seção 2.
+- as implicações elétricas dos pinos do **ESP32 externo** (`board_config_ctrl.h`) estão na seção 3; as restrições da tela (GPIO10–13/17/18) ficam como contexto histórico na seção 2.
 
 ---
 
