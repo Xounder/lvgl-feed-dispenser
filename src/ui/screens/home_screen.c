@@ -1,3 +1,5 @@
+#ifndef ROLE_EXTERNAL
+
 #include "home_screen.h"
 #include "../screen_manager.h"
 #include "screen_chrome.h"
@@ -82,3 +84,5 @@ lv_obj_t *home_screen_create(void)
 
     return screen;
 }
+
+#endif

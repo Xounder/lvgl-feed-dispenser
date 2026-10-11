@@ -1,10 +1,13 @@
+#ifndef ROLE_SCREEN
+
 #include "real_weight_sensor.h"
 
 #include <Arduino.h>
 #include "HX711.h"
 
 #include "../weight_sensor.h"
-#include "board_config.h"
+
+#include "board_config_ctrl.h"
 
 static HX711 scale;
 static int ready = 0;
@@ -46,3 +49,10 @@ void real_weight_sensor_init(void)
     scale.tare(10);
     ready = 1;
 }
+
+int real_weight_sensor_is_ready(void)
+{
+    return ready;
+}
+
+#endif

@@ -1,3 +1,5 @@
+#ifndef ROLE_EXTERNAL
+
 #include "screen_manager.h"
 #include "../domain/dosing_controller.h"
 #include "screens/home_screen.h"
@@ -66,3 +68,5 @@ DosingConfig *screen_manager_get_dosing_config(void)
 {
     return &dosing_config;
 }
+
+#endif

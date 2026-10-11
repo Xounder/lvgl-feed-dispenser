@@ -1,25 +1,20 @@
 /*
- * Projeto: simulador/porta do dosador de racao para ESP32-S3.
+ * Sketch da TELA (ESP32-S3 touch).
  *
- * Este sketch so identifica a pasta `arduino/` como um projeto Arduino IDE.
- * O codigo real vive em `src/` (mesma arvore do projeto) e o setup()/loop()
- * estao em `src/main_esp32.cpp`, que e compilado automaticamente junto com
- * o resto de `src/` pelo Arduino.
+ * Variante com ESP32 externo: ver .docs/14-external-esp32-communication.md.
+ * Este sketch compila apenas a UI (LVGL) + o proxy UART. O controle fisico
+ * (HX711, servo, botoes, LED) roda no ESP32 externo (arduino_ctrl/).
+ *
+ * O papel e fixado em tempo de compilacao por `build_opt.h` (-DROLE_SCREEN):
+ * o Arduino IDE compila toda a arvore do sketch (junction src/), logo nao ha
+ * como escolher tela/externo em runtime.
  *
  * Requisitos antes de abrir/compilar:
- *  - Rodar `create_sketch_links.ps1` (recria as junctions `arduino/src` e
- *    `arduino/libraries/lvgl` para apontar para o repositorio).
- *  - Instalar pelo Library Manager: LVGL NAO e instalado (usa a junction),
- *    instalar "HX711" (bogde) e "ESP32Servo" (madhephaestus).
+ *  - Rodar `create_sketch_links.ps1` (recria a junction `arduino/src`).
+ *  - Instalar pelo Library Manager: "LVGL" 9.6.0 (unico necessario aqui).
  *  - Placa: ESP32S3 Dev Module; Flash Size 16MB; Flash Mode QIO/OPI;
  *    Partition Scheme "Default 16MB"; PSRAM conforme o modulo (OPI se tiver).
- *  - Serial: 115200 baud (monitor) com USB CDC habilitado, se aplicavel.
  *
- * A config do LVGL para o ESP32 e resolvida pela library em
- * `libraries/lv_conf.h`, que encaminha para `config/lv_conf_esp32.h`.
- *
- * Nota: o driver de display/touch (src/hardware/esp32/board_display.cpp)
- * cria o painel RGB + GT911 e retorna o lv_display_t (UI sobe no ESP32).
- * Detalhes e knobs de primeiro boot (byte-order, orientação) em
- * .docs/MIGRACAO-ESP32-NOTAS.md e arduino/README.md.
+ * A config do LVGL para o ESP32 e resolvida pelo `lv_conf.h` desta pasta, que
+ * encaminha para `config/lv_conf_esp32.h`.
  */

@@ -1,10 +1,13 @@
+#ifndef ROLE_SCREEN
+
 #include "real_dispenser.h"
 
 #include <Arduino.h>
 #include <ESP32Servo.h>
 
 #include "../dispenser.h"
-#include "board_config.h"
+
+#include "board_config_ctrl.h"
 
 static Servo servo;
 static int active = 0;
@@ -37,3 +40,5 @@ void real_dispenser_init(void)
     servo.attach(BOARD_SERVO_PIN);
     servo.write(BOARD_SERVO_CLOSED_ANGLE);
 }
+
+#endif

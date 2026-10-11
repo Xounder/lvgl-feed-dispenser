@@ -1,9 +1,12 @@
+#ifndef ROLE_SCREEN
+
 #include "real_buttons.h"
 
 #include <Arduino.h>
 
 #include "../button.h"
-#include "board_config.h"
+
+#include "board_config_ctrl.h"
 
 typedef struct {
     int pin;
@@ -75,3 +78,5 @@ void real_buttons_init(void)
     manual_btn.stable = manual_btn.raw;
     manual_btn.last_change_ms = millis();
 }
+
+#endif

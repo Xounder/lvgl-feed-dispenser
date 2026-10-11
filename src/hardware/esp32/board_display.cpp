@@ -1,3 +1,5 @@
+#ifndef ROLE_EXTERNAL
+
 #include "board_display.h"
 
 #include <Arduino.h>
@@ -185,3 +187,5 @@ lv_display_t *board_display_init(void)
 
     return disp;
 }
+
+#endif

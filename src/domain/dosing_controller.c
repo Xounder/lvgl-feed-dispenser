@@ -1,3 +1,5 @@
+#ifndef ROLE_SCREEN
+
 #include "dosing_controller.h"
 #include "../hardware/weight_sensor.h"
 #include "../hardware/dispenser.h"
@@ -155,3 +157,5 @@ DosingPhase dosing_controller_get_phase(void)
 {
     return phase;
 }
+
+#endif

@@ -1,9 +1,12 @@
+#ifndef ROLE_SCREEN
+
 #include "real_indicator.h"
 
 #include <Arduino.h>
 
 #include "../indicator.h"
-#include "board_config.h"
+
+#include "board_config_ctrl.h"
 
 static void real_set(int on)
 {
@@ -22,3 +25,5 @@ void real_indicator_init(void)
     pinMode(BOARD_LED_PIN, OUTPUT);
     real_set(0);
 }
+
+#endif

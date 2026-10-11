@@ -1,28 +1,37 @@
-# Recria as junctions do sketch Arduino (arduino/).
+# Recria as junctions dos sketches Arduino (arduino/ e arduino_ctrl/).
 # O Arduino IDE precisa enxergar o codigo compartilhado (src/) dentro da pasta
 # do sketch, sem duplicar arquivos no repositorio.
 # Rode este script apos clonar o projeto (as junctions nao sao versionadas).
 #
-# O LVGL NAO entra mais aqui: usa-se o LVGL 9.6.0 do Library Manager (global),
-# e o `lv_conf.h` da raiz do sketch (arduino/lv_conf.h) encaminha para
+# Sao dois firmwares independentes (variante de dois ESP32):
+#   arduino/       (tela)     -> build_opt.h: -DROLE_SCREEN
+#   arduino_ctrl/  (externo)  -> build_opt.h: -DROLE_EXTERNAL
+# Detalhes em .docs/14-external-esp32-communication.md.
+#
+# O LVGL NAO entra aqui: usa-se o LVGL 9.6.0 do Library Manager (global),
+# e o `lv_conf.h` da raiz do sketch da tela (arduino/lv_conf.h) encaminha para
 # `config/lv_conf_esp32.h`.
 
 $ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $sketch   = $PSScriptRoot
+$src      = Join-Path $repoRoot 'src'
 
-$links = @(
-    @{ Path = Join-Path $sketch 'src';
-       Target = Join-Path $repoRoot 'src' }
+$dirs = @(
+    (Join-Path $sketch 'arduino'),
+    (Join-Path $sketch 'arduino_ctrl')
 )
 
-foreach ($link in $links) {
-    if (Test-Path -LiteralPath $link.Path) {
+foreach ($dir in $dirs) {
+    $link = Join-Path $dir 'src'
+
+    if (Test-Path -LiteralPath $link) {
         # `cmd /c rmdir` remove apenas o link da junction (sem tocar no destino),
         # diferente do Remove-Item que pede confirmacao interativa.
-        cmd /c rmdir "$($link.Path)" 2>$null
+        cmd /c rmdir "$link" 2>$null
     }
-    New-Item -ItemType Junction -Path $link.Path -Target $link.Target | Out-Null
-    Write-Host "junction criada: $($link.Path) -> $($link.Target)"
+
+    New-Item -ItemType Junction -Path $link -Target $src | Out-Null
+    Write-Host "junction criada: $link -> $src"
 }

@@ -1,3 +1,5 @@
+#ifndef ROLE_EXTERNAL
+
 #include "dosing_screen.h"
 #include "../screen_manager.h"
 #include "screen_chrome.h"
@@ -241,3 +243,5 @@ lv_obj_t *dosing_screen_create(void)
 
     return screen;
 }
+
+#endif

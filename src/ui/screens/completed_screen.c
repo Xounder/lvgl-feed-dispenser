@@ -1,3 +1,5 @@
+#ifndef ROLE_EXTERNAL
+
 #include "completed_screen.h"
 #include "../screen_manager.h"
 #include "screen_chrome.h"
@@ -119,3 +121,5 @@ lv_obj_t *completed_screen_create(void)
 
     return screen;
 }
+
+#endif

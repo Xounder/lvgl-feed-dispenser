@@ -1,3 +1,5 @@
+#ifndef ROLE_EXTERNAL
+
 #include "manual_release_widget.h"
 #include "screen_chrome.h"
 #include "../../domain/dosing_controller.h"
@@ -115,3 +117,5 @@ ManualReleaseWidget *manual_release_widget_create(
 
     return widget;
 }
+
+#endif

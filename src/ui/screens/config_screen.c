@@ -1,3 +1,5 @@
+#ifndef ROLE_EXTERNAL
+
 #include "config_screen.h"
 #include "../screen_manager.h"
 #include "screen_chrome.h"
@@ -392,3 +394,5 @@ lv_obj_t *config_screen_create(DosingMode mode)
 
     return screen;
 }
+
+#endif

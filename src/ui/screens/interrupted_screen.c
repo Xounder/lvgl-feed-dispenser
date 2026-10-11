@@ -1,3 +1,5 @@
+#ifndef ROLE_EXTERNAL
+
 #include "interrupted_screen.h"
 #include "../screen_manager.h"
 #include "screen_chrome.h"
@@ -168,3 +170,5 @@ lv_obj_t *interrupted_screen_create(void)
 
     return screen;
 }
+
+#endif

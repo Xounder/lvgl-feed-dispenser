@@ -1,3 +1,5 @@
+#ifndef ROLE_EXTERNAL
+
 #include "screen_chrome.h"
 
 /* Título da aplicacao + divisor */
@@ -123,3 +125,5 @@ lv_obj_t *screen_chrome_create(void)
 
     return screen;
 }
+
+#endif

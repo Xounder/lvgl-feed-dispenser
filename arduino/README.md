@@ -3,11 +3,19 @@
 Pasta de atalho (`junctions`) para rodar o codigo do projeto na placa usando o
 **Arduino IDE** como a equipe padrao, sem duplicar arquivos.
 
+> **Variante de dois ESP32:** ver `.docs/14-external-esp32-communication.md`.
+> Nela existem **dois sketches** (tela e externo) e cada placa precisa do **seu
+> proprio compile** (detalhes na secao "Firmwares" abaixo).
+
 ## O que ha aqui
 
 - `arduino.ino` — identifica a pasta como sketch (o codigo real esta em `src/`).
-- `create_sketch_links.ps1` — recria a junction `src` (nao e versionada; rode apos clonar).
+  Este e o sketch da **tela** (ESP32-S3 touch: UI + proxy UART).
+- `create_sketch_links.ps1` — recria a junction `src` dos dois sketches (nao e versionada; rode apos clonar).
 - `lv_conf.h` — Config do LVGL do ESP32 (encaminha para `config/lv_conf_esp32.h`).
+
+O outro firmware fica em `arduino_ctrl/` (ESP32 **externo**: dominio + HX711 +
+servo + botoes/LED); compartilha o mesmo `src/` por junction e **nao usa LVGL**.
 
 O **LVGL vem do Library Manager (versao 9.6.0)**, instalado na pasta global
 da Arduino IDE; por isso o sketch nao tem junction `libraries/lvgl`.
@@ -31,16 +39,47 @@ interessa ao hardware.
 5. Library Manager: instale as bibliotecas abaixo (nova secao "Bibliotecas").
 6. Compile e faça upload.
 
+## Dois firmwares (tela + externo)
+
+A variante usa **dois ESP32** (ver `.docs/14-external-esp32-communication.md`): o
+controle fisico (HX711, servo, botoes, LED) roda na placa externa e a tela faz so
+a UI. Isso exige **um sketch por firmware** e **um compile por placa**:
+
+| Sketch | Placa | Papel (`build_opt.h`) | Libs |
+| --- | --- | --- | --- |
+| `arduino/` | ESP32-S3 da tela (touch) | `-DROLE_SCREEN` | LVGL |
+| `arduino_ctrl/` | ESP32 externo | `-DROLE_EXTERNAL` | HX711, ESP32Servo |
+
+Pontos importantes:
+
+- **Nao existe compile unico**: tela e externo sao dois programas separados. O
+  Arduino IDE compila toda a arvore do sketch (inclusive a junction `src/`),
+  entao o papel e fixado em **tempo de compilacao** por sketch, nao em runtime.
+- Para "unir" os dois basta o **hardware**: ligar **TX<->RX cruzado** e **GND
+  comum** entre as placas; a partir dai conversam por UART. Pinagem e ligacoes
+  detalhadas (pino a pino) em
+  `.docs/14-external-esp32-communication/07-conexoes-fisicas.md`; protocolo em
+  `.docs/14-external-esp32-communication/04-protocolo-e-mensagens.md`.
+- Ao alterar codigo compartilhado em `src/`, **recompile e regrave as duas
+  placas** (um upload para cada).
+- Cada sketch tem o seu `build_opt.h` com o define de papel; o
+  `create_sketch_links.ps1` cria as junctions dos dois.
+- Arquivos de papel unico em `src/` usam guardas `#ifdef ROLE_*` para nao
+  duplicar simbolos entre os firmwares (lista em
+  `.docs/14-external-esp32-communication/02-arquitetura-e-camadas.md`).
+- O sketch da tela (`arduino/`) **nao** instala HX711/servo; o externo
+  (`arduino_ctrl/`) **nao** usa LVGL.
+
 ## Bibliotecas (Library Manager)
 
 Busque pelo **nome exato** e confira o **autor** antes de instalar:
 
-| Nome no Manager | Autor | Consumido em |
-| --- | --- | --- |
-| **LVGL** | LVGL (kisvegabor) — **9.6.0** | `src/` (toda a UI) |
-| **ESP32Servo** | Kevin Harrington (madhephaestus), John K. Bennett | `src/hardware/esp32/real_dispenser.cpp` |
-| **HX711** | Bogdan Necula (bogde) | `src/hardware/esp32/real_weight_sensor.cpp` |
-| **Servo** (classica) | Michael Margolis / Arduino | somente placas AVR (Uno/Mega) — nao usar no ESP32 |
+| Nome no Manager | Autor | Sketch | Consumido em |
+| --- | --- | --- | --- |
+| **LVGL** | LVGL (kisvegabor) — **9.6.0** | `arduino/` (tela) | `src/` (toda a UI) |
+| **ESP32Servo** | Kevin Harrington (madhephaestus), John K. Bennett | `arduino_ctrl/` (externo) | `src/hardware/esp32/real_dispenser.cpp` |
+| **HX711** | Bogdan Necula (bogde) | `arduino_ctrl/` (externo) | `src/hardware/esp32/real_weight_sensor.cpp` |
+| **Servo** (classica) | Michael Margolis / Arduino | — | somente placas AVR (Uno/Mega) — nao usar no ESP32 |
 
 Observacoes:
 

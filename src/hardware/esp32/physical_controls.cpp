@@ -1,3 +1,5 @@
+#ifndef ROLE_SCREEN
+
 #include "physical_controls.h"
 
 #include "../button.h"
@@ -42,3 +44,5 @@ void physical_controls_poll(void)
 
     indicator.set(dosing_controller_manual_release_is_active());
 }
+
+#endif
