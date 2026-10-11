@@ -5,6 +5,9 @@
 #include "hardware/esp32/board_display.h"
 #include "hardware/esp32/real_weight_sensor.h"
 #include "hardware/esp32/real_dispenser.h"
+#include "hardware/esp32/real_buttons.h"
+#include "hardware/esp32/real_indicator.h"
+#include "hardware/esp32/physical_controls.h"
 #include "ui/ui.h"
 
 static lv_display_t *disp;
@@ -21,6 +24,10 @@ void setup(void)
     real_dispenser_init();
     Serial.println("C");
 
+    real_buttons_init();
+    real_indicator_init();
+    Serial.println("C2");
+
     lv_init();
     Serial.println("D");
 
@@ -31,6 +38,9 @@ void setup(void)
         Serial.println("F");
         ui_init();
         Serial.println("G");
+
+        physical_controls_init();
+        Serial.println("H");
     } else {
         Serial.println("display nao inicializado; aguardando driver do fabricante");
     }
@@ -39,6 +49,8 @@ void setup(void)
 void loop(void)
 {
     if (disp != NULL) {
+        physical_controls_poll();
+
         lv_timer_handler();
     }
     delay(5);

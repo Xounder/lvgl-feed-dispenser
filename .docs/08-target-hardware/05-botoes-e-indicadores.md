@@ -82,7 +82,11 @@ Os pinos físicos de botões (emergência e liberação) e do LED estão definid
 * GPIO10–13 são o slot microSD (SPI) → os periféricos de domínio sacrificam o SD.
 * GPIO17 é o trilho do WS2812B on-board (header 1,5 mm, removível) → confirmar físico.
 * GPIO18 é o INT do GT911 (não usado pelo firmware) → validar que o sensor não aciona o pino.
-* A integração no firmware (leitura dos botões, acionamento do LED) ainda não foi feita.
+* A integração no firmware (leitura dos botões, acionamento do LED) **já foi feita**:
+  abstrações em `src/hardware/button.h`/`indicator.h`, implementações em
+  `src/hardware/esp32/real_buttons.cpp` (com debounce) e `real_indicator.cpp`,
+  e glue em `src/hardware/esp32/physical_controls.cpp`, chamado por
+  `src/main_esp32.cpp`.
 
 ---
 

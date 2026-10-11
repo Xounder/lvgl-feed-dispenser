@@ -40,6 +40,8 @@ void dosing_controller_start(void)
 {
     weight_sensor.reset();
 
+    manual_release_active = 0;
+
     state = DOSING_STATE_DOSING;
 
     phase = DOSING_PHASE_FAST;

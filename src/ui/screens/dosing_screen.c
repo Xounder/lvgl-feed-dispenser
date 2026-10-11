@@ -76,11 +76,22 @@ static void dosing_timer_cb(lv_timer_t *timer)
         );
     }
 
-    if (dosing_controller_get_state() == DOSING_STATE_COMPLETED) {
+    DosingState state = dosing_controller_get_state();
+
+    if (state == DOSING_STATE_COMPLETED) {
         lv_timer_delete(timer);
         context->timer = NULL;
 
         screen_manager_show(SCREEN_COMPLETED);
+
+        return;
+    }
+
+    if (state == DOSING_STATE_INTERRUPTED) {
+        lv_timer_delete(timer);
+        context->timer = NULL;
+
+        screen_manager_show(SCREEN_INTERRUPTED);
 
         return;
     }
