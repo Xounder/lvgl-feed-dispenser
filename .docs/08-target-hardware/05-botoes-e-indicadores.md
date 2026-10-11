@@ -87,6 +87,10 @@ Os pinos físicos de botões (emergência e liberação) e do LED estão definid
   `src/hardware/esp32/real_buttons.cpp` (com debounce) e `real_indicator.cpp`,
   e glue em `src/hardware/esp32/physical_controls.cpp`, chamado por
   `src/main_esp32.cpp`.
+* A inicialização e o `poll` dos botões/LED **rodam independentemente da
+  inicialização do display**: `physical_controls_init()` é chamado no `setup()`
+  e `physical_controls_poll()` no `loop()`, ambos fora do bloco condicionado a
+  `disp != NULL`. Assim, uma falha do display não desativa a emergência.
 
 ---
 

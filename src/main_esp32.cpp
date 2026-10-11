@@ -28,6 +28,9 @@ void setup(void)
     real_indicator_init();
     Serial.println("C2");
 
+    physical_controls_init();
+    Serial.println("H");
+
     lv_init();
     Serial.println("D");
 
@@ -38,19 +41,16 @@ void setup(void)
         Serial.println("F");
         ui_init();
         Serial.println("G");
-
-        physical_controls_init();
-        Serial.println("H");
     } else {
-        Serial.println("display nao inicializado; aguardando driver do fabricante");
+        Serial.println("display nao inicializado; botoes fisicos seguem ativos");
     }
 }
 
 void loop(void)
 {
-    if (disp != NULL) {
-        physical_controls_poll();
+    physical_controls_poll();
 
+    if (disp != NULL) {
         lv_timer_handler();
     }
     delay(5);

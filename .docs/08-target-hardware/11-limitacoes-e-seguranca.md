@@ -26,7 +26,7 @@ A **pinagem dos periféricos externos (HX711, servo, botões, LED)** também já
 - GPIO10–13 = microSD SPI → slot de cartão fica indisponível; o projeto não usa SD.
 - GPIO17 = trilho do WS2812B on-board (header 1,5 mm, removível) → LED passa a competir com o RGB da placa; confirmar fisicamente.
 - GPIO18 = pino INT do GT911 (roteado ao conector do touch, não usado pelo firmware) → usar como botão exige validação de que o GT911 não aciona esse pino.
-- 2 botões físicos (emergência e liberação) ainda **não estão integrados no firmware**; apenas definidos no `board_config.h`.
+- Botões físicos (emergência e liberação) e o LED **já estão integrados no firmware** (`src/hardware/esp32/real_buttons.cpp`, `real_indicator.cpp` e `physical_controls.cpp`, chamados por `src/main_esp32.cpp`); a leitura dos botões e o LED **não dependem da inicialização do display** — ver [`05-botoes-e-indicadores.md`](05-botoes-e-indicadores.md).
 
 ---
 
