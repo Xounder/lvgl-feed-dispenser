@@ -103,7 +103,7 @@ Detalhes: [`arduino/README.md`](arduino/README.md) e
    clonar):
 
    ```powershell
-   .\arduino\create_sketch_links.ps1
+   .\create_sketch_links.ps1
    ```
 
    > O `lv_conf.h` do sketch da tela encaminha para `config/lv_conf_esp32.h`
@@ -153,8 +153,9 @@ Migração PC → ESP32-S3: [`.docs/11-migration-pc-to-esp32.md`](.docs/11-migra
 ├── src/            # compartilhado + plataforma ESP32 (domain/, ui/, hardware/)
 ├── src_pc/         # somente PC: main.c, CMakeLists.txt, lv_conf.h, hal/ (SDL2),
 │                   #   hardware/simulated/, FreeRTOSConfig.h
-├── arduino/        # sketch da tela (junction p/ src/, lv_conf.h, script)
+├── arduino/        # sketch da tela (junction p/ src/, lv_conf.h)
 ├── arduino_ctrl/   # sketch do ESP32 externo (junction p/ src/)
+├── create_sketch_links.ps1  # recria as junctions src/ dos dois sketches
 ├── config/         # lv_conf_esp32.h (config única do LVGL no ESP32)
 └── .docs/          # documentação canônica do projeto
 ```

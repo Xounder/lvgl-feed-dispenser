@@ -117,7 +117,7 @@ Detalhes (configuração via CMake com vcpkg, toolchain, `SDL2d.dll` e troublesh
 
 O mesmo código (UI/domínio/abstrações) compila com drivers reais via **Arduino IDE**:
 
-1. Recriar as junctions do sketch: `.\arduino\create_sketch_links.ps1`
+1. Recriar as junctions do sketch: `.\create_sketch_links.ps1`
 2. Abrir `arduino/arduino.ino` na Arduino IDE (placa **ESP32S3 Dev Module**, flash 16MB, partition 16M; libs **LVGL 9.6.0**, **ESP32Servo**, **HX711**)
 3. Compilar e fazer upload
 
@@ -209,7 +209,9 @@ Regra principal:
 │   ├── hal/
 │   └── hardware/simulated/
 │
-├── arduino/          # sketch Arduino IDE (junctions p/ src/, lv_conf.h, script)
+├── arduino/          # sketch da tela (junction p/ src/, lv_conf.h)
+├── arduino_ctrl/     # sketch do ESP32 externo (junction p/ src/)
+├── create_sketch_links.ps1  # recria as junctions src/ dos dois sketches
 ├── config/           # lv_conf_esp32.h (config única do LVGL no ESP32)
 │
 ├── .docs/

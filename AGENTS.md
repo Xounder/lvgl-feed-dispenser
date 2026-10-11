@@ -48,7 +48,7 @@ comportamento na GUI.
 
 Build ESP32 (usuário, Arduino IDE + core ESP32):
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\arduino\create_sketch_links.ps1
+powershell -ExecutionPolicy Bypass -File .\create_sketch_links.ps1
 # abrir arduino/arduino.ino na Arduino IDE, placa ESP32S3 Dev Module,
 # flash 16MB QIO/OPI, Partition "Default 16MB", PSRAM conforme o módulo.
 # Libs do Library Manager: LVGL 9.6.0 (kisvegabor), HX711 (bogde),
@@ -66,8 +66,8 @@ powershell -ExecutionPolicy Bypass -File .\arduino\create_sketch_links.ps1
 - `src_pc/` — **somente PC**: `main.c`, `freertos_main.c`, `mouse_cursor_icon.c`,
   `hal/` (SDL2) e `hardware/simulated/`.
 - `arduino/` — sketch Arduino IDE com junction p/ `src/` (recriar com
-  `create_sketch_links.ps1`); `lv_conf.h` (raiz) aponta p/ `config/lv_conf_esp32.h`;
-  LVGL 9.6.0 vem do Library Manager global.
+  `create_sketch_links.ps1`, na raiz); `lv_conf.h` (raiz) aponta p/
+  `config/lv_conf_esp32.h`; LVGL 9.6.0 vem do Library Manager global.
 - `src/domain/dosing_controller.{c,h}` — lógica de domínio pura (sem LVGL):
   estado, dosagem em 2 etapas, liberação manual, eventos, inicialização.
 - `src/ui/screen_manager.h` — enum de telas e função `screen_manager_show()`.

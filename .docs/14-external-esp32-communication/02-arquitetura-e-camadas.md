@@ -78,7 +78,7 @@ arduino_ctrl/   (externo)  -> junction src/ ; build_opt.h: -DROLE_EXTERNAL
   restam apenas os dois firmwares acima e o simulador PC.
 - `board_config.h` guarda só o que a **tela** usa (display/touch/backlight +
   `BOARD_LINK_*`); HX711/servo/botões/LED ficam em `board_config_ctrl.h`.
-- `create_sketch_links.ps1` cria a junction `src/` dos **dois** sketches.
+- `create_sketch_links.ps1` (na raiz) cria a junction `src/` dos **dois** sketches.
 
 #### Como evitar símbolos duplicados
 

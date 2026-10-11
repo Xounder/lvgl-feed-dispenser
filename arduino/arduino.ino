@@ -10,7 +10,7 @@
  * como escolher tela/externo em runtime.
  *
  * Requisitos antes de abrir/compilar:
- *  - Rodar `create_sketch_links.ps1` (recria a junction `arduino/src`).
+ *  - Rodar `create_sketch_links.ps1` (na raiz do repo; recria a junction `arduino/src`).
  *  - Instalar pelo Library Manager: "LVGL" 9.6.0 (unico necessario aqui).
  *  - Placa: ESP32S3 Dev Module; Flash Size 16MB; Flash Mode QIO/OPI;
  *    Partition Scheme "Default 16MB"; PSRAM conforme o modulo (OPI se tiver).

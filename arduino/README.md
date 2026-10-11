@@ -11,7 +11,6 @@ Pasta de atalho (`junctions`) para rodar o codigo do projeto na placa usando o
 
 - `arduino.ino` — identifica a pasta como sketch (o codigo real esta em `src/`).
   Este e o sketch da **tela** (ESP32-S3 touch: UI + proxy UART).
-- `create_sketch_links.ps1` — recria a junction `src` dos dois sketches (nao e versionada; rode apos clonar).
 - `lv_conf.h` — Config do LVGL do ESP32 (encaminha para `config/lv_conf_esp32.h`).
 
 O outro firmware fica em `arduino_ctrl/` (ESP32 **externo**: dominio + HX711 +
@@ -26,7 +25,7 @@ interessa ao hardware.
 
 ## Como usar
 
-1. Rode `.\arduino\create_sketch_links.ps1` (no PowerShell, na raiz do projeto).
+1. Rode `.\create_sketch_links.ps1` (no PowerShell, na raiz do projeto).
 2. Arduino IDE: `File > Open...` e abra `arduino/arduino.ino`.
 3. Board Manager: instale **ESP32 by Espressif**; selecione **ESP32S3 Dev Module**.
 4. Opcoes da placa (Tools): Flash Size `16MB`, Flash Mode `QIO/OPI`, Partition `Default 16MB`, PSRAM conforme o modulo.
@@ -63,7 +62,7 @@ Pontos importantes:
 - Ao alterar codigo compartilhado em `src/`, **recompile e regrave as duas
   placas** (um upload para cada).
 - Cada sketch tem o seu `build_opt.h` com o define de papel; o
-  `create_sketch_links.ps1` cria as junctions dos dois.
+  `create_sketch_links.ps1` (na raiz) cria as junctions dos dois.
 - Arquivos de papel unico em `src/` usam guardas `#ifdef ROLE_*` para nao
   duplicar simbolos entre os firmwares (lista em
   `.docs/14-external-esp32-communication/02-arquitetura-e-camadas.md`).

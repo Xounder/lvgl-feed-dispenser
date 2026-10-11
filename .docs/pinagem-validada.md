@@ -104,7 +104,7 @@ só de pinagem. Resultado: **a montagem funciona corretamente**.
 
 | Ponto verificado        | Como está                                                             | Veredito |
 | ----------------------- | --------------------------------------------------------------------- | -------- |
-| Código compartilhado    | junction `arduino/src` → `src/` (recriável por `create_sketch_links.ps1`; não versionada) | OK |
+| Código compartilhado    | junction `arduino/src` → `src/` (recriável por `create_sketch_links.ps1` na raiz; não versionada) | OK |
 | Biblioteca LVGL         | LVGL **9.6.0** do Library Manager global (sem junction `libraries/lvgl`) | OK |
 | Config do LVGL          | `arduino/lv_conf.h` → `config/lv_conf_esp32.h`                | OK       |
 | Malloc custom           | `LV_STDLIB_CUSTOM` (`config/lv_conf_esp32.h:36`) implementado em `src/hardware/esp32/lv_mem_custom.cpp` | OK |

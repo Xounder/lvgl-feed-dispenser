@@ -30,7 +30,7 @@ Arduino framework
 
 A **Arduino IDE** gerencia build, flash e monitoramento do ESP32-S3, e o Arduino framework serve como camada de aplicação sobre o ESP-IDF/FreeRTOS.
 
-O sketch vive em `arduino/`: `src/` é a junction para o código compartilhado (não duplica arquivos; recriar com `arduino/create_sketch_links.ps1`), e `lv_conf.h` (na raiz do sketch) encaminha para `config/lv_conf_esp32.h`. O **LVGL vem do Library Manager** (versão 9.6.0, pasta global da Arduino IDE): o `lv_conf.h` do sketch é resolvido pelos include paths (`__has_include`/`LV_CONF_INCLUDE_SIMPLE` do `lv_conf_internal.h`), sem junction `libraries/lvgl` nem dependência de path absoluto.
+O sketch vive em `arduino/`: `src/` é a junction para o código compartilhado (não duplica arquivos; recriar com `create_sketch_links.ps1`, na raiz do repo), e `lv_conf.h` (na raiz do sketch) encaminha para `config/lv_conf_esp32.h`. O **LVGL vem do Library Manager** (versão 9.6.0, pasta global da Arduino IDE): o `lv_conf.h` do sketch é resolvido pelos include paths (`__has_include`/`LV_CONF_INCLUDE_SIMPLE` do `lv_conf_internal.h`), sem junction `libraries/lvgl` nem dependência de path absoluto.
 
 Detalhes da decisão de linguagem: [03-architecture-decisions.md](../03-architecture-decisions.md).
 

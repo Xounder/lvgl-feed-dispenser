@@ -1,7 +1,8 @@
-# Recria as junctions dos sketches Arduino (arduino/ e arduino_ctrl/).
+# Recria as junctions src/ dos dois sketches Arduino (arduino/ e arduino_ctrl/).
 # O Arduino IDE precisa enxergar o codigo compartilhado (src/) dentro da pasta
 # do sketch, sem duplicar arquivos no repositorio.
-# Rode este script apos clonar o projeto (as junctions nao sao versionadas).
+# Rode este script (na raiz do repositorio) apos clonar o projeto: as junctions
+# nao sao versionadas.
 #
 # Sao dois firmwares independentes (variante de dois ESP32):
 #   arduino/       (tela)     -> build_opt.h: -DROLE_SCREEN
@@ -14,13 +15,12 @@
 
 $ErrorActionPreference = 'Stop'
 
-$repoRoot = Split-Path -Parent $PSScriptRoot
-$sketch   = $PSScriptRoot
+$repoRoot = $PSScriptRoot
 $src      = Join-Path $repoRoot 'src'
 
 $dirs = @(
-    (Join-Path $sketch 'arduino'),
-    (Join-Path $sketch 'arduino_ctrl')
+    (Join-Path $repoRoot 'arduino'),
+    (Join-Path $repoRoot 'arduino_ctrl')
 )
 
 foreach ($dir in $dirs) {
