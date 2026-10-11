@@ -60,6 +60,7 @@ Documentação:
 - [`02-architecture.md`](02-architecture.md)
 - [`03-architecture-decisions.md`](03-architecture-decisions.md)
 - [`04-domain-and-state-machine.md`](04-domain-and-state-machine.md)
+- [`14-external-esp32-communication.md`](14-external-esp32-communication.md) — arquitetura com ESP32 externo + ESP32 da tela
 
 ---
 
@@ -225,7 +226,8 @@ Regra principal:
 │   ├── 10-testing-strategy.md
 │   ├── 11-migration-pc-to-esp32.md
 │   ├── 12-roadmap.md
-│   └── 13-agent-guide.md
+│   ├── 13-agent-guide.md
+│   └── 14-external-esp32-communication.md
 │
 └── README.md
 ```
@@ -258,6 +260,7 @@ O objetivo não é apenas criar um simulador.
 
 ### NOTE:
 
+- [`pinagem-validada.md`](pinagem-validada.md) valida a pinagem do `board_config.h` contra a VIEWE UEDX80480043E-WB-B e referencia as docs canônicas sobre os pontos levantados
 - [`agent-propose-implementation-plan.md`](agent-propose-implementation-plan.md) contém contexto da proposta inicial do agente + explicação do que foi seguido na proposta inicial e o que "não foi" após termos implementado o que existe atualmente em `src`
 - [`implementation.md`](implementation.md) contém um plano inicial do agente do que seria feito
 - [`run-code.md`](run-code.md) contém os passos necessários para rodar o projeto

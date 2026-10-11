@@ -26,3 +26,4 @@ O princípio central — *a lógica de negócio deve depender de abstrações* �
 - [05-hardware-abstraction.md](05-hardware-abstraction.md) — abstrações de hardware
 - [07-ui-and-navigation.md](07-ui-and-navigation.md) — UI e navegação
 - [11-migration-pc-to-esp32.md](11-migration-pc-to-esp32.md) — migração do PC para o ESP32-S3
+- [14-external-esp32-communication.md](14-external-esp32-communication.md) — variante com ESP32 externo + ESP32 da tela

@@ -326,3 +326,4 @@ O detalhamento técnico desta fase é tratado em:
 - [`08-target-hardware.md`](../08-target-hardware.md) — hardware físico alvo (ESP32-S3, display/touch, HX711/load cell, SG90/mecanismo, botões, indicadores, alimentação).
 - [`11-migration-pc-to-esp32.md`](../11-migration-pc-to-esp32.md) — plano de migração incremental (etapas 1–10) e checklist de migração.
 - [`10-testing-strategy.md`](../10-testing-strategy.md) — testes físicos, calibração, repetibilidade e falhas no hardware.
+- [`14-external-esp32-communication.md`](../14-external-esp32-communication.md) — variante com ESP32 externo + ESP32 da tela (opcional; ver ADR [`03-architecture-decisions/07-esp32-integrado-vs-externo.md`](../03-architecture-decisions/07-esp32-integrado-vs-externo.md)).

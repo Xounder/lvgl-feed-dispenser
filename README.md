@@ -72,54 +72,78 @@ e [`.docs/run-code.md`](.docs/run-code.md).
 
 ### Modo Arduino (ESP32-S3)
 
-Compila o mesmo código (UI/domínio/abstrações) com drivers reais de display,
-touch, HX711 e dispenser, via **Arduino IDE**.
+Nesta branch o firmware é dividido em **dois sketches** (variante de **dois
+ESP32**): a **tela** (`arduino/`) roda UI + proxy UART; o **externo**
+(`arduino_ctrl/`) roda o domínio + HX711 + servo + botões/LED. São **dois
+programas independentes** que se falam por UART, cada um com o **seu compile**.
+
+Detalhes: [`arduino/README.md`](arduino/README.md) e
+[`.docs/14-external-esp32-communication.md`](.docs/14-external-esp32-communication.md).
 
 **Pré-requisitos**
 
 - **Arduino IDE**
 - Core **ESP32 by Espressif** (Board Manager)
-- Placa-alvo: **ESP32S3 Dev Module** (display RGB 4.3" 800×480 + touch GT911)
+- **Duas** placas **ESP32S3 Dev Module** (a da tela com display RGB 4.3" 800×480
+  + touch GT911)
 - Bibliotecas (Library Manager):
 
 | Nome | Autor | Usada em |
 | --- | --- | --- |
-| **LVGL 9.6.0** | LVGL (kisvegabor) | toda a UI em `src/` |
-| **ESP32Servo** | Kevin Harrington (madhephaestus) | dispenser real |
-| **HX711** | Bogdan Necula (bogde) | sensor de peso real |
+| **LVGL 9.6.0** | LVGL (kisvegabor) | tela (`arduino/`) — toda a UI em `src/` |
+| **ESP32Servo** | Kevin Harrington (madhephaestus) | externo (`arduino_ctrl/`) — dispenser real |
+| **HX711** | Bogdan Necula (bogde) | externo (`arduino_ctrl/`) — sensor de peso real |
 
 > Não usar a biblioteca **Servo** clássica (Michael Margolis/Arduino): só
 > compila em AVR (Uno/Mega), não serve para ESP32.
 
-**Passos**
+**Passo a passo**
 
-1. Recriar as junctions do sketch (não são versionadas):
+1. Recriar as junctions dos sketches (não são versionadas — rode uma vez após
+   clonar):
 
    ```powershell
    .\arduino\create_sketch_links.ps1
    ```
 
-   > O `lv_conf.h` do sketch encaminha para `config/lv_conf_esp32.h` (fonte
-   > única da config LVGL do ESP32). O LVGL **não** entra por junction — vem do
-   > Library Manager (9.6.0).
+   > O `lv_conf.h` do sketch da tela encaminha para `config/lv_conf_esp32.h`
+   > (fonte única da config LVGL do ESP32). O LVGL **não** entra por junction —
+   > vem do Library Manager (9.6.0).
 
-2. Arduino IDE: `File > Open...` e abrir `arduino/arduino.ino`.
-3. Selecionar placa **ESP32S3 Dev Module** e ajustar as opções em `Tools` (os defaults do core não são os corretos):
+2. Ligar o **link físico** entre as placas: **TX↔RX cruzado** + **GND comum**
+   (sem trocar alimentação). Como conectar, pino a pino:
+   [`.docs/14-external-esp32-communication/07-conexoes-fisicas.md`](.docs/14-external-esp32-communication/07-conexoes-fisicas.md).
+3. Instalar as bibliotecas (Library Manager): **LVGL 9.6.0**, **HX711** (bogde)
+   e **ESP32Servo** (madhephaestus).
+
+#### 1) Firmware da tela — `arduino/` (`-DROLE_SCREEN`)
+
+4. Arduino IDE: `File > Open...` e abrir `arduino/arduino.ino`.
+5. `Tools`: placa **ESP32S3 Dev Module** e ajustar as opções (os defaults do core não são os corretos):
   - USB CDC On Boot: "Disabled"
   - Flash Size: **16MB** (confira o módulo: `N16` = 16MB flash)
   - Flash Mode: **QIO 80MHz**
   - Partition Scheme: **16M Flash (3MB APP/9.9MB FATFS)**
   - PSRAM: conforme o módulo (`R8` = 8MB, sugerido manter **OPI PSRAM** ativo)
-  - Serial monitor: **115200** baud (para debug - opcional)
-4. Instalar as bibliotecas acima (Library Manager).
-5. Compilar e fazer upload.
+  - Serial monitor: **115200** baud (debug — opcional)
+6. Selecionar a **porta da tela** e **Upload**.
+
+#### 2) Firmware do externo — `arduino_ctrl/` (`-DROLE_EXTERNAL`)
+
+7. `File > Open...` e abrir `arduino_ctrl/arduino_ctrl.ino`.
+8. Repetir as opções de `Tools` do passo 5.
+9. Selecionar a **porta do externo** e **Upload**.
+
+> Ao alterar código compartilhado em `src/`, **regrave as duas placas**. A tela
+> **não** instala HX711/servo; o externo **não** usa LVGL. O papel de cada
+> firmware é fixado em `build_opt.h` (tela `-DROLE_SCREEN`, externo
+> `-DROLE_EXTERNAL`).
 
 > Nota: o LVGL 9.6.0 do Library Manager resolve o `lv_conf.h` pelos
 > include paths do sketch (`__has_include`), sem tocar na instalação global —
 > portátil entre PCs.
 
-Detalhes do sketch: [`arduino/README.md`](arduino/README.md). Migração
-PC → ESP32-S3: [`.docs/11-migration-pc-to-esp32.md`](.docs/11-migration-pc-to-esp32.md).
+Migração PC → ESP32-S3: [`.docs/11-migration-pc-to-esp32.md`](.docs/11-migration-pc-to-esp32.md).
 
 ---
 
@@ -129,7 +153,8 @@ PC → ESP32-S3: [`.docs/11-migration-pc-to-esp32.md`](.docs/11-migration-pc-to-
 ├── src/            # compartilhado + plataforma ESP32 (domain/, ui/, hardware/)
 ├── src_pc/         # somente PC: main.c, CMakeLists.txt, lv_conf.h, hal/ (SDL2),
 │                   #   hardware/simulated/, FreeRTOSConfig.h
-├── arduino/        # sketch Arduino IDE (junctions p/ src/, lv_conf.h, script)
+├── arduino/        # sketch da tela (junction p/ src/, lv_conf.h, script)
+├── arduino_ctrl/   # sketch do ESP32 externo (junction p/ src/)
 ├── config/         # lv_conf_esp32.h (config única do LVGL no ESP32)
 └── .docs/          # documentação canônica do projeto
 ```

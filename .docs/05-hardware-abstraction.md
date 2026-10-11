@@ -70,3 +70,11 @@ Simulado  Real  Simulado  Real
 - Localização: `src/hardware/`.
 
 As regras de domínio que consomem essas abstrações são tratadas em [`04-domain-and-state-machine.md`](04-domain-and-state-machine.md).
+
+---
+
+## Documentos relacionados
+
+- [08-target-hardware.md](08-target-hardware.md) — hardware físico alvo (HX711, SG90, botões, LED)
+- [11-migration-pc-to-esp32.md](11-migration-pc-to-esp32.md) — migração PC → ESP32-S3
+- [14-external-esp32-communication.md](14-external-esp32-communication.md) — variante com ESP32 externo + ESP32 da tela (as abstrações viram contrato por UART)

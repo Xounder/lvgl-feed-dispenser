@@ -62,4 +62,5 @@ Os detalhes específicos de hardware físico (display, touch, HX711, servo, alim
 - [06-simulation-strategy.md](06-simulation-strategy.md) — estratégia de simulação
 - [07-ui-and-navigation.md](07-ui-and-navigation.md) — UI e navegação
 - [08-target-hardware.md](08-target-hardware.md) — hardware físico alvo
+- [14-external-esp32-communication.md](14-external-esp32-communication.md) — variante de arquitetura com ESP32 externo + ESP32 da tela
 - [09-pc-development-environment.md](09-pc-development-environment.md) — ambiente de desenvolvimento no PC

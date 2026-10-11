@@ -18,6 +18,7 @@ Um agente ou desenvolvedor que trabalhar no projeto deve consultar este document
 | [04-separacao-e-abstracoes.md](03-architecture-decisions/04-separacao-e-abstracoes.md) | Separação domínio/hardware, interfaces, abstrações justificadas |
 | [05-ui-estados-e-controller.md](03-architecture-decisions/05-ui-estados-e-controller.md) | UI separada das regras, DosingController, estados explícitos, configuração separada |
 | [06-contexto-e-resumo.md](03-architecture-decisions/06-contexto-e-resumo.md) | Preservação do contexto das escolhas, resumo das decisões e princípio final |
+| [07-esp32-integrado-vs-externo.md](03-architecture-decisions/07-esp32-integrado-vs-externo.md) | Decisão sobre 1 ESP32-S3 integrado vs. ESP32 externo + tela (opcional, documentada) |
 
 ## Documentos relacionados
 
@@ -27,3 +28,4 @@ Um agente ou desenvolvedor que trabalhar no projeto deve consultar este document
 - [06-simulation-strategy.md](06-simulation-strategy.md) — estratégia de simulação
 - [07-ui-and-navigation.md](07-ui-and-navigation.md) — UI e navegação
 - [11-migration-pc-to-esp32.md](11-migration-pc-to-esp32.md) — migração do PC para o ESP32-S3
+- [14-external-esp32-communication.md](14-external-esp32-communication.md) — arquitetura com ESP32 externo + ESP32 da tela

@@ -61,7 +61,8 @@ powershell -ExecutionPolicy Bypass -File .\arduino\create_sketch_links.ps1
 ## Estrutura do código
 
 - `src/` — código compartilhado + plataforma ESP32: `domain/`, `ui/`,
-  `hardware/` (interfaces + `esp32/` real) e `main_esp32.cpp` (entry setup/loop).
+  `hardware/` (interfaces + `esp32/` real), `link/` (protocolo UART) e os entries
+  `main_ui_esp32.cpp` (tela) e `main_ctrl_esp32.cpp` (externo).
 - `src_pc/` — **somente PC**: `main.c`, `freertos_main.c`, `mouse_cursor_icon.c`,
   `hal/` (SDL2) e `hardware/simulated/`.
 - `arduino/` — sketch Arduino IDE com junction p/ `src/` (recriar com
@@ -99,7 +100,8 @@ powershell -ExecutionPolicy Bypass -File .\arduino\create_sketch_links.ps1
   `04-domain-and-state-machine/`, `05-hardware-abstraction/`,
   `06-simulation-strategy/`, `07-ui-and-navigation/`, `08-target-hardware/`,
   `09-pc-development-environment/`, `10-testing-strategy/`,
-  `11-migration-pc-to-esp32/`, `12-roadmap/`, `13-agent-guide/`.
+  `11-migration-pc-to-esp32/`, `12-roadmap/`, `13-agent-guide/`,
+  `14-external-esp32-communication/`.
 - Arquivos `agent-propose-implementation-plan/`, `implementation/` e os `.md`
   rasos antigos (ex.: `02-architecture.md`) são **históricos — não atualizar**.
 - `README.md` (raiz) é o stock do LVGL — **não alterar**.

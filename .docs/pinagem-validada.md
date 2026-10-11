@@ -1,10 +1,16 @@
 # Validação de pinagem — VIEWE UEDX80480043E-WB-B
 
-Documento consolidado da validação da pinagem usada no firmware ESP32
-(`src/hardware/esp32/board_config.h`) contra a placa real
+Documento consolidado da validação da pinagem contra a placa real
 **VIEWE UEDX80480043E-WB-B** (ESP32-S3 N16R8, display RGB 4,3" 800×480
 ST7262E43‑G4, touch GT911 via I²C) e o **BSP oficial** da VIEWE
 (`viewesmart/bsp_uedx80480043_wb_a` — WB‑A/WB‑B são software-compatíveis).
+
+Na arquitetura atual (**dois ESP32** + PC), `src/hardware/esp32/board_config.h`
+descreve **apenas a tela** (display/touch/backlight + `BOARD_LINK_*`); os
+periféricos de domínio (HX711/servo/botões/LED) migraram para o **ESP32
+externo**, em `src/hardware/esp32/board_config_ctrl.h`. Os trechos abaixo que
+citam esses periféricos na VIEWE referem-se à antiga opção **integrada**
+(firmware único na tela), **descontinuada**.
 
 ---
 
@@ -24,13 +30,18 @@ A documentação canônica desses pinos está em
 
 ---
 
-### 2. Pontos levantados — periféricos de domínio
+### 2. Periféricos de domínio (hoje no ESP32 externo)
 
-A placa só disponibiliza como "free IOs" reais o **GPIO17** (trilho do
-WS2812B) e o **GPIO18** (INT do GT911); os demais periféricos ocupam o
-grupo do slot microSD (**GPIO10–13**). A melhor documentação desses
-pontos é [`08-target-hardware/11-limitacoes-e-seguranca.md`](08-target-hardware/11-limitacoes-e-seguranca.md),
-complementada por [`08-target-hardware/05-botoes-e-indicadores.md`](08-target-hardware/05-botoes-e-indicadores.md).
+Na arquitetura atual, HX711/servo/botões/LED **não** ficam no board tela: vão no
+ESP32 externo (`board_config_ctrl.h`, pinos genéricos do DevKit a validar). A
+tabela abaixo registra onde esses sinais caíam na placa VIEWE no firmware
+integrado e por que isso motivou a migração. A placa só oferecia como "free
+IOs" reais o **GPIO17** (trilho do WS2812B) e o **GPIO18** (INT do GT911); os
+demais periféricos ocupavam o grupo do slot microSD (**GPIO10–13**). A melhor
+documentação do tema é
+[`08-target-hardware/11-limitacoes-e-seguranca.md`](08-target-hardware/11-limitacoes-e-seguranca.md),
+complementada por
+[`08-target-hardware/05-botoes-e-indicadores.md`](08-target-hardware/05-botoes-e-indicadores.md).
 
 | Periférico               | Pino no projeto | Ocupação real na placa            | Situação |
 | ------------------------ | --------------- | --------------------------------- | -------- |
@@ -59,27 +70,29 @@ Pontos levantados na análise:
    indica o RGB removível pelo header 1,5 mm) ou usar o protocolo WS2812.
    (Ver `11-limitacoes-e-seguranca.md`.)
 
-A proposta de uso de GPIO10–13 para UART externa (TX/RX = 12/13) está em
-[`14-external-esp32-communication/03-pinos-e-constantes.md`](14-external-esp32-communication/03-pinos-e-constantes.md)
-e **conflita** com HX711/Servo — é alternativa para o cenário em que os
-periféricos de domínio migram para o ESP32 externo.
+Na arquitetura atual, a **tela** usa GPIO12/13 para o UART do link (ver
+[`14-external-esp32-communication/03-pinos-e-constantes.md`](14-external-esp32-communication/03-pinos-e-constantes.md)).
+Como 10–13 são o slot microSD da VIEWE, vale a regra: **sem cartão no slot** e
+sem inicializar o SPI do SD. Não há mais conflito com HX711/servo, pois eles
+migraram para o ESP32 externo.
 
 ---
 
 ### 3. Pendências de validação física
 
-Antes de fixar a pinagem na montagem final:
+Na montagem atual (dois ESP32), os itens de domínio da VIEWE deixaram de valer
+(periféricos migraram para o externo). Pendências remanescentes:
 
-- [ ] confirmar que **nenhum cartão microSD** permanece no slot
-      (GPIO10–13);
-- [ ] validar que o **GT911 não aciona GPIO18** durante toques
-      (botão de emergência sem falsos acionamentos);
-- [ ] validar que o **WS2812B em GPIO17** foi removido/desconectado
-      caso o LED indicador seja digital simples;
-- [ ] alimentar o **servo** por fonte própria (os pinos são apenas de
-      sinal; corrente/pico tratados em `08-target-hardware/06-alimentacao.md`);
+- [ ] confirmar que **nenhum cartão microSD** permanece no slot da tela
+      (GPIO10–13, agora UART do link em 12/13);
 - [ ] comparar os **timings do LCD** com o BSP (PCLK 15 MHz vs 16 MHz e
-      porches diferentes) no primeiro boot real.
+      porches diferentes) no primeiro boot real;
+- [ ] validar os pinos do **ESP32 externo** (`board_config_ctrl.h`: HX711 4/5,
+      servo 6, botões 7/15, LED 8) contra o DevKit/module real;
+- [ ] alimentar o **servo** por fonte própria (os pinos são apenas de sinal;
+      corrente/pico tratados em `08-target-hardware/06-alimentacao.md`);
+- [ ] testar o **link UART** (TX↔RX cruzado + GND comum) com loopback em cada
+      placa antes de conectar as duas.
 
 ---
 
@@ -95,7 +108,7 @@ só de pinagem. Resultado: **a montagem funciona corretamente**.
 | Biblioteca LVGL         | LVGL **9.6.0** do Library Manager global (sem junction `libraries/lvgl`) | OK |
 | Config do LVGL          | `arduino/lv_conf.h` → `config/lv_conf_esp32.h`                | OK       |
 | Malloc custom           | `LV_STDLIB_CUSTOM` (`config/lv_conf_esp32.h:36`) implementado em `src/hardware/esp32/lv_mem_custom.cpp` | OK |
-| Laço de execução        | `src/main_esp32.cpp:42` (`loop()` → `lv_timer_handler()`)      | OK       |
+| Laço de execução        | `src/main_ui_esp32.cpp` (`loop()` → `lv_timer_handler()`) | OK |
 | Domínio periódico       | timer LVGL de 300 ms (`src/ui/screens/dosing_screen.c:223`) → `dosing_controller_update()` | OK |
 | Sensoriamento           | HX711 real (`real_weight_sensor.cpp`); `real_add_grams` é no-op (correto — o peso vem da balança) | OK |
 | Display/touch           | framebuffer em PSRAM (`fb_in_psram`), buffer LVGL 480×800 em SPIRAM e rotação no `flush_cb` (`board_display.cpp`) | OK |
@@ -117,7 +130,7 @@ e nas instruções de uso em `arduino/README.md`.
 
 ---
 
-### 5. Botões físicos e LED (integrado)
+### 5. Botões físicos e LED (ESP32 externo)
 
 Esta lacuna vinha do [`Trabalho.md`](Trabalho.md), que exige três
 comandos físicos além da tela:
@@ -130,10 +143,10 @@ comandos físicos além da tela:
 | **RS11/RS12** | **Botão físico de emergência** com prioridade sobre a dosagem.   |
 
 **Situação no firmware (ajustada):** os pinos
-(`BOARD_BUTTON_1_PIN` 10, `BOARD_BUTTON_2_PIN` 18, `BOARD_LED_PIN` 17 em
-`src/hardware/esp32/board_config.h`) agora são lidos/acionados pelo
-firmware. A integração foi feita seguindo a abstração de hardware já
-existente:
+(`BOARD_BUTTON_1_PIN` 7, `BOARD_BUTTON_2_PIN` 15, `BOARD_LED_PIN` 8 em
+`src/hardware/esp32/board_config_ctrl.h` — ESP32 externo) são
+lidos/acionados pelo firmware externo, seguindo a abstração de hardware do
+simulador:
 
 - `src/hardware/button.h` / `indicator.h` — interfaces (`Button`,
   `Indicator`), análogas a `dispenser.h`/`weight_sensor.h`;
@@ -147,12 +160,13 @@ existente:
   troca para a tela Interrompida a cargo do timer da tela de dosagem
   (mesmo padrão do estado Concluído); LED →
   `manual_release_is_active()` (RS16);
-- `src/main_esp32.cpp` — `physical_controls_init()` no `setup()` e
-  `physical_controls_poll()` no `loop()`.
+- `src/main_ctrl_esp32.cpp` — `physical_controls_init()` no `setup()` e
+  `physical_controls_poll()` no `loop()` (no ESP32 externo).
 
-Ou seja, além dos comandos **via touch**, os botões físicos e o LED
-passam a atuar no ESP32. As pendências de validação **elétrica** dos pinos
-(seção 3) continuam valendo.
+Ou seja, além dos comandos **via touch** na tela, os botões físicos e o LED
+atuam no **ESP32 externo**, de forma autônoma (a emergência independe do link
+UART). As pendências de validação **elétrica** dos pinos externos estão na
+seção 3.
 
 **Relação com o simulador (já pronto):** o comportamento lógico já existe
 e foi validado no PC, então a lacuna é de integração de hardware, não de

@@ -21,12 +21,12 @@ Neste estágio, alguns detalhes ainda não estão definitivamente definidos:
 
 O controlador do touch (**GT911**) e os pinos de display/touch/backlight já estão definidos em `src/hardware/esp32/board_config.h`; os demais pontos devem ser definidos com base nos componentes efetivamente disponíveis e nos testes físicos.
 
-A **pinagem dos periféricos externos (HX711, servo, botões, LED)** também já é definida em `src/hardware/esp32/board_config.h`. Como o módulo ESP32-S3 N16R8 tem os GPIOs quase todos ocupados (display, touch, backlight, microSD, UART e BOOT), os periféricos de domínio **sacrificam o slot microSD** (GPIO10–13) e usam ainda GPIO17 (WS2812B "free IO") e GPIO18 (INT do touch, não utilizado pelo firmware). Implicações:
+A **pinagem dos periféricos externos (HX711, servo, botões, LED)** é definida para o **ESP32 externo** em `src/hardware/esp32/board_config_ctrl.h` (HX711 GPIO4/5, servo GPIO6, botões GPIO7/15, LED GPIO8): nesse módulo dedicado sobram GPIOs, então as restrições do board tela touch abaixo **não se aplicam** — ficam registradas como contexto da opção integrada (descontinuada). No board tela touch os GPIOs ficam quase todos ocupados (display, touch, backlight, microSD, UART e BOOT); na opção integrada os periféricos de domínio **sacrificavam o slot microSD** (GPIO10–13) e usavam ainda GPIO17 (WS2812B "free IO") e GPIO18 (INT do touch, não utilizado pelo firmware). Implicações históricas:
 
 - GPIO10–13 = microSD SPI → slot de cartão fica indisponível; o projeto não usa SD.
 - GPIO17 = trilho do WS2812B on-board (header 1,5 mm, removível) → LED passa a competir com o RGB da placa; confirmar fisicamente.
 - GPIO18 = pino INT do GT911 (roteado ao conector do touch, não usado pelo firmware) → usar como botão exige validação de que o GT911 não aciona esse pino.
-- Botões físicos (emergência e liberação) e o LED **já estão integrados no firmware** (`src/hardware/esp32/real_buttons.cpp`, `real_indicator.cpp` e `physical_controls.cpp`, chamados por `src/main_esp32.cpp`); a leitura dos botões e o LED **não dependem da inicialização do display** — ver [`05-botoes-e-indicadores.md`](05-botoes-e-indicadores.md).
+- Botões físicos (emergência e liberação) e o LED rodam no **ESP32 externo** (`src/hardware/esp32/real_buttons.cpp`, `real_indicator.cpp` e `physical_controls.cpp`, chamados por `src/main_ctrl_esp32.cpp`); a leitura dos botões e o LED **não dependem da inicialização do display** — ver [`05-botoes-e-indicadores.md`](05-botoes-e-indicadores.md).
 
 ---
 

@@ -66,6 +66,11 @@ O produto final deverá funcionar aproximadamente assim:
 
 O ESP32-S3 será o controlador central do dispositivo.
 
+> **Variante em estudo:** o controle físico (HX711, servo, botões, LED) pode
+> ser movido para um **ESP32 externo**, ficando o ESP32-S3 da tela apenas com a
+> UI (link UART). Ver [`14-external-esp32-communication.md`](../14-external-esp32-communication.md)
+> e a decisão em [`03-architecture-decisions/07-esp32-integrado-vs-externo.md`](../03-architecture-decisions/07-esp32-integrado-vs-externo.md).
+
 ---
 
 ### 3. ESP32-S3

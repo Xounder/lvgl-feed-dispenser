@@ -77,7 +77,7 @@ A semântica final pode ser complementada durante a integração (ex.: outros es
 
 O LED não deve substituir as informações principais da interface gráfica.
 
-Os pinos físicos de botões (emergência e liberação) e do LED estão definidos em `src/hardware/esp32/board_config.h`: botões em GPIO10 e GPIO18, LED em GPIO17. Implicações da placa VIEWE — ver [`11-limitacoes-e-seguranca.md`](11-limitacoes-e-seguranca.md):
+Os pinos físicos de botões (emergência e liberação) e do LED estão definidos em `src/hardware/esp32/board_config_ctrl.h` (ESP32 externo): botões em GPIO7 e GPIO15, LED em GPIO8. A opção de firmware único no board tela touch foi descontinuada; as implicações abaixo valiam quando esses periféricos rodavam na placa VIEWE — ver [`11-limitacoes-e-seguranca.md`](11-limitacoes-e-seguranca.md):
 
 * GPIO10–13 são o slot microSD (SPI) → os periféricos de domínio sacrificam o SD.
 * GPIO17 é o trilho do WS2812B on-board (header 1,5 mm, removível) → confirmar físico.
@@ -86,7 +86,7 @@ Os pinos físicos de botões (emergência e liberação) e do LED estão definid
   abstrações em `src/hardware/button.h`/`indicator.h`, implementações em
   `src/hardware/esp32/real_buttons.cpp` (com debounce) e `real_indicator.cpp`,
   e glue em `src/hardware/esp32/physical_controls.cpp`, chamado por
-  `src/main_esp32.cpp`.
+  `src/main_ctrl_esp32.cpp` (no ESP32 externo).
 * A inicialização e o `poll` dos botões/LED **rodam independentemente da
   inicialização do display**: `physical_controls_init()` é chamado no `setup()`
   e `physical_controls_poll()` no `loop()`, ambos fora do bloco condicionado a

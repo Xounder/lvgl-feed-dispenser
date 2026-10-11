@@ -34,6 +34,12 @@ ESP32-S3
 
 O ESP32-S3 será o controlador central do dispositivo, responsável por executar a aplicação, a lógica de dosagem, o LVGL, a comunicação com display e touch, o HX711, o servo/atuador, os botões, o gerenciamento de estados e o tratamento de erros.
 
+> **Variante documentada:** o controle físico pode ser movido para um **ESP32
+> externo**, deixando o ESP32-S3 da tela apenas renderizando a UI (link UART).
+> A decisão (opção 1 integrada vs. opção 2 externa) está em
+> [`03-architecture-decisions/07-esp32-integrado-vs-externo.md`](03-architecture-decisions/07-esp32-integrado-vs-externo.md)
+> e o detalhamento em [`14-external-esp32-communication.md`](14-external-esp32-communication.md).
+
 ---
 
 ## Índice
@@ -59,6 +65,7 @@ O ESP32-S3 será o controlador central do dispositivo, responsável por executar
 
 - [05-hardware-abstraction.md](05-hardware-abstraction.md) — abstrações de hardware (`WeightSensor`, `Dispenser` e implementações)
 - [11-migration-pc-to-esp32.md](11-migration-pc-to-esp32.md) — migração do simulador PC para o ESP32-S3
+- [14-external-esp32-communication.md](14-external-esp32-communication.md) — variante com ESP32 externo + ESP32 da tela
 - [02-architecture.md](02-architecture.md) — arquitetura e responsabilidades das camadas
 - [04-domain-and-state-machine.md](04-domain-and-state-machine.md) — domínio, estados e regras da dosagem
 - [06-simulation-strategy.md](06-simulation-strategy.md) — estratégia de simulação
