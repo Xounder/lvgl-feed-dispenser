@@ -5,9 +5,7 @@ bin/
 # vcpkg
 vcpkg_installed/
 
-# External dependencies
-lvgl/
-FreeRTOS/
+# Dependências externas (lvgl/, FreeRTOS/) são submodules — ver .gitmodules
 
 # Sketch Arduino: junctions (recriar com arduino/create_sketch_links.ps1)
 arduino/src/
@@ -51,5 +49,3 @@ Makefile
 # Windows
 Thumbs.db
 Desktop.ini
-
-.gitmodules
