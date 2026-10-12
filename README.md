@@ -38,10 +38,7 @@ Roda o simulador (**LVGL + SDL2**) com peso e dispenser simulados.
 **Rodar**
 
 ```powershell
-git clone --recursive <url-do-repo>   # ou, dentro de um clone existente:
-git submodule update --init --recursive
-
-cd <repo>
+cd <repo> # lvgl-feed-dispenser (por exemplo)
 .\setup.ps1
 ```
 
