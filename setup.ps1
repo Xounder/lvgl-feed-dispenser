@@ -55,13 +55,43 @@ function Resolve-CMake {
     return $null
 }
 
+function Remove-BrokenSubmodules {
+    $entries = & git -C $root config --file .gitmodules --get-regexp '^submodule\..*\.path$' 2>$null
+    if ($LASTEXITCODE -ne 0 -or -not $entries) { return $false }
+    $repaired = $false
+    foreach ($line in @($entries)) {
+        $subPath = (($line -split '\s+', 2)[1]).Trim()
+        if (-not $subPath) { continue }
+        $work = Join-Path $root $subPath
+        $gitfile = Join-Path $work '.git'
+        if (-not (Test-Path -LiteralPath $gitfile -PathType Leaf)) { continue }
+        $m = [regex]::Match((Get-Content -LiteralPath $gitfile -Raw -ErrorAction SilentlyContinue), 'gitdir:\s*(.+?)\s*$')
+        if (-not $m.Success) { continue }
+        $gitdir = $m.Groups[1].Value.Trim().Replace('/', '\')
+        if (-not [System.IO.Path]::IsPathRooted($gitdir)) { $gitdir = Join-Path $work $gitdir }
+        $gitdir = [System.IO.Path]::GetFullPath($gitdir)
+        if (Test-Path -LiteralPath (Join-Path $gitdir 'HEAD')) { continue }
+        Write-Step "Reparando submodule incompleto: $subPath"
+        if (Test-Path -LiteralPath $work) { Remove-Item -LiteralPath $work -Recurse -Force }
+        if (Test-Path -LiteralPath $gitdir) { Remove-Item -LiteralPath $gitdir -Recurse -Force }
+        $repaired = $true
+    }
+    return $repaired
+}
+
 if (Test-Path -LiteralPath (Join-Path $root '.gitmodules')) {
     if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
         throw 'git nao encontrado no PATH (necessario para os submodules).'
     }
     Write-Step 'Sincronizando submodules (lvgl, FreeRTOS)'
     & git -C $root submodule update --init --recursive
-    if ($LASTEXITCODE -ne 0) { throw 'Falha ao inicializar os submodules.' }
+    if ($LASTEXITCODE -ne 0) {
+        if (Remove-BrokenSubmodules) {
+            Write-Step 'Re-tentando submodules apos reparo'
+            & git -C $root submodule update --init --recursive
+        }
+        if ($LASTEXITCODE -ne 0) { throw 'Falha ao inicializar os submodules.' }
+    }
 }
 
 foreach ($dep in @('lvgl', 'FreeRTOS')) {
