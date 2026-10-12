@@ -28,46 +28,49 @@ agentes em [`AGENTS.md`](AGENTS.md).
 
 ### Modo PC (simulador desktop)
 
-Roda `.\bin\Debug\main.exe` (LVGL + SDL2), usando peso e dispenser simulados.
+Roda o simulador (**LVGL + SDL2**) com peso e dispenser simulados.
 
 **Pré-requisitos**
 
 - Windows com **Visual Studio Build Tools** (MSVC) — traz CMake e vcpkg
-- **`VCPKG_ROOT`** apontando para o vcpkg (ex.: o do Build Tools):
+- **Git** (para os submodules `lvgl`/`FreeRTOS`)
 
-  ```powershell
-  $env:VCPKG_ROOT = "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg"
-  ```
-
-O **SDL2** é baixado automaticamente pelo vcpkg (`src_pc/vcpkg.json`), e
-**lvgl**/**FreeRTOS** vêm como **submodules** — clone com `--recursive`.
-
-**Configurar e compilar** (na primeira vez o vcpkg baixa/instala o SDL2):
+**Rodar**
 
 ```powershell
-git clone --recursive <url-do-repo>   # ou: git submodule update --init --recursive
-cd src_pc
-cmake --preset default
-cmake --build --preset debug
+git clone --recursive <url-do-repo>   # ou, dentro de um clone existente:
+git submodule update --init --recursive
+
+cd <repo>
+.\setup.ps1
 ```
 
-> O preset usa VS 2026 / x64 e grava em `../build`. Se já existir um `build/`
-> antigo (de configuração manual), apague-o antes: a troca para modo *manifest*
-> do vcpkg exige um build limpo.
+O `setup.ps1` faz tudo **sem caminhos fixos** (descobre a instalação na sua
+máquina) e também roda `git submodule update --init --recursive` sozinho — o
+`--recursive` no clone é só conveniência:
 
-A `SDL2d.dll` é copiada automaticamente ao lado do `main.exe` (via
-`VCPKG_APPLOCAL_DEPS`). Alternativa manual (sem preset):
+- inicializa os submodules (`lvgl`, `FreeRTOS`), se necessário;
+- localiza o **vcpkg** (via `VCPKG_ROOT` ou o vindo com o Build Tools) e o **CMake**;
+- remove um `build/` antigo incompatível com o modo *manifest* do vcpkg;
+- compila (`src_pc/build.ps1`) e abre o simulador.
+
+Flags: `-Clean` (recompila do zero) e `-NoRun` (só compila). Se a execução de
+scripts estiver bloqueada:
 
 ```powershell
-cmake -S src_pc -B build -G "Visual Studio 18 2026" -A x64 `
-  -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake"
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+```
+
+O **SDL2** é baixado automaticamente pelo vcpkg (`src_pc/vcpkg.json`) e a
+`SDL2d.dll` é copiada ao lado do `main.exe` (`VCPKG_APPLOCAL_DEPS`). O
+executável fica em `bin\Debug\main.exe`.
+
+**(Opcional)** Build manual (sem o script) — defina `VCPKG_ROOT` para a sua
+instalação do vcpkg:
+
+```powershell
+cmake -S src_pc -B build -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake"
 cmake --build build --config Debug
-```
-
-**Executar**
-
-```powershell
-.\bin\Debug\main.exe
 ```
 
 Detalhes do ambiente PC: [`.docs/09-pc-development-environment.md`](.docs/09-pc-development-environment.md)

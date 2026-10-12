@@ -8,8 +8,7 @@
   "configurePresets": [
     {
       "name": "default",
-      "displayName": "PC simulator (Visual Studio 18 2026, x64, vcpkg)",
-      "generator": "Visual Studio 18 2026",
+      "displayName": "PC simulator (x64, vcpkg)",
       "architecture": {
         "value": "x64",
         "strategy": "set"
