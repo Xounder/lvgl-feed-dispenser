@@ -32,31 +32,36 @@ Roda `.\bin\Debug\main.exe` (LVGL + SDL2), usando peso e dispenser simulados.
 
 **Pré-requisitos**
 
-- Windows com **Visual Studio Build Tools** (MSVC)
-- **CMake**
-- **vcpkg** com `SDL2` instalado (x64-windows) — usado pelo toolchain do vcpkg
-- LVGL entra como dependência externa (`.gitignore` deixa `lvgl/`, `FreeRTOS/`
-  e `vcpkg_installed/` fora do repositório)
+- Windows com **Visual Studio Build Tools** (MSVC) — traz CMake e vcpkg
+- **`VCPKG_ROOT`** apontando para o vcpkg (ex.: o do Build Tools):
 
-**Configurar o build** (uma vez, na raiz do projeto), ajustando os caminhos do
-seu ambiente:
+  ```powershell
+  $env:VCPKG_ROOT = "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg"
+  ```
+
+O **SDL2** é baixado automaticamente pelo vcpkg (`src_pc/vcpkg.json`), e
+**lvgl**/**FreeRTOS** vêm como **submodules** — clone com `--recursive`.
+
+**Configurar e compilar** (na primeira vez o vcpkg baixa/instala o SDL2):
+
+```powershell
+git clone --recursive <url-do-repo>   # ou: git submodule update --init --recursive
+cd src_pc
+cmake --preset default
+cmake --build --preset debug
+```
+
+> O preset usa VS 2026 / x64 e grava em `../build`. Se já existir um `build/`
+> antigo (de configuração manual), apague-o antes: a troca para modo *manifest*
+> do vcpkg exige um build limpo.
+
+A `SDL2d.dll` é copiada automaticamente ao lado do `main.exe` (via
+`VCPKG_APPLOCAL_DEPS`). Alternativa manual (sem preset):
 
 ```powershell
 cmake -S src_pc -B build -G "Visual Studio 18 2026" -A x64 `
-  -DCMAKE_TOOLCHAIN_FILE="C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg\scripts\buildsystems\vcpkg.cmake"
-```
-
-**Compilar**
-
-```powershell
+  -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake"
 cmake --build build --config Debug
-```
-
-**Preparar a DLL do SDL2** (Debug): o executável precisa da `SDL2d.dll` ao lado
-dele no diretório de execução:
-
-```powershell
-Copy-Item ..\vcpkg_installed\x64-windows\debug\bin\SDL2d.dll .\bin\Debug\
 ```
 
 **Executar**
