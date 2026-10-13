@@ -6,71 +6,73 @@
 
 ## 20. Configuração do CMake
 
-A configuração utilizada atualmente é:
+A configuração é descrita por um **preset** (`src_pc/CMakePresets.json`), que fixa
+a arquitetura `x64`, usa o toolchain do vcpkg via `VCPKG_ROOT` e grava o build em
+`../build`. O **gerador do Visual Studio não é fixado** — o CMake usa o
+instalado na máquina (evita erro de plataforma ao trocar de máquina).
+
+Forma recomendada, um único comando na raiz (descobre vcpkg/CMake, sincroniza os
+submodules e compila):
 
 ```powershell
-cmake -S src_pc -B build -G "Visual Studio 18 2026" -A x64 -DCMAKE_TOOLCHAIN_FILE="C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg\scripts\buildsystems\vcpkg.cmake"
+.\setup.ps1
 ```
 
-Cada parte possui uma função específica.
+Manualmente (com `VCPKG_ROOT` definido), a partir de `src_pc`:
+
+```powershell
+cmake --preset default
+cmake --build --preset debug
+```
+
+Cada parte possui uma função específica (abaixo).
 
 ---
 
-## 21. `-S src_pc`
+## 21. Fonte (`-S src_pc`)
 
-Indica que o código-fonte (o `CMakeLists.txt` do simulador) está na subpasta
-`src_pc/` do projeto:
+O `CMakeLists.txt` principal do simulador PC fica em `src_pc/`, na raiz do
+repositório:
 
 ```text
 src_pc/
 ```
 
-Ou seja, o `CMakeLists.txt` principal do simulador PC fica em `src_pc/`, na
-raiz do repositório.
+O preset já aponta essa pasta como fonte (`sourceDir`), o que equivale ao
+`-S src_pc` do modo manual.
 
 ---
 
-## 22. `-B build`
+## 22. Diretório de build (`-B build`)
 
-Define:
+Os arquivos gerados vão para:
 
 ```text
 build/
 ```
 
-como diretório para os arquivos gerados.
-
-Isso mantém os artefatos de compilação separados do código-fonte.
-
----
-
-## 23. `-G`
-
-A opção:
-
-```text
--G "Visual Studio 18 2026"
-```
-
-define o gerador utilizado pelo CMake.
-
-Nesse caso:
-
-```text
-Visual Studio 18 2026
-```
+Isso mantém os artefatos de compilação separados do código-fonte. O preset
+define esse diretório (`binaryDir`), equivalente ao `-B build` do modo manual.
 
 ---
 
-## 24. `-A x64`
+## 23. Gerador
 
-Define a arquitetura:
+O preset **não** define `-G`: o CMake usa o gerador do Visual Studio instalado na
+máquina. Fixar uma versão (por exemplo, `Visual Studio 18 2026`) quebraria em
+qualquer máquina com outra versão instalada.
 
-```text
-x64
+---
+
+## 24. Arquitetura `x64`
+
+O preset define a arquitetura:
+
+```json
+"architecture": { "value": "x64", "strategy": "set" }
 ```
 
-Isso é importante porque o SDL2 utilizado foi instalado para:
+Isso é importante porque o SDL2 é instalado para:
 
 ```text
 x64-windows
@@ -82,33 +84,28 @@ A arquitetura da aplicação e a arquitetura das bibliotecas devem ser compatív
 
 ## 25. `CMAKE_TOOLCHAIN_FILE`
 
-O parâmetro:
+O preset aponta o toolchain do vcpkg pela variável de ambiente `VCPKG_ROOT`:
 
-```text
--DCMAKE_TOOLCHAIN_FILE="..."
+```json
+"toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
 ```
 
-informa ao CMake que deve utilizar o toolchain do vcpkg.
-
-Isso permite que o CMake encontre e configure as dependências instaladas por ele.
+Isso evita caminho fixo: o `setup.ps1` descobre o vcpkg (via `VCPKG_ROOT` ou a
+instalação do Build Tools) e exporta a variável antes de chamar o CMake.
 
 ---
 
 ## 26. Localização do `vcpkg_installed`
 
-O `vcpkg_installed` (pacotes instalados, incluindo o SDL2) fica **fora do
-repositório**, na pasta irmã do projeto, para não ser versionado.
-
-O `src_pc/CMakeLists.txt` resolve esse caminho automaticamente, relativo ao
-arquivo:
+O `vcpkg_installed` (pacotes instalados, incluindo o SDL2) fica **dentro de
+`build/`** (que é ignorado pelo Git), em modo *manifest* (`src_pc/vcpkg.json`):
 
 ```text
-src_pc/../../vcpkg_installed/x64-windows
+build/vcpkg_installed/x64-windows
 ```
 
-Por isso o comando de configuração não precisa mais de um
-`-DCMAKE_PREFIX_PATH` explícito (era usado somente quando o build estava na
-raiz do projeto).
+O próprio toolchain do vcpkg aponta esse diretório ao CMake, então o comando de
+configuração não precisa de um `-DCMAKE_PREFIX_PATH` explícito.
 
 ---
 
@@ -132,33 +129,19 @@ Debug
 
 ## 28. DLL do SDL2
 
-No Windows, a aplicação precisa encontrar a DLL do SDL2 correspondente à configuração utilizada.
+No Windows, a aplicação precisa encontrar a DLL do SDL2 correspondente à
+configuração utilizada.
 
-Durante o desenvolvimento, a DLL de debug foi copiada para:
+O vcpkg copia a DLL automaticamente para junto do executável
+(`VCPKG_APPLOCAL_DEPS`), não sendo preciso copiar à mão:
 
 ```text
 bin/Debug/
+├── main.exe
+└── SDL2d.dll
 ```
 
-através de:
-
-```powershell
-Copy-Item ..\vcpkg_installed\x64-windows\debug\bin\SDL2d.dll .\bin\Debug\
-```
-
-Isso permite que:
-
-```text
-main.exe
-```
-
-encontre:
-
-```text
-SDL2d.dll
-```
-
-no diretório de execução.
+Isso permite que `main.exe` encontre `SDL2d.dll` no diretório de execução.
 
 ---
 
@@ -205,26 +188,21 @@ Quando um novo `.c` é adicionado à aplicação, ele precisa ser incluído no s
 
 ---
 
-## 42. Dependências ignoradas pelo Git
+## 42. Dependências e artefatos fora do Git
 
-O projeto mantém algumas dependências e artefatos fora do versionamento.
-
-Entre os diretórios ignorados estão:
+O projeto mantém dependências externas e artefatos fora do versionamento:
 
 ```text
-lvgl/
-FreeRTOS/
-vcpkg_installed/
 build/
 bin/
+vcpkg_installed/
 ```
 
-O objetivo é evitar versionar:
+O objetivo é evitar versionar arquivos gerados, binários e artefatos temporários.
 
-* bibliotecas externas;
-* arquivos gerados;
-* binários;
-* artefatos temporários.
+O **LVGL** e o **FreeRTOS** já não ficam em `.gitignore`: são **submodules**,
+clonados com `git submodule update --init --recursive` (o `setup.ps1` faz isso
+automaticamente).
 
 ---
 

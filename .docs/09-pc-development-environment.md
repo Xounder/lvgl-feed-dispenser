@@ -29,9 +29,9 @@ Simulador desktop
 
 A aplicação é escrita em **C**, em migração para **C++** (decisão em [03-architecture-decisions.md](03-architecture-decisions.md)).
 
-O comando completo de configuração do CMake (com gerador `Visual Studio 18 2026`, arquitetura `x64` e toolchain do vcpkg) está na [parte 02](09-pc-development-environment/02-configuracao-e-build.md). O `vcpkg_installed/` é resolvido automaticamente pelo `CMakeLists.txt` (fica fora do repositório, na pasta irmã do projeto).
+A configuração e o build são feitos pelo script da raiz (`.\setup.ps1`) ou pelo preset do CMake (`src_pc/CMakePresets.json`, arquitetura `x64` e toolchain do vcpkg via `VCPKG_ROOT`) — detalhes na [parte 02](09-pc-development-environment/02-configuracao-e-build.md). O `vcpkg_installed/` fica em `build/vcpkg_installed/` (gerado, fora do Git).
 
-O [run-code.md](run-code.md) contém apenas o quick-start curto (`cmake --build build --config Debug` e `.\bin\Debug\main.exe`); os detalhes completos de configuração e build estão na [parte 02](09-pc-development-environment/02-configuracao-e-build.md).
+O [run-code.md](run-code.md) contém o quick-start curto (`.\setup.ps1` ou `cmake --preset default` + `cmake --build --preset debug`); os detalhes completos de configuração e build estão na [parte 02](09-pc-development-environment/02-configuracao-e-build.md).
 
 O arquivo original excedia 500 linhas e foi dividido em partes lógicas na subpasta `09-pc-development-environment/`, preservando 100% do conteúdo factual.
 
@@ -40,7 +40,7 @@ O arquivo original excedia 500 linhas e foi dividido em partes lógicas na subpa
 | Parte | Conteúdo |
 | ----- | -------- |
 | [01-visao-geral-e-toolchain.md](09-pc-development-environment/01-visao-geral-e-toolchain.md) | Objetivo, objetivo do simulador, relação PC/hardware, sistema operacional, Visual Studio Build Tools 2026 (VS 18 2026/x64), compilador, CMake 4.3.1, por que CMake, estrutura do build, diretórios importantes, dependências (LVGL/SDL2), vcpkg, toolchain do vcpkg, SDL2 instalado (2.32.10/x64-windows) e toolchain completo |
-| [02-configuracao-e-build.md](09-pc-development-environment/02-configuracao-e-build.md) | Comando completo de configuração do CMake, flags `-S`/`-B`/`-G`/`-A`, `CMAKE_TOOLCHAIN_FILE`, resolução automática do `vcpkg_installed`, build (`cmake --build build --config Debug`), `SDL2d.dll` ao lado do executável, CMake e fontes (MAIN_SOURCES), dependências ignoradas pelo Git e build versus runtime |
+| [02-configuracao-e-build.md](09-pc-development-environment/02-configuracao-e-build.md) | Preset do CMake (`CMakePresets.json`), flags `-S`/`-B`, gerador não fixado (auto-selecionado), `CMAKE_TOOLCHAIN_FILE` via `VCPKG_ROOT`, localização do `vcpkg_installed` (`build/vcpkg_installed`), build (`cmake --build --preset debug`), `SDL2d.dll` ao lado do executável, CMake e fontes (MAIN_SOURCES), dependências/submodules fora do Git e build versus runtime |
 | [03-execucao-e-loop-principal.md](09-pc-development-environment/03-execucao-e-loop-principal.md) | Executável, `main.c`, loop principal, `lv_timer_handler()`, tempo de espera, compatibilidade Windows (`Sleep`), HAL do simulador, `sdl_hal_init(800, 480)`, separação da HAL, estrutura `src_pc/` e `src/` e domínio |
 | [04-configuracao-lvgl.md](09-pc-development-environment/04-configuracao-lvgl.md) | `lv_conf.h`, ThorVG (`LV_USE_THORVG`), avisos do LVGL, demo padrão desabilitado e por que não usar o demo como aplicação |
 | [05-simulacao-migracao-e-validacao.md](09-pc-development-environment/05-simulacao-migracao-e-validacao.md) | Ponte com os temas canônicos de simulação, abstração de hardware, migração e testes (pontos que viram link para os documentos donos), PC como ambiente de validação, testes rápidos, dependências não viram código da aplicação, fronteiras e princípios de validação |

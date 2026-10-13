@@ -13,12 +13,13 @@ Verificar:
 ```text
 vcpkg
 CMAKE_TOOLCHAIN_FILE
-vcpkg_installed (fora do repositório, na pasta irmã)
+vcpkg_installed (em build/vcpkg_installed)
 arquitetura x64
 ```
 
-> O `CMakeLists.txt` resolve o `vcpkg_installed` automaticamente
-> (`src_pc/../../vcpkg_installed`) — sem necessidade de `-DCMAKE_PREFIX_PATH`.
+> Em modo manifest (`src_pc/vcpkg.json`), o vcpkg instala em
+> `build/vcpkg_installed` e o toolchain do vcpkg informa o caminho ao CMake — sem
+> necessidade de `-DCMAKE_PREFIX_PATH`.
 
 ---
 
@@ -36,10 +37,10 @@ está disponível no diretório esperado para a configuração Debug.
 
 ### Build usa arquitetura errada
 
-Verificar:
+Verificar a arquitetura definida no preset (`src_pc/CMakePresets.json`):
 
 ```text
--A x64
+x64
 ```
 
 e se a dependência também é:
@@ -74,7 +75,8 @@ configure
 build/
 ```
 
-Se o estado gerado estiver inconsistente, uma reconstrução limpa pode ser necessária.
+Se o estado gerado estiver inconsistente, uma reconstrução limpa pode ser
+necessária (ex.: `.\setup.ps1 -Clean`, que apaga `build/` antes de reconfigurar).
 
 Não é necessário apagar o código-fonte nem as dependências apenas por causa de um problema no diretório `build`.
 

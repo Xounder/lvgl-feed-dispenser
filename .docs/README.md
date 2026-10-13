@@ -83,6 +83,7 @@ Ambiente atualmente utilizado:
 
 ```text
 Windows
+Git (submodules lvgl/FreeRTOS)
 Visual Studio Build Tools
 MSVC
 CMake
@@ -91,18 +92,25 @@ SDL2
 LVGL
 ```
 
+Na primeira execução é necessária conexão com a internet (clonar os submodules e
+baixar o SDL2 pelo vcpkg).
+
 ### Passos rápidos (simulador PC)
 
-Na raiz do projeto:
+Na raiz do projeto, o script único cuida de tudo (sincroniza os submodules
+`lvgl`/`FreeRTOS`, configura o CMake + vcpkg e compila):
 
 ```powershell
-# Configurar o CMake (uma vez, ajustando o caminho do toolchain do vcpkg):
-cmake -S src_pc -B build -G "Visual Studio 18 2026" -A x64 `
-  -DCMAKE_TOOLCHAIN_FILE="C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg\scripts\buildsystems\vcpkg.cmake"
+.\setup.ps1
+```
 
-# Compilar e executar:
-cmake --build build --config Debug
-.\bin\Debug\main.exe
+O script executa `bin\Debug\main.exe` ao final (`-NoRun` apenas compila; `-Clean`
+apaga `build/` antes). Alternativa manual (com `VCPKG_ROOT` definido), a partir
+de `src_pc`:
+
+```powershell
+cmake --preset default
+cmake --build --preset debug
 ```
 
 O executável é gerado em `bin/Debug/main.exe`. No ambiente atual, a DLL de debug do SDL2 (`SDL2d.dll`) deve estar disponível junto ao executável.

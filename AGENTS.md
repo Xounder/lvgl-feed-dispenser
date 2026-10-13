@@ -27,16 +27,25 @@ Referências canônicas de requisitos:
 - O agente **não consegue ver imagens PNG** (mockups em `.images/`) — usar
   apenas os textos (`telas-regras.md`, `Trabalho.md`, docs, em `.docs/`).
 
-Build manual (pelo usuário, VS Build Tools já instalado):
+Build PC — o script da raiz faz tudo (sync de submodules + configure/build/run).
+Para o usuário rodar:
 ```powershell
-cmake -S src_pc -B build
-cmake --build build --config Debug
-& .\bin\Debug\main.exe
+.\setup.ps1            # compila e executa
+.\setup.ps1 -NoRun     # apenas compila
+.\setup.ps1 -Clean     # apaga build/ antes de reconfigurar
 ```
-Alternativa quando o agente precisa checar compilação/link:
+
+Alternativa sem o script (requer `VCPKG_ROOT` definido), a partir de `src_pc`:
 ```powershell
-# Caminho varia conforme a instalação local do VS Build Tools.
-& "C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\MSBuild.exe" build\main.vcxproj -p:Configuration=Debug -v:m
+cmake --preset default
+cmake --build --preset debug
+```
+
+Alternativa quando o agente precisa checar compilação/link (MSBuild localizado
+via `vswhere`, sem caminho fixo):
+```powershell
+$msbuild = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -find "MSBuild\**\Bin\MSBuild.exe"
+& $msbuild build\main.vcxproj -p:Configuration=Debug -v:m
 ```
 > **Atenção:** quando um **novo arquivo** `.c` é adicionado ao
 > `src_pc/CMakeLists.txt` (MAIN_SOURCES), o build incremental do MSBuild pode não
@@ -102,7 +111,7 @@ powershell -ExecutionPolicy Bypass -File .\arduino\create_sketch_links.ps1
   `11-migration-pc-to-esp32/`, `12-roadmap/`, `13-agent-guide/`.
 - Arquivos `agent-propose-implementation-plan/`, `implementation/` e os `.md`
   rasos antigos (ex.: `02-architecture.md`) são **históricos — não atualizar**.
-- `README.md` (raiz) é o stock do LVGL — **não alterar**.
+- O `README.md` dentro do submodule `lvgl/` é o stock do LVGL — **não alterar** (o `README.md` da raiz é do projeto).
 - Toda mudança de comportamento deve ser refletida nos docs afetados.
 
 ## Convenções de código

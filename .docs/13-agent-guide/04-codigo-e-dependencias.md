@@ -69,14 +69,15 @@ SDL2
 vcpkg
 ```
 
-Algumas dependências são externas ao repositório e estão no `.gitignore`.
+O **LVGL** e o **FreeRTOS** são **submodules** (clonados com
+`git submodule update --init --recursive`; o `setup.ps1` faz isso
+automaticamente).
 
-Não adicionar:
+Os artefatos gerados ficam no `.gitignore`. Não adicionar:
 
 ```text
 build/
 vcpkg_installed/
-lvgl/
 DLLs
 ```
 
@@ -94,7 +95,8 @@ O ambiente atual utiliza:
 SDL2 x64-windows
 ```
 
-A DLL de debug é necessária para execução do build de debug.
+A DLL de debug é necessária para execução do build de debug (o vcpkg a copia
+automaticamente para junto do executável).
 
 Isso é uma particularidade do ambiente PC.
 

@@ -95,13 +95,8 @@ Ela fornece o ambiente necessário para compilação utilizando o compilador da 
 
 O ambiente inclui o toolchain utilizado pelo CMake para gerar a solução Visual Studio.
 
-A geração atual utiliza:
-
-```text
-Visual Studio 18 2026
-```
-
-com arquitetura:
+A geração usa o gerador do Visual Studio instalado na máquina (escolhido
+automaticamente pelo CMake, sem fixar a versão), com arquitetura:
 
 ```text
 x64
@@ -113,13 +108,8 @@ x64
 
 O projeto é compilado utilizando o toolchain do Visual Studio.
 
-O CMake gera um projeto:
-
-```text
-Visual Studio 18 2026
-```
-
-para:
+O CMake gera um projeto para o gerador do Visual Studio instalado na máquina
+(não fixado no preset), na arquitetura:
 
 ```text
 x64
@@ -203,7 +193,7 @@ A pasta `build/` contém artefatos gerados pelo CMake e não representa o códig
 
 ## 10. Diretórios importantes
 
-A estrutura da raiz do projeto (`src/`, `src_pc/`, `.docs/`, `lvgl/`, `FreeRTOS/`, `build/`, `bin/`) está em [02-architecture.md](../02-architecture.md). O `vcpkg_installed/` fica fora do repositório, na pasta irmã do projeto.
+A estrutura da raiz do projeto (`src/`, `src_pc/`, `.docs/`, `lvgl/`, `FreeRTOS/`, `build/`, `bin/`) está em [02-architecture.md](../02-architecture.md). O `vcpkg_installed/` fica em `build/vcpkg_installed/` (dentro do diretório de build, ignorado pelo Git).
 
 Algumas dessas pastas são dependências ou artefatos gerados e não fazem parte do código principal versionado.
 
@@ -305,7 +295,9 @@ vcpkg
 
 A versão utilizada vem integrada ao ambiente do Visual Studio Build Tools.
 
-O executável utilizado atualmente está em:
+O `setup.ps1` localiza o `vcpkg.exe` automaticamente, a partir da variável de
+ambiente `VCPKG_ROOT` ou da instalação do Build Tools (via `vswhere`). Em uma
+máquina típica, ele fica em:
 
 ```text
 C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg\vcpkg.exe
@@ -315,17 +307,15 @@ C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg\vcpkg.exe
 
 ## 16. Toolchain do vcpkg
 
-O arquivo de integração utilizado pelo CMake é:
+O arquivo de integração (`scripts/buildsystems/vcpkg.cmake`) é passado ao CMake
+pelo preset, usando a variável `VCPKG_ROOT`:
 
-```text
-C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg\scripts\buildsystems\vcpkg.cmake
+```json
+"toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
 ```
 
-Ele é passado ao CMake através de:
-
-```text
--DCMAKE_TOOLCHAIN_FILE="..."
-```
+Assim o caminho não fica fixo no repositório: `VCPKG_ROOT` é definida pelo
+`setup.ps1` (ou pelo usuário) antes da configuração.
 
 ---
 
@@ -349,10 +339,10 @@ O pacote instalado é:
 sdl2:x64-windows@2.32.10#1
 ```
 
-A instalação local está em (fora do repositório, na pasta irmã do projeto):
+A instalação local está em (dentro do diretório de build, ignorado pelo Git):
 
 ```text
-../vcpkg_installed/x64-windows
+build/vcpkg_installed/x64-windows
 ```
 
 ---

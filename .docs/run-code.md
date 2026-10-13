@@ -1,20 +1,29 @@
+# Executar o simulador (PC)
 
-passos:
-- Abra o **Developer PowerShell** (Visual Studio), que já traz CMake/MSVC no PATH.
+Na raiz do repositório, o script único cuida de tudo (sincroniza os submodules
+`lvgl`/`FreeRTOS`, configura o CMake + vcpkg e compila):
 
-> O prompt mostrado será algo como:
->
-> ```bash
-> **********************************************************************
-> ** Visual Studio 2026 Developer PowerShell v18.10.1
-> ** Copyright (c) 2026 Microsoft Corporation
-> **********************************************************************
-> PS C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools>
-> ```
+```powershell
+.\setup.ps1
+```
 
-- a partir da pasta clonada do projeto, rode:
-  - cmake --build build --config Debug
-  - .\bin\Debug\main.exe
+Ele executa `bin\Debug\main.exe` ao final. Opções:
 
-> Dica: o projeto não depende de um caminho fixo de clone — rode os comandos a
-> partir da raiz do repositório em qualquer máquina (`cd <caminho-do-repositorio>`).
+- `.\setup.ps1 -NoRun` — compila sem executar;
+- `.\setup.ps1 -Clean` — apaga `build/` antes de reconfigurar.
+
+Pré-requisito: Windows + Visual Studio Build Tools (MSVC + vcpkg). Na primeira
+execução é necessária conexão com a internet (download do SDL2 pelo vcpkg).
+
+Alternativa manual (com `VCPKG_ROOT` definido), a partir de `src_pc`:
+
+```powershell
+cmake --preset default
+cmake --build --preset debug
+```
+
+O executável fica em:
+
+```text
+bin\Debug\main.exe
+```
