@@ -28,41 +28,46 @@ agentes em [`AGENTS.md`](AGENTS.md).
 
 ### Modo PC (simulador desktop)
 
-Roda `.\bin\Debug\main.exe` (LVGL + SDL2), usando peso e dispenser simulados.
+Roda o simulador (**LVGL + SDL2**) com peso e dispenser simulados.
 
 **Pré-requisitos**
 
-- Windows com **Visual Studio Build Tools** (MSVC)
-- **CMake**
-- **vcpkg** com `SDL2` instalado (x64-windows) — usado pelo toolchain do vcpkg
-- LVGL entra como dependência externa (`.gitignore` deixa `lvgl/`, `FreeRTOS/`
-  e `vcpkg_installed/` fora do repositório)
+- Windows com **Visual Studio Build Tools** (MSVC) — traz CMake e vcpkg
+- **Git** (para os submodules `lvgl`/`FreeRTOS`)
 
-**Configurar o build** (uma vez, na raiz do projeto), ajustando os caminhos do
-seu ambiente:
+**Rodar**
 
 ```powershell
-cmake -S src_pc -B build -G "Visual Studio 18 2026" -A x64 `
-  -DCMAKE_TOOLCHAIN_FILE="C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\vcpkg\scripts\buildsystems\vcpkg.cmake"
+cd <repo> # lvgl-feed-dispenser (por exemplo)
+.\setup.ps1
 ```
 
-**Compilar**
+O `setup.ps1` faz tudo **sem caminhos fixos** (descobre a instalação na sua
+máquina) e também roda `git submodule update --init --recursive` sozinho — o
+`--recursive` no clone é só conveniência:
+
+- inicializa os submodules (`lvgl`, `FreeRTOS`), se necessário;
+- localiza o **vcpkg** (via `VCPKG_ROOT` ou o vindo com o Build Tools) e o **CMake**;
+- remove um `build/` antigo incompatível com o modo *manifest* do vcpkg;
+- compila (`src_pc/build.ps1`) e abre o simulador.
+
+Flags: `-Clean` (recompila do zero) e `-NoRun` (só compila). Se a execução de
+scripts estiver bloqueada:
 
 ```powershell
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+```
+
+O **SDL2** é baixado automaticamente pelo vcpkg (`src_pc/vcpkg.json`) e a
+`SDL2d.dll` é copiada ao lado do `main.exe` (`VCPKG_APPLOCAL_DEPS`). O
+executável fica em `bin\Debug\main.exe`.
+
+**(Opcional)** Build manual (sem o script) — defina `VCPKG_ROOT` para a sua
+instalação do vcpkg:
+
+```powershell
+cmake -S src_pc -B build -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake"
 cmake --build build --config Debug
-```
-
-**Preparar a DLL do SDL2** (Debug): o executável precisa da `SDL2d.dll` ao lado
-dele no diretório de execução:
-
-```powershell
-Copy-Item ..\vcpkg_installed\x64-windows\debug\bin\SDL2d.dll .\bin\Debug\
-```
-
-**Executar**
-
-```powershell
-.\bin\Debug\main.exe
 ```
 
 Detalhes do ambiente PC: [`.docs/09-pc-development-environment.md`](.docs/09-pc-development-environment.md)
