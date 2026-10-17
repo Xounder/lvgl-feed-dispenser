@@ -4,6 +4,7 @@
 - Selecione o modo: Massa ou Valor
 - Defina a quantidade desejada
 - Liberação manual disponível
+- Exibe a massa atual ao manter a liberação manual pressionada
 
 ## Dosando
 - Dosagem automática em andamento

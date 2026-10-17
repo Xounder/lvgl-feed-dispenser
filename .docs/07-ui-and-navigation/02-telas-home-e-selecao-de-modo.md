@@ -30,6 +30,9 @@ Selecione o modo de dosagem
 │ Dosar por valor (R$)                 │
 └──────────────────────────────────────┘
 
+Massa atual
+0 g
+
 ┌──────────────────────────────────────┐
 │ LIBERAR MANUALMENTE                  │
 └──────────────────────────────────────┘
@@ -56,6 +59,10 @@ A Home hospeda a **liberação manual** (RS14-RS16 do Trabalho.md):
 O widget usado é `manual_release_widget.c` (apenas o botão),
 compartilhado com as telas de conclusão e interrupção. Na Home, o widget
 fica na **parte inferior da tela**, logo acima da barra de navegação.
+
+A Home também exibe a **massa atual** (`Massa atual` + valor em `g`),
+atualizada pelo `tick_cb` do widget enquanto o botão permanece
+pressionado (sem barra de progresso, `%` ou meta).
 
 ---
 
