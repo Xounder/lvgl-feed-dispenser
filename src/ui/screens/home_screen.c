@@ -2,6 +2,22 @@
 #include "../screen_manager.h"
 #include "screen_chrome.h"
 #include "manual_release_widget.h"
+#include "../../domain/dosing_controller.h"
+
+typedef struct {
+    lv_obj_t *weight_label;
+} HomeScreenContext;
+
+static void tick_cb(void *user_data)
+{
+    HomeScreenContext *ctx = user_data;
+
+    lv_label_set_text_fmt(
+        ctx->weight_label,
+        "%d g",
+        dosing_controller_get_weight()
+    );
+}
 
 static void grams_card_event_cb(lv_event_t *e)
 {
@@ -49,6 +65,9 @@ lv_obj_t *home_screen_create(void)
 {
     lv_obj_t *screen = screen_chrome_create();
 
+    HomeScreenContext *ctx =
+        lv_malloc(sizeof(HomeScreenContext));
+
     screen_chrome_add_title(screen);
     screen_chrome_add_state(screen, "AGUARDANDO", "", CHROME_BLUE);
     screen_chrome_add_subtitle(screen, "Selecione o modo de dosagem", 136);
@@ -69,13 +88,29 @@ lv_obj_t *home_screen_create(void)
         currency_card_event_cb
     );
 
+    lv_obj_t *weight_hint = lv_label_create(screen);
+    lv_label_set_text(weight_hint, "Massa atual");
+    lv_obj_set_style_text_color(weight_hint, CHROME_GREY, 0);
+    lv_obj_set_style_text_font(weight_hint, &lv_font_montserrat_14, 0);
+    lv_obj_align(weight_hint, LV_ALIGN_TOP_MID, 0, 400);
+
+    ctx->weight_label = lv_label_create(screen);
+    lv_label_set_text(ctx->weight_label, "0 g");
+    lv_obj_set_style_text_color(ctx->weight_label, CHROME_WHITE, 0);
+    lv_obj_set_style_text_font(
+        ctx->weight_label,
+        &lv_font_montserrat_28,
+        0
+    );
+    lv_obj_align(ctx->weight_label, LV_ALIGN_TOP_MID, 0, 418);
+
     manual_release_widget_create(
         screen,
         LV_ALIGN_BOTTOM_MID,
         0,
         -60,
-        NULL,
-        NULL
+        tick_cb,
+        ctx
     );
 
     screen_chrome_add_bottom_nav(screen);

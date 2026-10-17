@@ -25,6 +25,8 @@ TELA 1: AGUARDANDO (Seleção de Modo)
 │ │       Dosar por valor (R$)             │ │
 │ └────────────────────────────────────────┘ │
 │                                            │
+│ Massa atual                                │
+│ 0 g                                        │
 │                                            │
 │    ✋ LIBERAÇÃO MANUAL DISPONÍVEL          │
 │ ┌────────────────────────────────────────┐ │
@@ -77,7 +79,7 @@ TELA 2: AGUARDANDO (Definição de Quantidade)
 
 ### Resumo do Fluxo e Funcionamento:
 
-1. **Tela 1:** O sistema inicia no estado "Aguardando". O usuário tem a opção de fazer uma **liberação manual** direta mantendo o botão verde inferior pressionado, ou pode escolher iniciar uma dosagem automática selecionando entre os botões **MASSA** ou **VALOR MONETÁRIO**.
+1. **Tela 1:** O sistema inicia no estado "Aguardando". O usuário tem a opção de fazer uma **liberação manual** direta mantendo o botão verde inferior pressionado — enquanto pressionado, a tela exibe a **massa atual** — ou pode escolher iniciar uma dosagem automática selecionando entre os botões **MASSA** ou **VALOR MONETÁRIO**.
 2. **Tela 2:** Ao clicar em "MASSA", a tela de definição de quantidade é aberta. Nela, o usuário pode ajustar o valor desejado usando os botões de incremento/decremento `[ - ]` e `[ + ]`, ou selecionar rapidamente através da grade de **Valores rápidos**. Ao confirmar a quantidade, basta clicar em **INICIAR DOSAGEM AUTOMÁTICA** para que o ESP32 comece a atuar sobre o servo motor e ler a célula de carga, mudando o sistema para o estado "Dosando". Caso queira desistir, o botão **VOLTAR** retorna à tela inicial.
 
 ---
