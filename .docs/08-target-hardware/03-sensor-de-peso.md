@@ -174,9 +174,23 @@ peso estável
 WeightSensor
 ```
 
-O algoritmo específico ainda não está definido.
+O algoritmo específico pode evoluir com base em testes reais.
 
-A escolha deverá ser baseada em testes reais.
+Implementação atual (`src/hardware/esp32/real_weight_sensor.cpp`):
+
+* **Leitura não bloqueante**: só lê quando `is_ready()` indica dado pronto; caso
+  contrário devolve o último valor. Isso evita o `wait_ready()` **sem timeout**
+  do driver, que trava o `loop()` inteiro (UI e botões) quando o HX711 não
+  responde. `wait_ready_timeout` (curto) é usado apenas em init/tara.
+* **Média móvel** de 8 amostras brutas.
+* **Rejeição de picos**: uma amostra que se afaste mais de `300 g` da média
+  corrente é descartada (não entra no filtro), evitando que um ruído isolado
+  desloque o valor.
+* **Validação de faixa**: gramas fora de `[0, 30000]` são descartados (mantém o
+  último valor válido), evitando concluir a dosagem com leitura corrompida.
+  O domínio também valida (`MAX_VALID_GRAMS` em `dosing_controller.c`).
+* Log `[PESAGEM]` traz `dt/maxdt` e contadores de rejeição
+  (`rej(notready/range/spike)`) para diagnóstico.
 
 ---
 

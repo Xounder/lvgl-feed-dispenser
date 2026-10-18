@@ -119,7 +119,7 @@ As regras de cada modo (incrementos, limites e conversão valor → massa) perte
 
 O simulador representa o hardware por meio de implementações artificiais.
 
-Quando uma dosagem é iniciada, o controller reseta o peso, inicia o dispenser, o sensor simulado começa em 0 g e o peso aumenta gradualmente. A liberação ocorre em duas etapas (`DosingPhase`): etapa **rápida** com vazão alta (+20 g a cada 300 ms) enquanto faltam mais de 30 g, e etapa **fina** com vazão reduzida (+2 g) quando faltam 30 g ou menos. Ao atingir a meta, o dispenser para e o estado passa a `COMPLETED`.
+Quando uma dosagem é iniciada, o controller inicia o dispenser **sem resetar a massa medida**: a mesma referência de peso das demais telas (ex.: liberação manual na Home) é preservada, e o peso aumenta gradualmente a partir do valor atual. A liberação ocorre em duas etapas (`DosingPhase`): etapa **rápida** com vazão alta (+20 g a cada 300 ms) enquanto faltam mais de 30 g, e etapa **fina** com vazão reduzida (+2 g) quando faltam 30 g ou menos. Ao atingir a meta, o dispenser para e o estado passa a `COMPLETED`.
 
 Na implementação atual, a simulação adiciona uma pequena quantidade de peso a cada atualização do processo (300 ms).
 

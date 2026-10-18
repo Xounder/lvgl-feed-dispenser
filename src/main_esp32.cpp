@@ -15,40 +15,59 @@ static lv_display_t *disp;
 void setup(void)
 {
     Serial.begin(115200);
+    delay(200);
 
-    Serial.println("A");
+    Serial.printf(
+        "[SYS] boot psram=%u/%u heap=%u\n",
+        (unsigned)ESP.getFreePsram(),
+        (unsigned)ESP.getPsramSize(),
+        (unsigned)ESP.getFreeHeap()
+    );
+
+    Serial.println("[SYS] A peso");
 
     real_weight_sensor_init();
-    Serial.println("B");
+    real_weight_sensor_probe("pos-init");
+    Serial.println("[SYS] B servo");
 
     real_dispenser_init();
-    Serial.println("C");
+    real_weight_sensor_probe("pos-servo");
+    Serial.println("[SYS] C botoes/led");
 
     real_buttons_init();
     real_indicator_init();
-    Serial.println("C2");
+    Serial.println("[SYS] C2 controles fisicos");
 
     physical_controls_init();
-    Serial.println("H");
+    real_weight_sensor_probe("pos-ctrl");
+    Serial.println("[SYS] H dominio pronto");
 
     lv_init();
-    Serial.println("D");
+    Serial.println("[SYS] D lv_init");
 
     disp = board_display_init();
-    Serial.println("E");
+    Serial.println("[SYS] E display");
 
     if (disp != NULL) {
-        Serial.println("F");
+        real_weight_sensor_probe("pos-display");
+        real_weight_sensor_init();
+        real_weight_sensor_probe("pos-reinit");
+        Serial.println("[SYS] F ui_init");
         ui_init();
-        Serial.println("G");
+        real_weight_sensor_probe("pos-ui");
+        Serial.println("[SYS] G pronto");
     } else {
-        Serial.println("display nao inicializado; botoes fisicos seguem ativos");
+        Serial.println(
+            "[SYS] display nao inicializado; botoes fisicos seguem ativos"
+        );
     }
 }
 
 void loop(void)
 {
     physical_controls_poll();
+
+    real_weight_sensor_log();
 
     if (disp != NULL) {
         lv_timer_handler();

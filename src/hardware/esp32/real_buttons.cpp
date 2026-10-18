@@ -10,14 +10,15 @@ typedef struct {
     int stable;
     int raw;
     uint32_t last_change_ms;
+    const char *name;
 } DebouncedButton;
 
 static DebouncedButton emergency_btn = {
-    BOARD_BUTTON_2_PIN, 0, 0, 0
+    BOARD_BUTTON_2_PIN, 0, 0, 0, "EMERGENCIA"
 };
 
 static DebouncedButton manual_btn = {
-    BOARD_BUTTON_1_PIN, 0, 0, 0
+    BOARD_BUTTON_1_PIN, 0, 0, 0, "LIBERACAO"
 };
 
 static int read_raw(int pin)
@@ -37,8 +38,16 @@ static int debounce_update(DebouncedButton *button)
         button->last_change_ms = now;
     }
 
-    if ((now - button->last_change_ms) >= BOARD_BUTTON_DEBOUNCE_MS) {
+    if ((now - button->last_change_ms) >= BOARD_BUTTON_DEBOUNCE_MS &&
+        button->stable != button->raw) {
         button->stable = button->raw;
+
+        Serial.printf(
+            "[BOTAO] %s GPIO%d %s\n",
+            button->name,
+            button->pin,
+            button->stable ? "PRESSIONADO" : "SOLTO"
+        );
     }
 
     return button->stable;
@@ -74,4 +83,14 @@ void real_buttons_init(void)
     manual_btn.raw = read_raw(manual_btn.pin);
     manual_btn.stable = manual_btn.raw;
     manual_btn.last_change_ms = millis();
+
+    Serial.printf(
+        "[BOTAO] init LIBERACAO=GPIO%d EMERGENCIA=GPIO%d ativo=%d "
+        "liberacao=%d emergencia=%d\n",
+        BOARD_BUTTON_1_PIN,
+        BOARD_BUTTON_2_PIN,
+        BOARD_BUTTON_ACTIVE_LEVEL,
+        manual_btn.stable,
+        emergency_btn.stable
+    );
 }

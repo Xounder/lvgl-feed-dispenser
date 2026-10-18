@@ -216,7 +216,7 @@ parado
 Concluído:
 
 ```text
-✓ peso começa em 0
+✓ massa medida preservada (sem reset no start)
 ✓ dispenser inicia
 ✓ peso aumenta
 ✓ meta é verificada

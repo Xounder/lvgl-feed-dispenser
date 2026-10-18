@@ -6,6 +6,7 @@
 #define FINE_STEP_GRAMS 2
 #define FINE_THRESHOLD_GRAMS 30
 #define MANUAL_STEP_GRAMS 5
+#define MAX_VALID_GRAMS 30000
 
 static DosingConfig *config;
 static DosingState state = DOSING_STATE_IDLE;
@@ -38,8 +39,6 @@ void dosing_controller_init(DosingConfig *dosing_config)
 
 void dosing_controller_start(void)
 {
-    weight_sensor.reset();
-
     manual_release_active = 0;
 
     state = DOSING_STATE_DOSING;
@@ -54,6 +53,11 @@ void dosing_controller_update(void)
     if (state == DOSING_STATE_DOSING) {
         int target = effective_target_grams();
         int current_weight = weight_sensor.read_grams();
+
+        if (current_weight < 0 || current_weight > MAX_VALID_GRAMS) {
+            return;
+        }
+
         int remaining = target - current_weight;
         int step;
 

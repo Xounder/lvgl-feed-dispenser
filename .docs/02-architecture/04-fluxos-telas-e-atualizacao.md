@@ -23,11 +23,9 @@ Um ciclo típico funciona conceitualmente assim:
               ▼
 5. DosingController inicia
               │
-       ┌──────┴───────┐
-       ▼              ▼
- reset sensor     start dispenser
-       │              │
-       └──────┬───────┘
+              ▼
+      start dispenser
+              │
               ▼
 6. Controller entra em DOSING
               │

@@ -32,7 +32,7 @@ SELECT_MODE
 
 No modelo simplificado atual, parte desse fluxo é representada diretamente pela navegação da UI.
 
-Na implementação atual, `dosing_controller_start()` parte diretamente de `IDLE` para `DOSING` (executando tara/reset do sensor e iniciando o dispenser na fase `FAST`).
+Na implementação atual, `dosing_controller_start()` parte diretamente de `IDLE` para `DOSING` (sem tara/reset — a massa medida é preservada — e iniciando o dispenser na fase `FAST`).
 
 ---
 
@@ -192,14 +192,16 @@ CONFIGURING
 
 Antes de iniciar efetivamente o processo, o controller deve preparar o sistema.
 
+O início **não** executa tara/reset: a massa medida é a mesma referência exibida
+nas demais telas (ex.: liberação manual na Home) e é preservada ao entrar em
+`DOSING`. A tara ocorre apenas em `new_dosing()` (RS13).
+
 Fluxo conceitual:
 
 ```text
 receber configuração
         ↓
 validar configuração
-        ↓
-resetar/tarar sensor
         ↓
 iniciar dispenser
         ↓
@@ -209,8 +211,6 @@ estado = DOSING
 Na implementação atual, esse fluxo resume-se a `dosing_controller_start()`:
 
 ```text
-reset/tara do sensor (weight_sensor.reset)
-        ↓
 estado = DOSING, fase = FAST
         ↓
 dispenser ativo

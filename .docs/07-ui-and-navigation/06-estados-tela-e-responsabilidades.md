@@ -194,8 +194,6 @@ screen_manager_show(SCREEN_DOSING)
     ↓
 DosingController.start()
     ↓
-WeightSensor.reset()
-    ↓
 Dispenser.start()
     ↓
 DosingScreen
