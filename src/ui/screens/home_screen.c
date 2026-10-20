@@ -1,7 +1,7 @@
 #include "home_screen.h"
 #include "../screen_manager.h"
-#include "screen_chrome.h"
-#include "manual_release_widget.h"
+#include "../components/screen_chrome.h"
+#include "../components/manual_release_widget.h"
 #include "../../domain/dosing_controller.h"
 
 typedef struct {

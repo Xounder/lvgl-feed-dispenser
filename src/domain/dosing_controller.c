@@ -23,8 +23,7 @@ static int effective_target_grams(void)
         return 0;
     }
 
-    return (config->target_money_cents * 1000) /
-           config->price_per_kg_cents;
+    return (config->target_money_cents * 1000) / config->price_per_kg_cents;
 }
 
 void dosing_controller_init(DosingConfig *dosing_config)

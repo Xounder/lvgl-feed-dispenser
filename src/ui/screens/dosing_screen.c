@@ -1,7 +1,7 @@
 #include "dosing_screen.h"
 #include "../screen_manager.h"
 #include "../components/ui_button.h"
-#include "screen_chrome.h"
+#include "../components/screen_chrome.h"
 #include "../../domain/dosing_controller.h"
 
 typedef struct {
