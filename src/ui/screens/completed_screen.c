@@ -1,6 +1,8 @@
 #include "completed_screen.h"
 #include "../screen_manager.h"
 #include "../components/ui_button.h"
+#include "../components/ui_meta_row.h"
+#include "../components/ui_metric.h"
 #include "../components/screen_chrome.h"
 #include "../components/manual_release_widget.h"
 #include "../../domain/dosing_controller.h"
@@ -47,21 +49,11 @@ lv_obj_t *completed_screen_create(void)
         CHROME_ACCENT_GREEN
     );
 
-    lv_obj_t *final_hint = lv_label_create(screen);
-    lv_label_set_text(final_hint, "Massa final");
-    lv_obj_set_style_text_color(final_hint, CHROME_GREY, 0);
-    lv_obj_set_style_text_font(final_hint, &lv_font_montserrat_14, 0);
-    lv_obj_align(final_hint, LV_ALIGN_TOP_MID, 0, 132);
+    UiMetric metric;
 
-    ctx->weight_label = lv_label_create(screen);
+    ui_metric_create(screen, "Massa final", 132, 150, -40, &metric);
+    ctx->weight_label = metric.value;
     lv_label_set_text_fmt(ctx->weight_label, "%d g", final_grams);
-    lv_obj_set_style_text_color(ctx->weight_label, CHROME_WHITE, 0);
-    lv_obj_set_style_text_font(
-        ctx->weight_label,
-        &lv_font_montserrat_28,
-        0
-    );
-    lv_obj_align(ctx->weight_label, LV_ALIGN_TOP_MID, -40, 150);
 
     lv_obj_t *check_icon = lv_label_create(screen);
     lv_label_set_text(check_icon, LV_SYMBOL_OK);
@@ -69,24 +61,10 @@ lv_obj_t *completed_screen_create(void)
     lv_obj_set_style_text_font(check_icon, &lv_font_montserrat_28, 0);
     lv_obj_align(check_icon, LV_ALIGN_TOP_MID, 100, 150);
 
-    lv_obj_t *meta_row = lv_obj_create(screen);
-    lv_obj_set_size(meta_row, 440, 24);
-    lv_obj_align(meta_row, LV_ALIGN_TOP_MID, 0, 200);
-    lv_obj_clear_flag(meta_row, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_set_style_border_width(meta_row, 0, 0);
-    lv_obj_set_style_bg_opa(meta_row, LV_OPA_TRANSP, 0);
+    UiMetaRow meta;
 
-    lv_obj_t *meta_label = lv_label_create(meta_row);
-    lv_label_set_text(meta_label, "Meta");
-    lv_obj_set_style_text_color(meta_label, CHROME_GREY, 0);
-    lv_obj_set_style_text_font(meta_label, &lv_font_montserrat_14, 0);
-    lv_obj_align(meta_label, LV_ALIGN_LEFT_MID, 0, 0);
-
-    lv_obj_t *target_label = lv_label_create(meta_row);
-    lv_label_set_text_fmt(target_label, "%d g", target_grams);
-    lv_obj_set_style_text_color(target_label, CHROME_GREY, 0);
-    lv_obj_set_style_text_font(target_label, &lv_font_montserrat_14, 0);
-    lv_obj_align(target_label, LV_ALIGN_RIGHT_MID, 0, 0);
+    ui_meta_row_create(screen, "Meta", 200, &meta);
+    lv_label_set_text_fmt(meta.value, "%d g", target_grams);
 
     UiButtonConfig new_dosing_config = {
         .width = 440,

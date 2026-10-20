@@ -1,6 +1,9 @@
 #include "interrupted_screen.h"
 #include "../screen_manager.h"
 #include "../components/ui_button.h"
+#include "../components/ui_meta_row.h"
+#include "../components/ui_progress.h"
+#include "../components/ui_metric.h"
 #include "../components/screen_chrome.h"
 #include "../components/manual_release_widget.h"
 #include "../../domain/dosing_controller.h"
@@ -69,73 +72,24 @@ lv_obj_t *interrupted_screen_create(void)
         CHROME_ACCENT_RED
     );
 
-    lv_obj_t *partial_hint = lv_label_create(screen);
-    lv_label_set_text(partial_hint, "Massa parcial");
-    lv_obj_set_style_text_color(partial_hint, CHROME_GREY, 0);
-    lv_obj_set_style_text_font(partial_hint, &lv_font_montserrat_14, 0);
-    lv_obj_align(partial_hint, LV_ALIGN_TOP_MID, 0, 128);
+    UiMetric metric;
 
-    ctx->weight_label = lv_label_create(screen);
+    ui_metric_create(screen, "Massa parcial", 128, 148, 0, &metric);
+    ctx->weight_label = metric.value;
     lv_label_set_text_fmt(ctx->weight_label, "%d g", partial_grams);
-    lv_obj_set_style_text_color(ctx->weight_label, CHROME_WHITE, 0);
-    lv_obj_set_style_text_font(
-        ctx->weight_label,
-        &lv_font_montserrat_28,
-        0
-    );
-    lv_obj_align(ctx->weight_label, LV_ALIGN_TOP_MID, 0, 148);
 
-    lv_obj_t *meta_row = lv_obj_create(screen);
-    lv_obj_set_size(meta_row, 440, 24);
-    lv_obj_align(meta_row, LV_ALIGN_TOP_MID, 0, 192);
-    lv_obj_clear_flag(meta_row, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_set_style_border_width(meta_row, 0, 0);
-    lv_obj_set_style_bg_opa(meta_row, LV_OPA_TRANSP, 0);
+    UiMetaRow meta;
 
-    lv_obj_t *meta_label = lv_label_create(meta_row);
-    lv_label_set_text(meta_label, "Meta");
-    lv_obj_set_style_text_color(meta_label, CHROME_GREY, 0);
-    lv_obj_set_style_text_font(meta_label, &lv_font_montserrat_14, 0);
-    lv_obj_align(meta_label, LV_ALIGN_LEFT_MID, 0, 0);
+    ui_meta_row_create(screen, "Meta", 192, &meta);
+    lv_label_set_text_fmt(meta.value, "%d g", target_grams);
 
-    lv_obj_t *target_label = lv_label_create(meta_row);
-    lv_label_set_text_fmt(target_label, "%d g", target_grams);
-    lv_obj_set_style_text_color(target_label, CHROME_GREY, 0);
-    lv_obj_set_style_text_font(target_label, &lv_font_montserrat_14, 0);
-    lv_obj_align(target_label, LV_ALIGN_RIGHT_MID, 0, 0);
+    UiProgress progress;
 
-    lv_obj_t *progress_row = lv_obj_create(screen);
-    lv_obj_set_size(progress_row, 440, 26);
-    lv_obj_align(progress_row, LV_ALIGN_TOP_MID, 0, 222);
-    lv_obj_clear_flag(progress_row, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_set_style_border_width(progress_row, 0, 0);
-    lv_obj_set_style_bg_opa(progress_row, LV_OPA_TRANSP, 0);
-
-    ctx->progress_bar = lv_bar_create(progress_row);
-    lv_obj_set_size(ctx->progress_bar, 380, 18);
-    lv_obj_align(ctx->progress_bar, LV_ALIGN_LEFT_MID, 0, 0);
-    lv_bar_set_range(ctx->progress_bar, 0, 100);
-    lv_bar_set_value(ctx->progress_bar, percent, LV_ANIM_OFF);
-    lv_obj_set_style_bg_color(
-        ctx->progress_bar,
-        CHROME_BORDER,
-        LV_PART_MAIN
-    );
-    lv_obj_set_style_bg_color(
-        ctx->progress_bar,
-        CHROME_ACCENT_RED,
-        LV_PART_INDICATOR
-    );
-
-    ctx->percent_label = lv_label_create(progress_row);
+    ui_progress_create(screen, 222, CHROME_ACCENT_RED, &progress);
+    ctx->progress_bar = progress.bar;
+    ctx->percent_label = progress.percent;
     lv_label_set_text_fmt(ctx->percent_label, "%d%%", percent);
-    lv_obj_set_style_text_color(ctx->percent_label, CHROME_GREY, 0);
-    lv_obj_set_style_text_font(
-        ctx->percent_label,
-        &lv_font_montserrat_14,
-        0
-    );
-    lv_obj_align(ctx->percent_label, LV_ALIGN_RIGHT_MID, 0, 0);
+    lv_bar_set_value(ctx->progress_bar, percent, LV_ANIM_OFF);
 
     UiButtonConfig new_dosing_config = {
         .width = 440,

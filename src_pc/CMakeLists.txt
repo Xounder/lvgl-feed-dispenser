@@ -91,6 +91,9 @@ set(MAIN_SOURCES
     ../src/ui/components/manual_release_widget.c
     ../src/ui/components/screen_chrome.c
     ../src/ui/components/ui_button.c
+    ../src/ui/components/ui_metric.c
+    ../src/ui/components/ui_meta_row.c
+    ../src/ui/components/ui_progress.c
     hardware/simulated/simulated_weight_sensor.c
     ../src/domain/dosing_controller.c
     hardware/simulated/simulated_dispenser.c

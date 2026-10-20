@@ -1,5 +1,6 @@
 #include "home_screen.h"
 #include "../screen_manager.h"
+#include "../components/ui_metric.h"
 #include "../components/screen_chrome.h"
 #include "../components/manual_release_widget.h"
 #include "../../domain/dosing_controller.h"
@@ -88,21 +89,10 @@ lv_obj_t *home_screen_create(void)
         currency_card_event_cb
     );
 
-    lv_obj_t *weight_hint = lv_label_create(screen);
-    lv_label_set_text(weight_hint, "Massa atual");
-    lv_obj_set_style_text_color(weight_hint, CHROME_GREY, 0);
-    lv_obj_set_style_text_font(weight_hint, &lv_font_montserrat_14, 0);
-    lv_obj_align(weight_hint, LV_ALIGN_TOP_MID, 0, 400);
+    UiMetric metric;
 
-    ctx->weight_label = lv_label_create(screen);
-    lv_label_set_text(ctx->weight_label, "0 g");
-    lv_obj_set_style_text_color(ctx->weight_label, CHROME_WHITE, 0);
-    lv_obj_set_style_text_font(
-        ctx->weight_label,
-        &lv_font_montserrat_28,
-        0
-    );
-    lv_obj_align(ctx->weight_label, LV_ALIGN_TOP_MID, 0, 418);
+    ui_metric_create(screen, "Massa atual", 400, 418, 0, &metric);
+    ctx->weight_label = metric.value;
 
     manual_release_widget_create(
         screen,
