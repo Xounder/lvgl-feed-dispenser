@@ -160,7 +160,7 @@ domínio:
 
 - `dosing_controller_manual_release_start/stop` +
   `..._is_allowed()` implementam RS14/RS15 (bloqueio em `DOSING`);
-- `src/ui/screens/manual_release_widget.c` faz o "segura para liberar"
+- `src/ui/components/manual_release_widget.c` faz o "segura para liberar"
   (equivalente ao botão de liberação);
 - o indicador verde da Home representa o LED do RS16.
 

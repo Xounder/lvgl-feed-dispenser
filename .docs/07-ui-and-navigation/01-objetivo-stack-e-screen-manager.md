@@ -109,6 +109,19 @@ src/ui/
 ├── ui.h
 ├── screen_manager.c
 ├── screen_manager.h
+├── components/
+│   ├── screen_chrome.c
+│   ├── screen_chrome.h
+│   ├── manual_release_widget.c
+│   ├── manual_release_widget.h
+│   ├── ui_button.c
+│   ├── ui_button.h
+│   ├── ui_metric.c
+│   ├── ui_metric.h
+│   ├── ui_meta_row.c
+│   ├── ui_meta_row.h
+│   ├── ui_progress.c
+│   └── ui_progress.h
 └── screens/
     ├── home_screen.c
     ├── home_screen.h
@@ -119,11 +132,7 @@ src/ui/
     ├── completed_screen.c
     ├── completed_screen.h
     ├── interrupted_screen.c
-    ├── interrupted_screen.h
-    ├── manual_release_widget.c
-    ├── manual_release_widget.h
-    └── screen_chrome.c
-    └── screen_chrome.h
+    └── interrupted_screen.h
 ```
 
 A organização separa:

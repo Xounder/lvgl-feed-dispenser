@@ -68,7 +68,7 @@ Responsável por:
 configuração
 ```
 
-### `manual_release_widget.c`
+### `components/manual_release_widget.c`
 
 Responsável por:
 
@@ -77,7 +77,7 @@ widget de liberação manual (LED + botão), reutilizado em Home,
 Concluído e Interrompido
 ```
 
-### `screen_chrome.c`
+### `components/screen_chrome.c`
 
 Responsável por:
 
@@ -92,6 +92,42 @@ título, blocos de estado, barra inferior e cards
 > isso, o tema injeta `pad` (~18–24px) e rótulos próximos à borda
 > inferior do card (ex.: subtítulo dos cards da Home) saem da área
 > visível.
+
+### `components/ui_button.c`
+
+Responsável por:
+
+```text
+botão padronizado (UiButtonConfig: tamanho, alinhamento, cores,
+texto, fonte e callback), reutilizado pelas telas
+```
+
+### `components/ui_metric.c`
+
+Responsável por:
+
+```text
+bloco "dica + valor grande" (ex.: Massa atual / final / parcial),
+reutilizado em Home, Dosagem, Concluído e Interrompido
+```
+
+### `components/ui_meta_row.c`
+
+Responsável por:
+
+```text
+linha rótulo (esquerda) + valor (direita) (ex.: Meta), reutilizada
+em Dosagem, Concluído e Interrompido
+```
+
+### `components/ui_progress.c`
+
+Responsável por:
+
+```text
+barra de progresso + percentual, com cor do indicador
+parametrizável, reutilizada em Dosagem e Interrompido
+```
 
 ### `dosing_screen.c`
 

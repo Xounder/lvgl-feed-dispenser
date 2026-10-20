@@ -171,13 +171,17 @@ set(MAIN_SOURCES
     hal/hal.c
     ../src/ui/ui.c
     ../src/ui/screen_manager.c
-    ../src/ui/screens/screen_chrome.c
+    ../src/ui/components/screen_chrome.c
+    ../src/ui/components/manual_release_widget.c
+    ../src/ui/components/ui_button.c
+    ../src/ui/components/ui_metric.c
+    ../src/ui/components/ui_meta_row.c
+    ../src/ui/components/ui_progress.c
     ../src/ui/screens/home_screen.c
     ../src/ui/screens/config_screen.c
     ../src/ui/screens/dosing_screen.c
     ../src/ui/screens/completed_screen.c
     ../src/ui/screens/interrupted_screen.c
-    ../src/ui/screens/manual_release_widget.c
     ../src/domain/dosing_controller.c
     hardware/simulated/simulated_weight_sensor.c
     hardware/simulated/simulated_dispenser.c

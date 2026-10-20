@@ -56,9 +56,9 @@ A Home hospeda a **liberação manual** (RS14-RS16 do Trabalho.md):
 * a liberação manual só é permitida quando o estado do domínio é
   `IDLE` (bloqueada durante dosagem automática — RS15).
 
-O widget usado é `manual_release_widget.c` (apenas o botão),
-compartilhado com as telas de conclusão e interrupção. Na Home, o widget
-fica na **parte inferior da tela**, logo acima da barra de navegação.
+O widget usado é `manual_release_widget.c` (em `src/ui/components/`), apenas
+o botão, compartilhado com as telas de conclusão e interrupção. Na Home, o
+widget fica na **parte inferior da tela**, logo acima da barra de navegação.
 
 A Home também exibe a **massa atual** (`Massa atual` + valor em `g`),
 atualizada pelo `tick_cb` do widget enquanto o botão permanece
