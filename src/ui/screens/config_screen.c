@@ -1,5 +1,6 @@
 #include "config_screen.h"
 #include "../screen_manager.h"
+#include "../components/ui_button.h"
 #include "screen_chrome.h"
 #include "../../domain/dosing_controller.h"
 
@@ -307,39 +308,33 @@ lv_obj_t *config_screen_create(DosingMode mode)
 
     update_value_label(context);
 
-    lv_obj_t *decrease_button = lv_button_create(screen);
-    lv_obj_set_size(decrease_button, 90, 40);
-    lv_obj_align(decrease_button, LV_ALIGN_TOP_MID, -150, 196);
-    lv_obj_set_style_bg_color(decrease_button, CHROME_CARD, 0);
-    lv_obj_set_style_radius(decrease_button, 8, 0);
-    lv_obj_add_event_cb(
-        decrease_button,
-        decrease_value_event_cb,
-        LV_EVENT_CLICKED,
-        context
-    );
+    lv_obj_t *decrease_button = ui_button_create(screen, &(UiButtonConfig){
+        .width = 90,
+        .height = 40,
+        .align = LV_ALIGN_TOP_MID,
+        .x = -150,
+        .y = 196,
+        .color = CHROME_CARD,
+        .text_color = CHROME_WHITE,
+        .text = LV_SYMBOL_MINUS,
+        .event_cb = decrease_value_event_cb,
+        .user_data = context
+    });
+    (void)decrease_button;
 
-    lv_obj_t *decrease_label = lv_label_create(decrease_button);
-    lv_label_set_text(decrease_label, LV_SYMBOL_MINUS);
-    lv_obj_set_style_text_color(decrease_label, CHROME_WHITE, 0);
-    lv_obj_center(decrease_label);
-
-    lv_obj_t *increase_button = lv_button_create(screen);
-    lv_obj_set_size(increase_button, 90, 40);
-    lv_obj_align(increase_button, LV_ALIGN_TOP_MID, 150, 196);
-    lv_obj_set_style_bg_color(increase_button, CHROME_CARD, 0);
-    lv_obj_set_style_radius(increase_button, 8, 0);
-    lv_obj_add_event_cb(
-        increase_button,
-        increase_value_event_cb,
-        LV_EVENT_CLICKED,
-        context
-    );
-
-    lv_obj_t *increase_label = lv_label_create(increase_button);
-    lv_label_set_text(increase_label, LV_SYMBOL_PLUS);
-    lv_obj_set_style_text_color(increase_label, CHROME_WHITE, 0);
-    lv_obj_center(increase_label);
+    lv_obj_t *increase_button = ui_button_create(screen, &(UiButtonConfig){
+        .width = 90,
+        .height = 40,
+        .align = LV_ALIGN_TOP_MID,
+        .x = 150,
+        .y = 196,
+        .color = CHROME_CARD,
+        .text_color = CHROME_WHITE,
+        .text = LV_SYMBOL_PLUS,
+        .event_cb = increase_value_event_cb,
+        .user_data = context
+    });
+    (void)increase_button;
 
     lv_obj_t *quick_hint = lv_label_create(screen);
     lv_label_set_text(quick_hint, "Valores rapidos");
@@ -349,44 +344,33 @@ lv_obj_t *config_screen_create(DosingMode mode)
 
     create_chip_grid(screen, context);
 
-    lv_obj_t *continue_button = lv_button_create(screen);
-    lv_obj_set_size(continue_button, 440, 44);
-    lv_obj_align(continue_button, LV_ALIGN_TOP_MID, 0, 408);
-    lv_obj_set_style_bg_color(continue_button, CHROME_GREEN_BTN, 0);
-    lv_obj_set_style_radius(continue_button, 8, 0);
-    lv_obj_add_event_cb(
-        continue_button,
-        continue_event_cb,
-        LV_EVENT_CLICKED,
-        NULL
-    );
+    ui_button_create(screen, &(UiButtonConfig){
+        .width = 440,
+        .height = 44,
+        .align = LV_ALIGN_TOP_MID,
+        .x = 0,
+        .y = 408,
+        .color = CHROME_GREEN_BTN,
+        .text_color = CHROME_WHITE,
+        .text = LV_SYMBOL_PLAY " INICIAR DOSAGEM AUTOMATICA",
+        .font = &lv_font_montserrat_16,
+        .event_cb = continue_event_cb,
+        .user_data = NULL
+    });
 
-    lv_obj_t *continue_label = lv_label_create(continue_button);
-    lv_label_set_text(
-        continue_label,
-        LV_SYMBOL_PLAY " INICIAR DOSAGEM AUTOMATICA"
-    );
-    lv_obj_set_style_text_color(continue_label, CHROME_WHITE, 0);
-    lv_obj_set_style_text_font(continue_label, &lv_font_montserrat_16, 0);
-    lv_obj_center(continue_label);
-
-    lv_obj_t *voltar_button = lv_button_create(screen);
-    lv_obj_set_size(voltar_button, 440, 36);
-    lv_obj_align(voltar_button, LV_ALIGN_TOP_MID, 0, 466);
-    lv_obj_set_style_bg_color(voltar_button, CHROME_BTN_DISABLED, 0);
-    lv_obj_set_style_radius(voltar_button, 8, 0);
-    lv_obj_add_event_cb(
-        voltar_button,
-        home_button_event_cb,
-        LV_EVENT_CLICKED,
-        NULL
-    );
-
-    lv_obj_t *voltar_label = lv_label_create(voltar_button);
-    lv_label_set_text(voltar_label, "VOLTAR");
-    lv_obj_set_style_text_color(voltar_label, CHROME_GREY, 0);
-    lv_obj_set_style_text_font(voltar_label, &lv_font_montserrat_14, 0);
-    lv_obj_center(voltar_label);
+    ui_button_create(screen, &(UiButtonConfig){
+        .width = 440,
+        .height = 36,
+        .align = LV_ALIGN_TOP_MID,
+        .x = 0,
+        .y = 466,
+        .color = CHROME_BTN_DISABLED,
+        .text_color = CHROME_GREY,
+        .text = "VOLTAR",
+        .font = &lv_font_montserrat_14,
+        .event_cb = home_button_event_cb,
+        .user_data = NULL
+    });
 
     screen_chrome_add_bottom_nav(screen);
 

@@ -1,5 +1,6 @@
 #include "dosing_screen.h"
 #include "../screen_manager.h"
+#include "../components/ui_button.h"
 #include "screen_chrome.h"
 #include "../../domain/dosing_controller.h"
 
@@ -192,27 +193,21 @@ lv_obj_t *dosing_screen_create(void)
     );
     lv_obj_align(context->phase_label, LV_ALIGN_TOP_MID, 0, 270);
 
-    lv_obj_t *stop_button = lv_button_create(screen);
-    lv_obj_set_size(stop_button, 440, 42);
-    lv_obj_align(stop_button, LV_ALIGN_TOP_MID, 0, 298);
-    lv_obj_set_style_bg_color(stop_button, CHROME_RED_BTN, 0);
-    lv_obj_set_style_radius(stop_button, 8, 0);
+    UiButtonConfig stop_config = {
+        .width = 440,
+        .height = 42,
+        .align = LV_ALIGN_TOP_MID,
+        .x = 0,
+        .y = 298,
+        .color = CHROME_RED_BTN,
+        .text_color = CHROME_WHITE,
+        .text = LV_SYMBOL_STOP " INTERROMPER DOSAGEM",
+        .font = &lv_font_montserrat_16,
+        .event_cb = cancel_event_cb,
+        .user_data = context
+    };
 
-    lv_obj_add_event_cb(
-        stop_button,
-        cancel_event_cb,
-        LV_EVENT_CLICKED,
-        context
-    );
-
-    lv_obj_t *stop_label = lv_label_create(stop_button);
-    lv_label_set_text(
-        stop_label,
-        LV_SYMBOL_STOP " INTERROMPER DOSAGEM"
-    );
-    lv_obj_set_style_text_color(stop_label, CHROME_WHITE, 0);
-    lv_obj_set_style_text_font(stop_label, &lv_font_montserrat_16, 0);
-    lv_obj_center(stop_label);
+    ui_button_create(screen, &stop_config);
 
     lv_obj_t *manual_card = screen_chrome_add_card(screen, 660, 440, 80);
     lv_obj_set_style_bg_color(manual_card, CHROME_CARD_DISABLED, 0);

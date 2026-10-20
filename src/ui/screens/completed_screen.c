@@ -1,5 +1,6 @@
 #include "completed_screen.h"
 #include "../screen_manager.h"
+#include "../components/ui_button.h"
 #include "screen_chrome.h"
 #include "manual_release_widget.h"
 #include "../../domain/dosing_controller.h"
@@ -87,24 +88,21 @@ lv_obj_t *completed_screen_create(void)
     lv_obj_set_style_text_font(target_label, &lv_font_montserrat_14, 0);
     lv_obj_align(target_label, LV_ALIGN_RIGHT_MID, 0, 0);
 
-    lv_obj_t *new_dosing_button = lv_button_create(screen);
-    lv_obj_set_size(new_dosing_button, 440, 46);
-    lv_obj_align(new_dosing_button, LV_ALIGN_TOP_MID, 0, 244);
-    lv_obj_set_style_bg_color(new_dosing_button, CHROME_BTN_BLUE, 0);
-    lv_obj_set_style_radius(new_dosing_button, 8, 0);
+    UiButtonConfig new_dosing_config = {
+        .width = 440,
+        .height = 46,
+        .align = LV_ALIGN_TOP_MID,
+        .x = 0,
+        .y = 244,
+        .color = CHROME_BTN_BLUE,
+        .text_color = CHROME_WHITE,
+        .text = LV_SYMBOL_REFRESH " NOVA DOSAGEM",
+        .font = &lv_font_montserrat_16,
+        .event_cb = new_dosing_event_cb,
+        .user_data = NULL
+    };
 
-    lv_obj_add_event_cb(
-        new_dosing_button,
-        new_dosing_event_cb,
-        LV_EVENT_CLICKED,
-        NULL
-    );
-
-    lv_obj_t *new_dosing_label = lv_label_create(new_dosing_button);
-    lv_label_set_text(new_dosing_label, LV_SYMBOL_REFRESH " NOVA DOSAGEM");
-    lv_obj_set_style_text_color(new_dosing_label, CHROME_WHITE, 0);
-    lv_obj_set_style_text_font(new_dosing_label, &lv_font_montserrat_16, 0);
-    lv_obj_center(new_dosing_label);
+    ui_button_create(screen, &new_dosing_config);
 
     manual_release_widget_create(
         screen,

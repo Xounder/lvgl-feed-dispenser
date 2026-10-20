@@ -90,6 +90,7 @@ set(MAIN_SOURCES
     ../src/ui/screens/dosing_screen.c
     ../src/ui/screens/manual_release_widget.c
     ../src/ui/screens/screen_chrome.c
+    ../src/ui/components/ui_button.c
     hardware/simulated/simulated_weight_sensor.c
     ../src/domain/dosing_controller.c
     hardware/simulated/simulated_dispenser.c
