@@ -99,6 +99,7 @@ set(MAIN_SOURCES
     hardware/simulated/simulated_dispenser.c
     ../src/ui/screens/completed_screen.c
     ../src/ui/screens/interrupted_screen.c
+    ../src/ui/screens/manual_release_screen.c
 )
 set(MAIN_LIBS lvgl lvgl::examples lvgl::demos lvgl::thorvg ${SDL2_LIBRARIES})
 

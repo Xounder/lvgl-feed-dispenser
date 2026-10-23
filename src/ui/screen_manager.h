@@ -14,7 +14,8 @@ typedef enum {
     SCREEN_CONFIG,
     SCREEN_DOSING,
     SCREEN_COMPLETED,
-    SCREEN_INTERRUPTED
+    SCREEN_INTERRUPTED,
+    SCREEN_MANUAL_RELEASE
 } Screen;
 
 void screen_manager_init(void);

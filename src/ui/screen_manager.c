@@ -5,6 +5,7 @@
 #include "screens/dosing_screen.h"
 #include "screens/completed_screen.h"
 #include "screens/interrupted_screen.h"
+#include "screens/manual_release_screen.h"
 
 static Screen current_screen;
 static DosingMode selected_mode;
@@ -58,6 +59,10 @@ void screen_manager_show(Screen screen)
 
         case SCREEN_INTERRUPTED:
             lv_screen_load(interrupted_screen_create());
+            break;
+
+        case SCREEN_MANUAL_RELEASE:
+            lv_screen_load(manual_release_screen_create());
             break;
     }
 }

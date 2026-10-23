@@ -1,24 +1,6 @@
 #include "home_screen.h"
 #include "../screen_manager.h"
-#include "../components/ui_metric.h"
 #include "../components/screen_chrome.h"
-#include "../components/manual_release_widget.h"
-#include "../../domain/dosing_controller.h"
-
-typedef struct {
-    lv_obj_t *weight_label;
-} HomeScreenContext;
-
-static void tick_cb(void *user_data)
-{
-    HomeScreenContext *ctx = user_data;
-
-    lv_label_set_text_fmt(
-        ctx->weight_label,
-        "%d g",
-        dosing_controller_get_weight()
-    );
-}
 
 static void grams_card_event_cb(lv_event_t *e)
 {
@@ -32,6 +14,13 @@ static void currency_card_event_cb(lv_event_t *e)
     (void)e;
 
     screen_manager_show_config(DOSING_MODE_CURRENCY);
+}
+
+static void manual_release_card_event_cb(lv_event_t *e)
+{
+    (void)e;
+
+    screen_manager_show(SCREEN_MANUAL_RELEASE);
 }
 
 static lv_obj_t *create_mode_card(
@@ -66,9 +55,6 @@ lv_obj_t *home_screen_create(void)
 {
     lv_obj_t *screen = screen_chrome_create();
 
-    HomeScreenContext *ctx =
-        lv_malloc(sizeof(HomeScreenContext));
-
     screen_chrome_add_title(screen);
     screen_chrome_add_state(screen, "AGUARDANDO", "", CHROME_BLUE);
     screen_chrome_add_subtitle(screen, "Selecione o modo de dosagem", 136);
@@ -89,18 +75,12 @@ lv_obj_t *home_screen_create(void)
         currency_card_event_cb
     );
 
-    UiMetric metric;
-
-    ui_metric_create(screen, "Massa atual", 400, 418, 0, &metric);
-    ctx->weight_label = metric.value;
-
-    manual_release_widget_create(
+    create_mode_card(
         screen,
-        LV_ALIGN_BOTTOM_MID,
-        0,
-        -60,
-        tick_cb,
-        ctx
+        344,
+        "LIBERACAO MANUAL",
+        "Controlar a abertura manualmente",
+        manual_release_card_event_cb
     );
 
     screen_chrome_add_bottom_nav(screen);
