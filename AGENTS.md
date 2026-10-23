@@ -81,7 +81,7 @@ powershell -ExecutionPolicy Bypass -File .\arduino\create_sketch_links.ps1
 - `src/ui/screen_manager.h` — enum de telas e função `screen_manager_show()`.
 - `src/ui/screens/` — uma tela por arquivo, criada por `xxx_screen_create()`:
   `home_screen.c`, `mode_screen.c`, `config_screen.c`, `dosing_screen.c`,
-  `completed_screen.c`, `interrupted_screen.c`.
+  `completed_screen.c`, `interrupted_screen.c`, `manual_release_screen.c`.
 - `src/ui/components/` — widgets reutilizáveis: `screen_chrome.{c,h}`,
   `manual_release_widget.{c,h}`, `ui_button.{c,h}`, `ui_metric.{c,h}`,
   `ui_meta_row.{c,h}`, `ui_progress.{c,h}`.

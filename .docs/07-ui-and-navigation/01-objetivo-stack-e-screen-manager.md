@@ -132,7 +132,9 @@ src/ui/
     ├── completed_screen.c
     ├── completed_screen.h
     ├── interrupted_screen.c
-    └── interrupted_screen.h
+    ├── interrupted_screen.h
+    ├── manual_release_screen.c
+    └── manual_release_screen.h
 ```
 
 A organização separa:
@@ -196,7 +198,8 @@ typedef enum {
     SCREEN_CONFIG,
     SCREEN_DOSING,
     SCREEN_COMPLETED,
-    SCREEN_INTERRUPTED
+    SCREEN_INTERRUPTED,
+    SCREEN_MANUAL_RELEASE
 } Screen;
 ```
 
@@ -208,6 +211,7 @@ SCREEN_CONFIG
 SCREEN_DOSING
 SCREEN_COMPLETED
 SCREEN_INTERRUPTED
+SCREEN_MANUAL_RELEASE
 ```
 
 > A seleção de modo (Massa / Valor R$) foi incorporada à `SCREEN_HOME`
@@ -243,40 +247,35 @@ Isso pertence à tela de configuração.
 O fluxo atual pode ser representado por:
 
 ```text
-             ┌──────────────┐
-             │     HOME     │
-             └──────┬───────┘
-                    │
-         (cards MASSA / VALOR na própria HOME)
-                    │
-          ┌─────────┴─────────┐
-          │                   │
-          ▼                   ▼
-        Massa             Valor (R$)
-          │                   │
-          └─────────┬─────────┘
-                    ▼
-             ┌──────────────┐
-             │    CONFIG    │
-             └──────┬───────┘
-                    │
-                Iniciar
-                    │
-                    ▼
-             ┌──────────────┐
-             │    DOSING    │
-             └──┬───────┬───┘
-                │       │
-   objetivo     │       │  Interromper
-   atingido     │       │  dosagem
-                │       │
-                ▼       ▼
-     ┌──────────────┐ ┌──────────────┐
-     │  COMPLETED   │ │  INTERRUPTED │
-     └──────┬───────┘ └──────┬───────┘
-            │                │
-     Nova dosagem     Nova dosagem
-            │                │
-            ▼                ▼
-          HOME            HOME
+              ┌──────────────┐
+              │     HOME     │
+              └──────┬───────┘
+                     │
+                (cards MASSA / VALOR / LIBERAÇÃO MANUAL)
+                     │
+           ┌─────────┼─────────┐
+           │         │         │
+           ▼         ▼         ▼
+         Massa   Valor(R$)   Liberacao Manual
+           │         │         │
+           │         │         └──► SCREEN_MANUAL_RELEASE
+           ▼         ▼
+         CONFIG   CONFIG
+           │         │
+           └─────┬───┘
+                 │
+                 ▼
+               DOSING
+                 │
+            ┌────┴────┐
+            │         │
+            ▼         ▼
+         COMPLETED INTERRUPTED
+            │         │
+            └─────┬───┘
+                  │
+                Nova dosagem
+                  │
+                  ▼
+                HOME
 ```

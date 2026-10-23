@@ -44,7 +44,9 @@ src/
 │       ├── completed_screen.c
 │       ├── completed_screen.h
 │       ├── interrupted_screen.c
-│       └── interrupted_screen.h
+│       ├── interrupted_screen.h
+│       ├── manual_release_screen.c
+│       └── manual_release_screen.h
 │
 ├── domain/
 │   ├── dosing_config.h
