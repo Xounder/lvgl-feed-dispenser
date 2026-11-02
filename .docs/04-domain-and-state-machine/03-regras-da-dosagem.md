@@ -48,8 +48,8 @@ o processo continua.
 A dosagem é dividida em duas etapas controladas por fases:
 
 ```text
-faltam > 30 g  → fase RÁPIDA (FAST) → +20 g por tick
-faltam <= 30 g → fase FINA (FINE)   → +2 g por tick
+faltam > 30 g  → início na fase RÁPIDA (FAST)
+faltam <= 30 g → início/transição para fase FINA (FINE)
 ```
 
 Cada `tick` corresponde a uma atualização do controller (intervalo de 300 ms no simulador).
@@ -63,15 +63,29 @@ typedef enum {
 } DosingPhase;
 ```
 
-Isso é apenas um modelo de simulação.
+O controller comanda `dispenser.start(DISPENSER_FLOW_FAST)` ou
+`dispenser.start(DISPENSER_FLOW_FINE)`, inclusive ao iniciar com massa já
+presente. No ESP32, esses perfis correspondem a aberturas distintas do servo;
+no PC, os incrementos continuam sendo +20 g por tick rápido e +2 g por tick fino.
+O peso real continua vindo exclusivamente da célula de carga/HX711.
 
-No hardware real:
+Uma vez atingida a fase fina, o controller não retorna à rápida nessa
+operação, mesmo se a leitura oscilar e a diferença voltar a ultrapassar 30 g.
+Isso evita alternância de posições perto do limiar. Nova dosagem escolhe a
+fase novamente. O limiar está em `FINE_THRESHOLD_GRAMS` no domínio;
+os ângulos ficam no `board_config.h`, sem GPIOs ou graus no controlador.
 
-```text
-peso
-```
+Antes de abrir, `start()` verifica a leitura e o alvo: se a massa já alcança
+a meta, fecha e conclui sem abrir. Alvo fora de 1–40000 g ou leitura fora de
+0–40000 g impede início e resulta em `INTERRUPTED`. O limite máximo de 40 kg
+é definido por `MAX_VALID_GRAMS` no controlador e `WEIGHT_MAX_GRAMS` no
+driver real. A capacidade informada não substitui
+calibração e validação da balança. Chamadas repetidas de
+início durante `DOSING` são ignoradas.
 
-será determinado pela célula de carga através do HX711.
+A disponibilidade/frescura da leitura não é exposta pela interface atual do
+sensor: o HX711 pode devolver o último valor válido. A validação de faixa
+não detecta esse caso nem substitui timeout/supervisão de sensor.
 
 ---
 
@@ -158,6 +172,11 @@ state = INTERRUPTED
 ### Massa parcial preservada
 
 A interrupção preserva a massa parcialmente liberada: **não** é feita tara/reset do sensor nesse momento.
+
+A liberação manual usa `DISPENSER_FLOW_MANUAL`, disponível fora de `DOSING`.
+Soltar um comando manual que não está ativo não interrompe o automático.
+Durante a dosagem, nenhuma liberação manual é iniciada. Após cancelamento,
+os ticks não retornam às fases automáticas nem reabrem o dispenser.
 
 Para iniciar uma nova dosagem, o usuário utiliza `new_dosing`:
 

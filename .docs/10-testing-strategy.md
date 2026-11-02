@@ -75,8 +75,8 @@ O objetivo final da estratégia de testes é garantir que a evolução do projet
 
 - **Grupos de testes:** build, UI e navegação, domínio, hardware simulado e integração; futuramente hardware real.
 - **Critério de sucesso:** `current_weight >= target_grams` → `dispenser.stop()` e `state = DOSING_STATE_COMPLETED`.
-- **Estado atual:** dosagem normal nos dois modos (Massa e Valor R$), peso simulado crescente em duas etapas (rápida/fina), parada ao atingir a meta, interrupção (Parar/Emergência → tela Interrompida), liberação manual na Home, tara ao iniciar nova dosagem, conclusão já implementados.
-- **Ainda planejado:** timeout, sensor sem progresso, sensor inválido, excesso de peso, tolerância de overshoot, estado `ERROR`, validações de domínio mais completas e testes automatizados.
+- **Estado atual:** dosagem nos modos Massa e Valor, fases rápida/fina com comandos de abertura para o servo real, escolha inicial pela massa restante e permanência na fina até a parada. Interrupção, liberação manual em tela dedicada e nas telas de encerramento, tara em nova dosagem e conclusão implementadas. Há testes automatizados do domínio e do driver de servo com substitutos em `tests/`; validar movimento e vazão no hardware.
+- **Ainda planejado:** timeout, sensor sem progresso, supervisão de leitura indisponível, tolerância de overshoot, estado `ERROR`, validações mais completas e expansão dos testes automatizados.
 
 ---
 

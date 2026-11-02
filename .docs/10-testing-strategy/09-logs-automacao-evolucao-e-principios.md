@@ -60,9 +60,28 @@ de uma alteração.
 
 ---
 
-## 70. Testes automatizados futuros
+## 70. Testes automatizados
 
-O projeto pode evoluir para testes automatizados principalmente no domínio.
+Há testes independentes em `tests/`, sem SDL2/LVGL e sem bibliotecas Arduino
+instaladas. Usam sensores/atuadores substitutos para verificar o controller
+e substitutos mínimos de Arduino/ESP32Servo para executar o driver real.
+
+```powershell
+cmake -S tests -B build/tests
+cmake --build build/tests --config Debug
+ctest --test-dir build/tests -C Debug --output-on-failure
+```
+
+Cobertura: escolha da fase inicial; transição em 30 g; permanência na fina
+com oscilação; conclusão antes de abrir se a meta já está atingida; rejeição
+de início com valores fora de faixa; interrupção; bloqueio manual; nova
+dosagem; conversão monetária; mapeamento de perfis para ângulos; fechamento;
+e ausência de comandos duplicados ao repetir um perfil já ativo.
+Inclui aceitação de 40.000 g e rejeição de 40.001 g no controlador.
+
+Esses testes verificam decisões/comandos, não compilação com as bibliotecas
+Arduino reais, pulsos elétricos, alimentação, movimento ou vazão física.
+Novos cenários de falha/timeout continuam como evolução prevista.
 
 Exemplo conceitual:
 
@@ -200,6 +219,8 @@ Os testes devem verificar o comportamento por trás da interface.
 ✓ reset
 ✓ conclusão
 ✓ nova dosagem
+✓ controle de abertura rápida/fina e manual por perfil
+✓ testes automatizados do controller e do driver com substitutos
 ```
 
 ### Ainda planejado
@@ -212,7 +233,7 @@ Os testes devem verificar o comportamento por trás da interface.
 ○ tolerância de overshoot
 ○ estado ERROR
 ○ validações de domínio mais completas
-○ testes automatizados
+○ expansão dos testes automatizados para falhas e integração completa
 ```
 
 Os itens planejados não devem ser documentados como se já existissem.

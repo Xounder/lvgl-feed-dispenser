@@ -16,8 +16,14 @@ Interface atual:
 extern "C" {
 #endif
 
+typedef enum {
+    DISPENSER_FLOW_FAST,
+    DISPENSER_FLOW_FINE,
+    DISPENSER_FLOW_MANUAL
+} DispenserFlow;
+
 typedef struct {
-    void (*start)(void);
+    void (*start)(DispenserFlow flow);
     void (*stop)(void);
     int (*is_active)(void);
 } Dispenser;
@@ -45,14 +51,18 @@ ESP32    → dispenser (real, em src/hardware/esp32/)
 O domínio precisa basicamente de três operações:
 
 ```text
-start()
+start(flow)
 stop()
 is_active()
 ```
 
-### `start()`
+### `start(flow)`
 
-Solicita que o mecanismo comece a liberar ração.
+Solicita abertura no perfil `FAST`, `FINE` ou `MANUAL`. Pode também ajustar
+um dispenser já ativo para outro perfil, sem precisar fechar antes.
+O domínio informa a intenção de vazão; ângulos permanecem no driver.
+A implementação real evita reescrever a mesma posição para o mesmo perfil
+enquanto ativo. Após `stop()`, um novo `start(flow)` volta a comandar abertura.
 
 ### `stop()`
 
@@ -130,7 +140,7 @@ Essa diferença deve ser preservada conceitualmente.
 
 ---
 
-## 23. Futuro `Dispenser` baseado em SG90
+## 23. `Dispenser` real baseado em servo
 
 O primeiro atuador considerado é o:
 
@@ -168,12 +178,12 @@ ração
 
 ## 24. Responsabilidades da implementação do servo
 
-A implementação real poderá cuidar de:
+A implementação real cuida de:
 
 * inicialização do PWM;
 * configuração do pino;
 * posição inicial;
-* posição de abertura;
+* posições de abertura rápida, fina e manual;
 * posição de fechamento;
 * movimentação;
 * temporização;
@@ -193,7 +203,9 @@ qual biblioteca do ESP32
 Ele apenas solicita:
 
 ```text
-start()
+start(DISPENSER_FLOW_FAST)
+start(DISPENSER_FLOW_FINE)
+start(DISPENSER_FLOW_MANUAL)
 stop()
 ```
 
@@ -276,3 +288,10 @@ servo → posição fechada
 ```
 
 O comportamento exato dependerá do mecanismo.
+
+Os ângulos são definidos em `src/hardware/esp32/board_config.h`: fechado
+180°, rápido 0°, fino 150° e manual 0°. O valor fino é inicial, não calibrado.
+O driver verifica em compilação que ele está entre fechado e rápido,
+inclusive para montagens cujo sentido de abertura seja invertido.
+Parada/conclusão solicitam fechamento diretamente, sem rampa nem espera.
+`is_active()` representa estado comandado, não confirmação física de fluxo.

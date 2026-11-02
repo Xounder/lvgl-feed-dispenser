@@ -28,7 +28,11 @@ O HX711 é responsável pela aquisição do sinal proveniente da célula de carg
 
 ### 11. Load Cell
 
-A plataforma de pesagem será apoiada em **4 células de carga de 5 kg**, uma em cada ponto de apoio (RP05, conforme Trabalho.md).
+A capacidade máxima de pesagem informada para a plataforma é **40 kg**.
+A proposta original previa **4 células de carga de 5 kg**, uma em cada
+ponto de apoio (RP05, conforme Trabalho.md). Confirmar o modelo, a capacidade
+individual e a associação das células da montagem final; não deduzir a
+capacidade de 40 kg a partir da especificação inicialmente proposta.
 
 ```text
 ração
@@ -186,9 +190,11 @@ Implementação atual (`src/hardware/esp32/real_weight_sensor.cpp`):
 * **Rejeição de picos**: uma amostra que se afaste mais de `300 g` da média
   corrente é descartada (não entra no filtro), evitando que um ruído isolado
   desloque o valor.
-* **Validação de faixa**: gramas fora de `[0, 30000]` são descartados (mantém o
+* **Validação de faixa**: gramas fora de `[0, 40000]` são descartados (mantém o
   último valor válido), evitando concluir a dosagem com leitura corrompida.
-  O domínio também valida (`MAX_VALID_GRAMS` em `dosing_controller.c`).
+  O driver usa `WEIGHT_MAX_GRAMS` e o domínio usa `MAX_VALID_GRAMS`, ambos
+  definidos como 40.000 g em seus respectivos arquivos. Esse limite não altera
+  automaticamente o fator de calibração.
 * Log `[PESAGEM]` traz `dt/maxdt` e contadores de rejeição
   (`rej(notready/range/spike)`) para diagnóstico.
 
