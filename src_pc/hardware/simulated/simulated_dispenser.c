@@ -2,9 +2,11 @@
 
 static int active = 0;
 
-static void simulated_start(void)
+static void simulated_start(DispenserFlow flow)
 {
-    active = 1;
+    active = flow == DISPENSER_FLOW_FAST ||
+        flow == DISPENSER_FLOW_FINE ||
+        flow == DISPENSER_FLOW_MANUAL;
 }
 
 static void simulated_stop(void)
